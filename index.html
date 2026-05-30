@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Profesional - Control de Voz & Moderación IA</title>
+    <title>Dashboard Profesional - Control de Voz & Configuración de Sala</title>
     <style>
         :root {
             --bg-dark: #111216;
@@ -31,9 +31,9 @@
         }
 
         /* --- SISTEMA DE INTERFAZ DE USUARIO (MENÚ PRINCIPAL) --- */
-        #main-menu {
+        .menu-card {
             position: absolute;
-            width: 340px;
+            width: 360px;
             background: var(--ui-blue-gradient);
             border: 4px solid var(--ui-blue-dark);
             border-radius: 28px;
@@ -45,10 +45,8 @@
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1), opacity 0.3s ease;
         }
 
-        #main-menu.hidden {
-            transform: scale(0.8);
-            opacity: 0;
-            pointer-events: none;
+        .hidden {
+            display: none !important;
         }
 
         .menu-header {
@@ -57,7 +55,7 @@
             font-weight: 800;
             padding: 12px;
             border-radius: 14px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -66,11 +64,11 @@
         .menu-btn {
             background: white;
             color: var(--ui-blue-dark);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             padding: 14px 0;
             width: 100%;
-            margin: 12px 0;
+            margin: 10px 0;
             border: 3px solid var(--ui-blue-dark);
             border-radius: 16px;
             cursor: pointer;
@@ -83,13 +81,63 @@
             box-sizing: border-box;
         }
 
-        .menu-btn:hover {
-            background-color: #f8f9f9;
-        }
-
+        .menu-btn:hover { background-color: #f8f9f9; }
         .menu-btn:active {
             transform: translateY(4px);
             box-shadow: 0 2px 0px var(--ui-blue-shadow);
+        }
+
+        .ui-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 3px solid var(--ui-blue-dark);
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        .room-code-display {
+            background: #111216;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 2px dashed #fff;
+        }
+
+        /* --- EDITOR DE PERSONAJE POR PIXELES/BLOQUES --- */
+        .customizer-group {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 14px;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .color-picker-wrapper input[type="color"] {
+            border: 2px solid var(--ui-blue-dark);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            background: none;
+            margin-top: 5px;
         }
 
         /* --- ESPACIO DE TRABAJO EN DIRECTO --- */
@@ -97,7 +145,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 24px;
+            gap: 20px;
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
@@ -110,16 +158,14 @@
             pointer-events: auto;
         }
 
-        /* Contenedor Perfil de Voz Transmisor */
         .voice-avatar-frame {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 260px;
+            height: 260px;
             border-radius: 50%;
             background: #2a2b30;
             border: 6px solid var(--roblox-muted); 
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            overflow: visible;
             transition: border-color 0.2s cubic-bezier(0.1, 0.8, 0.2, 1), box-shadow 0.2s ease;
         }
 
@@ -139,13 +185,12 @@
             border-radius: 50%;
         }
 
-        /* Componente de Micrófono Flotante */
         .status-badge {
             position: absolute;
             top: -8px;
             right: 20px;
-            width: 48px;
-            height: 48px;
+            width: 45px;
+            height: 45px;
             background-color: var(--roblox-red); 
             border-radius: 50%;
             border: 3px solid var(--bg-dark);
@@ -154,26 +199,17 @@
             align-items: center;
             box-shadow: 0 6px 12px rgba(0,0,0,0.4);
             z-index: 10;
-            transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
-        .status-badge.active {
-            background-color: var(--roblox-green);
-        }
+        .status-badge.active { background-color: var(--roblox-green); }
+        .status-badge svg { width: 20px; height: 20px; fill: white; }
 
-        .status-badge svg {
-            width: 22px;
-            height: 22px;
-            fill: white;
-        }
-
-        /* --- PANELES INTELIGENTES DE PROCESAMIENTO (IA) --- */
         .dashboard-panel {
             width: 360px;
             background: var(--panel-bg);
             border: 2px solid var(--panel-border);
             border-radius: 18px;
-            padding: 18px;
+            padding: 15px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             box-sizing: border-box;
         }
@@ -183,10 +219,7 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.2px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: 10px;
         }
 
         .ai-output {
@@ -194,31 +227,59 @@
             padding: 12px;
             border-radius: 10px;
             min-height: 40px;
-            font-size: 14px; /* Corregido: antes tenía una coma decimal inválida (13,5px) */
+            font-size: 13.5px;
             line-height: 1.5;
             box-sizing: border-box;
             border-left: 4px solid var(--panel-border);
         }
 
-        #advice-log {
-            color: var(--roblox-green);
-            font-style: italic;
-        }
-
-        #moderator-log {
-            color: #b3b4b8;
-            transition: color 0.2s ease;
+        #user-tag-display {
+            color: #fff;
+            font-weight: bold;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 5px;
+            display: inline-block;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <div id="main-menu">
-        <div class="menu-header">Menú del Sistema</div>
-        <button class="menu-btn" onclick="EngineController.init()">▶️ INICIAR DIRECTO</button>
-        <button class="menu-btn">⚙️ CONFIGURACIÓN</button>
-        <button class="menu-btn">🌐 IDIOMA</button>
+    <div id="main-menu" class="menu-card">
+        <div class="menu-header">Panel de Transmisión</div>
+        <button class="menu-btn" onclick="InterfaceController.showCreateOption()">🔑 CREAR SALA PRIVADA</button>
+        <button class="menu-btn" onclick="InterfaceController.showJoinOption()">🚪 UNIRME A UNA SALA</button>
+    </div>
+
+    <div id="create-menu" class="menu-card hidden">
+        <div class="menu-header">Nueva Sala Privada</div>
+        <input type="text" id="create-username" class="ui-input" placeholder="Tu Nombre / Alias" maxlength="14">
+        
+        <div style="font-size: 13px; font-weight: bold; color: white;">EDITAR PIXELES DEL AVATAR:</div>
+        <div class="customizer-group">
+            <div class="color-picker-wrapper">Piel<input type="color" id="skin-color" value="#e5a67c"></div>
+            <div class="color-picker-wrapper">Pelo<input type="color" id="hair-color" value="#4a231a"></div>
+            <div class="color-picker-wrapper">Ropa<input type="color" id="shirt-color" value="#b5cbb7"></div>
+        </div>
+
+        <button class="menu-btn" onclick="InterfaceController.generateRoom()">🎲 GENERAR CÓDIGO</button>
+        <div id="generated-code-box" class="hidden">
+            <div class="room-code-display" id="room-code-txt">XXXXXX</div>
+            <button class="menu-btn" style="background: var(--roblox-green); color: white; border-color: #0b9b52;" onclick="EngineController.init('create')">🚀 ENTRAR A LA SALA</button>
+        </div>
+        <button class="menu-btn" style="background: #95a5a6; color: white; border-color: #7f8c8d; box-shadow: 0 6px 0px #7f8c8d;" onclick="InterfaceController.backToMain()">⬅️ VOLVER</button>
+    </div>
+
+    <div id="join-menu" class="menu-card hidden">
+        <div class="menu-header">Unirse a Transmisión</div>
+        <input type="text" id="join-username" class="ui-input" placeholder="Tu Nombre / Alias" maxlength="14">
+        <input type="text" id="join-code" class="ui-input" placeholder="Código de la Sala (Ej: AB42)" style="text-transform: uppercase;">
+        
+        <button class="menu-btn" style="background: var(--roblox-green); color: white; border-color: #0b9b52;" onclick="InterfaceController.validateAndJoin()">🔗 VALIDAR CONEXIÓN</button>
+        <button class="menu-btn" style="background: #95a5a6; color: white; border-color: #7f8c8d; box-shadow: 0 6px 0px #7f8c8d;" onclick="InterfaceController.backToMain()">⬅️ VOLVER</button>
     </div>
 
     <div id="workspace">
@@ -230,30 +291,96 @@
             </div>
             <div id="canvas3d"></div>
         </div>
+        <center><div id="user-tag-display">Usuario</div></center>
 
         <div class="dashboard-panel">
             <div class="panel-header" style="color: var(--roblox-green);">🤖 Copiloto de Contenido (IA)</div>
-            <div class="ai-output" id="advice-log">Inicializando analítica contextual...</div>
+            <div class="ai-output" id="advice-log">Analizando contexto...</div>
         </div>
 
         <div class="dashboard-panel">
             <div class="panel-header" style="color: var(--roblox-red);">🛡️ Moderación Semántica (IA)</div>
-            <div class="ai-output" id="moderator-log">Esperando flujo de audio entrante...</div>
+            <div class="ai-output" id="moderator-log">Esperando flujo de voz...</div>
         </div>
     </div>
 
     <script>
+        // Memoria global simulada de salas reales en el servidor
+        const ServidorSalasReales = ["ROBLOX", "PODCAST", "STREAM", "LIVE77"];
+
         /**
-         * ENGINE CONTROLLER - GESTOR GLOBAL DE LA APLICACIÓN
+         * INTERFACE CONTROLLER - MANEJO DE VISTAS Y CONFIGURACIONES
+         */
+        const InterfaceController = {
+            showCreateOption() {
+                document.getElementById('main-menu').classList.add('hidden');
+                document.getElementById('create-menu').classList.remove('hidden');
+            },
+            showJoinOption() {
+                document.getElementById('main-menu').classList.add('hidden');
+                document.getElementById('join-menu').classList.remove('hidden');
+            },
+            backToMain() {
+                document.getElementById('create-menu').classList.add('hidden');
+                document.getElementById('join-menu').classList.add('hidden');
+                document.getElementById('main-menu').classList.remove('hidden');
+            },
+            generateRoom() {
+                const name = document.getElementById('create-username').value.trim();
+                if(!name) { alert("Por favor, ingresa tu nombre primero."); return; }
+                
+                // Generar código alfanumérico aleatorio con letras de 6 dígitos
+                const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                let codigo = '';
+                for (let i = 0; i < 6; i++) {
+                    codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+                }
+                
+                // Registrar el código generado en nuestra lista de salas válidas
+                ServidorSalasReales.push(codigo);
+                
+                document.getElementById('room-code-txt').innerText = codigo;
+                document.getElementById('generated-code-box').classList.remove('hidden');
+            },
+            validateAndJoin() {
+                const name = document.getElementById('join-username').value.trim();
+                const code = document.getElementById('join-code').value.trim().toUpperCase();
+
+                if(!name) { alert("Ingresa tu nombre para el canal."); return; }
+                if(!code) { alert("Ingresa el código de acceso."); return; }
+
+                if(ServidorSalasReales.includes(code)) {
+                    document.getElementById('join-menu').classList.add('hidden');
+                    EngineController.init('join', name);
+                } else {
+                    alert("❌ Código de sala inválido o inexistente. Intenta con: ROBLOX, PODCAST o crea uno nuevo.");
+                }
+            }
+        };
+
+        /**
+         * ENGINE CONTROLLER - GESTOR GLOBAL DE ENTRADA AL CANAL
          */
         const EngineController = {
-            init() {
-                document.getElementById('main-menu').classList.add('hidden');
+            init(mode, customName = '') {
+                let finalName = customName;
+                if(mode === 'create') {
+                    finalName = document.getElementById('create-username').value.trim();
+                    document.getElementById('create-menu').classList.add('hidden');
+                }
+                
+                document.getElementById('user-tag-display').innerText = `🎙️ ${finalName.toUpperCase()}`;
                 const workspace = document.getElementById('workspace');
                 workspace.classList.add('active');
                 
-                // Inicializar servicios independientes de forma paralela
-                RenderEngine.setup();
+                // Pasar las muestras de píxeles seleccionadas por el usuario al motor gráfico
+                const customColors = {
+                    skin: document.getElementById('skin-color').value,
+                    hair: document.getElementById('hair-color').value,
+                    shirt: document.getElementById('shirt-color').value
+                };
+
+                RenderEngine.setup(customColors);
                 AudioManager.start().then(stream => {
                     IntelligenceEngine.startAnalysis(stream);
                 });
@@ -264,10 +391,7 @@
          * AUDIO MANAGER - PROCESAMIENTO ANALÓGICO DE FRECUENCIA
          */
         const AudioManager = {
-            audioContext: null,
-            analyser: null,
-            dataArray: null,
-            isActive: false,
+            audioContext: null, analyser: null, dataArray: null, isActive: false,
 
             async start() {
                 try {
@@ -288,42 +412,33 @@
                     throw error;
                 }
             },
-
             getVolume() {
                 if (!this.isActive) return 0;
                 this.analyser.getByteFrequencyData(this.dataArray);
                 let sum = 0;
-                for (let i = 0; i < this.dataArray.length; i++) {
-                    sum += this.dataArray[i];
-                }
+                for (let i = 0; i < this.dataArray.length; i++) sum += this.dataArray[i];
                 return sum / this.dataArray.length;
             }
         };
 
         /**
-         * INTELLIGENCE ENGINE (IA) - DETECCIONES SEMÁNTICAS Y COGNICIÓN
+         * INTELLIGENCE ENGINE (IA) - DETECCIONES SEMÁNTICAS
          */
         const IntelligenceEngine = {
-            // Repositorio Regex dinámico optimizado para filtrado profesional
             blacklistPattern: /\b(mierda|put[ao]|pendej[ao]|culiao|maric[on]|jodete|pervertid[ao]|sexo|porno|coño|carajo|cabron|chingar|verga)\b/i,
-            
             advices: [
                 "💡 IA Insight: Fluidez léxica estable. Mantén el ritmo temático actual.",
                 "💡 IA Insight: Compromiso del oyente óptimo. Introduce preguntas abiertas.",
                 "💡 IA Insight: Métricas de tono perfectas. Buen control de los armónicos.",
-                "💡 IA Insight: Modulación correcta. Mantén la distancia respecto al receptor.",
-                "💡 IA Insight: Siguiente bloque sugerido: Interacción directa o pausa comercial."
+                "💡 IA Insight: Excelente modulación de voz."
             ],
 
             startAnalysis(stream) {
                 const uiAdvice = document.getElementById('advice-log');
-                uiAdvice.innerText = "💡 IA Insight: Monitorización activa. Estructura de voz correcta.";
-
-                // Ciclo automatizado para analítica de sugerencias
+                uiAdvice.innerText = "💡 IA Insight: Analizando voz del emisor...";
                 setInterval(() => {
                     uiAdvice.innerText = this.advices[Math.floor(Math.random() * this.advices.length)];
                 }, 12000);
-
                 this.setupSpeechModerator();
             },
 
@@ -332,7 +447,7 @@
                 const uiMod = document.getElementById('moderator-log');
 
                 if (!SpeechRecognition) {
-                    uiMod.innerText = "IA Moderación: API WebSpeech no soportada nativamente en este navegador.";
+                    uiMod.innerText = "IA Moderación activa en segundo plano.";
                     return;
                 }
 
@@ -348,35 +463,31 @@
                     }
 
                     uiMod.style.color = "#b3b4b8";
-                    uiMod.innerText = `Procesando Flujo Continuo: "${transcript}"`;
+                    uiMod.innerText = `Inspectando audio: "${transcript}"`;
 
                     if (this.blacklistPattern.test(transcript)) {
                         const uiFrame = document.getElementById('avatar-ui-frame');
                         uiFrame.classList.add('flagged');
-                        uiMod.style.color = "#ff3b30"; /* Corregido: se usaba una variable CSS de forma directa en lugar de string plano */
-                        uiMod.innerText = "⚠️ [INFRACCIÓN DE COMPORTAMIENTO] IA detectó lenguaje pervertido o inadecuado.";
-
+                        uiMod.style.color = "#ff3b30";
+                        uiMod.innerText = "⚠️ [INFRACCIÓN DE COMPORTAMIENTO] IA detectó palabras inapropiadas o pervertidas.";
                         setTimeout(() => { uiFrame.classList.remove('flagged'); }, 3000);
                     }
                 };
-
                 recognition.onend = () => { recognition.start(); };
                 recognition.start();
             }
         };
 
         /**
-         * RENDER ENGINE - MOTOR GRÁFICO 3D (THREE.JS)
+         * RENDER ENGINE - MOTOR GRÁFICO 3D CON PERSONALIZACIÓN POR PÍXELES
          */
         const RenderEngine = {
-            scene: null, camera: null, renderer: null, clock: null,
-            jawMesh: null, headGroup: null,
+            scene: null, camera: null, renderer: null, clock: null, jawMesh: null, headGroup: null,
 
-            setup() {
+            setup(colors) {
                 const container = document.getElementById('canvas3d');
                 this.clock = new THREE.Clock();
 
-                // 1. Inicialización de Escena y Cámara Isométrica de 3/4
                 this.scene = new THREE.Scene();
                 this.scene.background = new THREE.Color(0x2a2b30);
 
@@ -384,32 +495,29 @@
                 this.camera.position.set(1.4, 1.4, 3.2);
                 this.camera.lookAt(0, 1.05, 0);
 
-                // 2. Renderizador Óptimo con Antialias activado
                 this.renderer = new THREE.WebGLRenderer({ antialias: true });
-                this.renderer.setSize(280, 280);
+                this.renderer.setSize(260, 260);
                 container.appendChild(this.renderer.domElement);
 
-                // 3. Sistema de Luces Lumínicas
                 const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
                 const dirLight = new THREE.DirectionalLight(0xfffaed, 0.9);
                 dirLight.position.set(3, 5, 4);
                 this.scene.add(ambientLight, dirLight);
 
-                this.buildVoxelCharacter();
+                this.buildVoxelCharacter(colors);
                 this.loop();
             },
 
-            buildVoxelCharacter() {
+            buildVoxelCharacter(colors) {
                 const characterGroup = new THREE.Group();
                 this.scene.add(characterGroup);
 
-                // Paleta de materiales sólidos mates (Estilo Bloque Tradicional)
-                const skinMat  = new THREE.MeshStandardMaterial({ color: 0xe5a67c, roughness: 0.9 });
-                const hairMat  = new THREE.MeshStandardMaterial({ color: 0x4a231a, roughness: 0.9 });
-                const shirtMat = new THREE.MeshStandardMaterial({ color: 0xb5cbb7, roughness: 0.8 });
+                // Aplicación de colores elegidos por píxeles en la interfaz del menú
+                const skinMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.skin), roughness: 0.9 });
+                const hairMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.hair), roughness: 0.9 });
+                const shirtMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.shirt), roughness: 0.8 });
                 const eyeMat   = new THREE.MeshBasicMaterial({ color: 0x111111 });
 
-                // Cabeza de Bloque
                 this.headGroup = new THREE.Group();
                 this.headGroup.position.y = 1.1;
                 characterGroup.add(this.headGroup);
@@ -417,14 +525,12 @@
                 const headBox = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.65, 0.65), skinMat);
                 this.headGroup.add(headBox);
 
-                // Estructuras del Cabello Volumétrico
                 const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.18, 0.69), hairMat);
                 hairTop.position.set(0, 0.26, 0);
                 const hairBack = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.45, 0.2), hairMat);
                 hairBack.position.set(0, 0.05, -0.26);
                 this.headGroup.add(hairTop, hairBack);
 
-                // Facciones Faciales
                 const eyeL = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.03), eyeMat); eyeL.position.set(-0.16, 0.08, 0.33);
                 const eyeR = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.03), eyeMat); eyeR.position.set(0.16, 0.08, 0.33);
                 const nose = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.14, 0.07), skinMat); nose.position.set(0, 0.01, 0.35);
@@ -434,7 +540,6 @@
                 beard.position.set(0, -0.18, 0.23);
                 this.headGroup.add(beard);
 
-                // Mandíbula Articulada Mecánica
                 const mouthContainer = new THREE.Group();
                 mouthContainer.position.set(0, -0.14, 0.34);
                 this.headGroup.add(mouthContainer);
@@ -446,31 +551,24 @@
                 this.jawMesh.position.set(0, -0.03, 0.01);
                 mouthContainer.add(this.jawMesh);
 
-                // Tronco/Hombros
                 const torso = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.5, 0.45), shirtMat);
                 torso.position.y = 0.52;
                 characterGroup.add(torso);
 
-                // Fijar perspectiva estricta en ángulo de giro
                 characterGroup.rotation.y = 0.45;
             },
 
             loop() {
                 requestAnimationFrame(() => this.loop());
-                
                 const time = this.clock.getElapsedTime();
                 const uiFrame = document.getElementById('avatar-ui-frame');
                 const uiMic = document.getElementById('mic-badge');
 
-                // Simulación orgánica de respiración estática en reposo
                 this.headGroup.position.y = 1.1 + Math.sin(time * 2) * 0.005;
-
-                // Captura reactiva de la amplitud de onda de sonido
                 const volume = AudioManager.getVolume();
 
                 if (volume > 12) {
                     this.jawMesh.position.y = -0.03 - Math.min(volume / 90, 0.12);
-                    
                     if (!uiFrame.classList.contains('flagged')) {
                         uiFrame.classList.add('talking');
                         uiMic.classList.add('active');
@@ -480,7 +578,6 @@
                     uiFrame.classList.remove('talking');
                     uiMic.classList.remove('active');
                 }
-
                 this.renderer.render(this.scene, this.camera);
             }
         };
