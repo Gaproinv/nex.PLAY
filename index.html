@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Profesional - Control de Voz & Moderación IA</title>
+    <style>
+        :root {
+            --bg-dark: #111216;
+            --panel-bg: #1f2026;
+            --panel-border: #3a3b45;
+            --roblox-green: #00e676;
+            --roblox-red: #ff3b30;
+            --roblox-muted: #45474f;
+            --ui-blue-gradient: linear-gradient(180deg, #5dade2 0%, #2471a3 100%);
+            --ui-blue-dark: #1b4f72;
+            --ui-blue-shadow: #154360;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #e3e4e8;
+        }
+
+        /* --- SISTEMA DE INTERFAZ DE USUARIO (MENÚ PRINCIPAL) --- */
+        #main-menu {
+            position: absolute;
+            width: 340px;
+            background: var(--ui-blue-gradient);
+            border: 4px solid var(--ui-blue-dark);
+            border-radius: 28px;
+            padding: 25px;
+            box-shadow: 0 12px 0px #114162, 0 20px 40px rgba(0,0,0,0.6);
+            text-align: center;
+            z-index: 100;
+            box-sizing: border-box;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1), opacity 0.3s ease;
+        }
+
+        #main-menu.hidden {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .menu-header {
+            background-color: var(--ui-blue-dark);
+            color: white;
+            font-weight: 800;
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .menu-btn {
+            background: white;
+            color: var(--ui-blue-dark);
+            font-size: 18px;
+            font-weight: 700;
+            padding: 14px 0;
+            width: 100%;
+            margin: 12px 0;
+            border: 3px solid var(--ui-blue-dark);
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 0px var(--ui-blue-shadow);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        .menu-btn:hover {
+            background-color: #f8f9f9;
+        }
+
+        .menu-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px var(--ui-blue-shadow);
+        }
+
+        /* --- ESPACIO DE TRABAJO EN DIRECTO --- */
+        #workspace {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        #workspace.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Contenedor Perfil de Voz Transmisor */
+        .voice-avatar-frame {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: #2a2b30;
+            border: 6px solid var(--roblox-muted); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            overflow: visible;
+            transition: border-color 0.2s cubic-bezier(0.1, 0.8, 0.2, 1), box-shadow 0.2s ease;
+        }
+
+        .voice-avatar-frame.talking {
+            border-color: var(--roblox-green);
+            box-shadow: 0 0 35px rgba(0, 230, 118, 0.5);
+        }
+
+        .voice-avatar-frame.flagged {
+            border-color: var(--roblox-red) !important;
+            box-shadow: 0 0 45px rgba(255, 59, 48, 0.7) !important;
+        }
+
+        #canvas3d {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        /* Componente de Micrófono Flotante */
+        .status-badge {
+            position: absolute;
+            top: -8px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background-color: var(--roblox-red); 
+            border-radius: 50%;
+            border: 3px solid var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            z-index: 10;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .status-badge.active {
+            background-color: var(--roblox-green);
+        }
+
+        .status-badge svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        /* --- PANELES INTELIGENTES DE PROCESAMIENTO (IA) --- */
+        .dashboard-panel {
+            width: 360px;
+            background: var(--panel-bg);
+            border: 2px solid var(--panel-border);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            box-sizing: border-box;
+        }
+
+        .panel-header {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-output {
+            background: #141519;
+            padding: 12px;
+            border-radius: 10px;
+            min-height: 40px;
+            font-size: 14px; /* Corregido: antes tenía una coma decimal inválida (13,5px) */
+            line-height: 1.5;
+            box-sizing: border-box;
+            border-left: 4px solid var(--panel-border);
+        }
+
+        #advice-log {
+            color: var(--roblox-green);
+            font-style: italic;
+        }
+
+        #moderator-log {
+            color: #b3b4b8;
+            transition: color 0.2s ease;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <div id="main-menu">
+        <div class="menu-header">Menú del Sistema</div>
+        <button class="menu-btn" onclick="EngineController.init()">▶️ INICIAR DIRECTO</button>
+        <button class="menu-btn">⚙️ CONFIGURACIÓN</button>
+        <button class="menu-btn">🌐 IDIOMA</button>
+    </div>
+
+    <div id="workspace">
+        <div class="voice-avatar-frame" id="avatar-ui-frame">
+            <div class="status-badge" id="mic-badge">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                </svg>
+            </div>
+            <div id="canvas3d"></div>
+        </div>
+
+        <div class="dashboard-panel">
+            <div class="panel-header" style="color: var(--roblox-green);">🤖 Copiloto de Contenido (IA)</div>
+            <div class="ai-output" id="advice-log">Inicializando analítica contextual...</div>
+        </div>
+
+        <div class="dashboard-panel">
+            <div class="panel-header" style="color: var(--roblox-red);">🛡️ Moderación Semántica (IA)</div>
+            <div class="ai-output" id="moderator-log">Esperando flujo de audio entrante...</div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * ENGINE CONTROLLER - GESTOR GLOBAL DE LA APLICACIÓN
+         */
+        const EngineController = {
+            init() {
+                document.getElementById('main-menu').classList.add('hidden');
+                const workspace = document.getElementById('workspace');
+                workspace.classList.add('active');
+                
+                // Inicializar servicios independientes de forma paralela
+                RenderEngine.setup();
+                AudioManager.start().then(stream => {
+                    IntelligenceEngine.startAnalysis(stream);
+                });
+            }
+        };
+
+        /**
+         * AUDIO MANAGER - PROCESAMIENTO ANALÓGICO DE FRECUENCIA
+         */
+        const AudioManager = {
+            audioContext: null,
+            analyser: null,
+            dataArray: null,
+            isActive: false,
+
+            async start() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    this.audioContext = new AudioContextClass();
+                    this.analyser = this.audioContext.createAnalyser();
+                    this.analyser.fftSize = 256;
+                    
+                    const source = this.audioContext.createMediaStreamSource(stream);
+                    source.connect(this.analyser);
+                    
+                    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                    this.isActive = true;
+                    return stream;
+                } catch (error) {
+                    document.getElementById('moderator-log').innerText = "Fallo de hardware: Micrófono inaccesible.";
+                    throw error;
+                }
+            },
+
+            getVolume() {
+                if (!this.isActive) return 0;
+                this.analyser.getByteFrequencyData(this.dataArray);
+                let sum = 0;
+                for (let i = 0; i < this.dataArray.length; i++) {
+                    sum += this.dataArray[i];
+                }
+                return sum / this.dataArray.length;
+            }
+        };
+
+        /**
+         * INTELLIGENCE ENGINE (IA) - DETECCIONES SEMÁNTICAS Y COGNICIÓN
+         */
+        const IntelligenceEngine = {
+            // Repositorio Regex dinámico optimizado para filtrado profesional
+            blacklistPattern: /\b(mierda|put[ao]|pendej[ao]|culiao|maric[on]|jodete|pervertid[ao]|sexo|porno|coño|carajo|cabron|chingar|verga)\b/i,
+            
+            advices: [
+                "💡 IA Insight: Fluidez léxica estable. Mantén el ritmo temático actual.",
+                "💡 IA Insight: Compromiso del oyente óptimo. Introduce preguntas abiertas.",
+                "💡 IA Insight: Métricas de tono perfectas. Buen control de los armónicos.",
+                "💡 IA Insight: Modulación correcta. Mantén la distancia respecto al receptor.",
+                "💡 IA Insight: Siguiente bloque sugerido: Interacción directa o pausa comercial."
+            ],
+
+            startAnalysis(stream) {
+                const uiAdvice = document.getElementById('advice-log');
+                uiAdvice.innerText = "💡 IA Insight: Monitorización activa. Estructura de voz correcta.";
+
+                // Ciclo automatizado para analítica de sugerencias
+                setInterval(() => {
+                    uiAdvice.innerText = this.advices[Math.floor(Math.random() * this.advices.length)];
+                }, 12000);
+
+                this.setupSpeechModerator();
+            },
+
+            setupSpeechModerator() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const uiMod = document.getElementById('moderator-log');
+
+                if (!SpeechRecognition) {
+                    uiMod.innerText = "IA Moderación: API WebSpeech no soportada nativamente en este navegador.";
+                    return;
+                }
+
+                const recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'es-ES';
+
+                recognition.onresult = (event) => {
+                    let transcript = "";
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        transcript += event.results[i][0].transcript;
+                    }
+
+                    uiMod.style.color = "#b3b4b8";
+                    uiMod.innerText = `Procesando Flujo Continuo: "${transcript}"`;
+
+                    if (this.blacklistPattern.test(transcript)) {
+                        const uiFrame = document.getElementById('avatar-ui-frame');
+                        uiFrame.classList.add('flagged');
+                        uiMod.style.color = "#ff3b30"; /* Corregido: se usaba una variable CSS de forma directa en lugar de string plano */
+                        uiMod.innerText = "⚠️ [INFRACCIÓN DE COMPORTAMIENTO] IA detectó lenguaje pervertido o inadecuado.";
+
+                        setTimeout(() => { uiFrame.classList.remove('flagged'); }, 3000);
+                    }
+                };
+
+                recognition.onend = () => { recognition.start(); };
+                recognition.start();
+            }
+        };
+
+        /**
+         * RENDER ENGINE - MOTOR GRÁFICO 3D (THREE.JS)
+         */
+        const RenderEngine = {
+            scene: null, camera: null, renderer: null, clock: null,
+            jawMesh: null, headGroup: null,
+
+            setup() {
+                const container = document.getElementById('canvas3d');
+                this.clock = new THREE.Clock();
+
+                // 1. Inicialización de Escena y Cámara Isométrica de 3/4
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x2a2b30);
+
+                this.camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+                this.camera.position.set(1.4, 1.4, 3.2);
+                this.camera.lookAt(0, 1.05, 0);
+
+                // 2. Renderizador Óptimo con Antialias activado
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(280, 280);
+                container.appendChild(this.renderer.domElement);
+
+                // 3. Sistema de Luces Lumínicas
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                const dirLight = new THREE.DirectionalLight(0xfffaed, 0.9);
+                dirLight.position.set(3, 5, 4);
+                this.scene.add(ambientLight, dirLight);
+
+                this.buildVoxelCharacter();
+                this.loop();
+            },
+
+            buildVoxelCharacter() {
+                const characterGroup = new THREE.Group();
+                this.scene.add(characterGroup);
+
+                // Paleta de materiales sólidos mates (Estilo Bloque Tradicional)
+                const skinMat  = new THREE.MeshStandardMaterial({ color: 0xe5a67c, roughness: 0.9 });
+                const hairMat  = new THREE.MeshStandardMaterial({ color: 0x4a231a, roughness: 0.9 });
+                const shirtMat = new THREE.MeshStandardMaterial({ color: 0xb5cbb7, roughness: 0.8 });
+                const eyeMat   = new THREE.MeshBasicMaterial({ color: 0x111111 });
+
+                // Cabeza de Bloque
+                this.headGroup = new THREE.Group();
+                this.headGroup.position.y = 1.1;
+                characterGroup.add(this.headGroup);
+
+                const headBox = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.65, 0.65), skinMat);
+                this.headGroup.add(headBox);
+
+                // Estructuras del Cabello Volumétrico
+                const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.18, 0.69), hairMat);
+                hairTop.position.set(0, 0.26, 0);
+                const hairBack = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.45, 0.2), hairMat);
+                hairBack.position.set(0, 0.05, -0.26);
+                this.headGroup.add(hairTop, hairBack);
+
+                // Facciones Faciales
+                const eyeL = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.03), eyeMat); eyeL.position.set(-0.16, 0.08, 0.33);
+                const eyeR = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.03), eyeMat); eyeR.position.set(0.16, 0.08, 0.33);
+                const nose = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.14, 0.07), skinMat); nose.position.set(0, 0.01, 0.35);
+                this.headGroup.add(eyeL, eyeR, nose);
+
+                const beard = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.3, 0.24), hairMat);
+                beard.position.set(0, -0.18, 0.23);
+                this.headGroup.add(beard);
+
+                // Mandíbula Articulada Mecánica
+                const mouthContainer = new THREE.Group();
+                mouthContainer.position.set(0, -0.14, 0.34);
+                this.headGroup.add(mouthContainer);
+
+                const mouthCavity = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.1, 0.02), new THREE.MeshBasicMaterial({ color: 0x240a0a }));
+                mouthContainer.add(mouthCavity);
+
+                this.jawMesh = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.07, 0.03), hairMat);
+                this.jawMesh.position.set(0, -0.03, 0.01);
+                mouthContainer.add(this.jawMesh);
+
+                // Tronco/Hombros
+                const torso = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.5, 0.45), shirtMat);
+                torso.position.y = 0.52;
+                characterGroup.add(torso);
+
+                // Fijar perspectiva estricta en ángulo de giro
+                characterGroup.rotation.y = 0.45;
+            },
+
+            loop() {
+                requestAnimationFrame(() => this.loop());
+                
+                const time = this.clock.getElapsedTime();
+                const uiFrame = document.getElementById('avatar-ui-frame');
+                const uiMic = document.getElementById('mic-badge');
+
+                // Simulación orgánica de respiración estática en reposo
+                this.headGroup.position.y = 1.1 + Math.sin(time * 2) * 0.005;
+
+                // Captura reactiva de la amplitud de onda de sonido
+                const volume = AudioManager.getVolume();
+
+                if (volume > 12) {
+                    this.jawMesh.position.y = -0.03 - Math.min(volume / 90, 0.12);
+                    
+                    if (!uiFrame.classList.contains('flagged')) {
+                        uiFrame.classList.add('talking');
+                        uiMic.classList.add('active');
+                    }
+                } else {
+                    this.jawMesh.position.y = -0.03;
+                    uiFrame.classList.remove('talking');
+                    uiMic.classList.remove('active');
+                }
+
+                this.renderer.render(this.scene, this.camera);
+            }
+        };
+    </script>
+</body>
+</html>
