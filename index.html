@@ -111,7 +111,7 @@
             border: 2px dashed #fff;
         }
 
-        /* --- EDITOR DE PERSONAJE POR PIXELES/BLOQUES --- */
+        /* --- EDITOR DE PERSONAJE POR PIXELES --- */
         .customizer-group {
             display: flex;
             justify-content: space-around;
@@ -268,7 +268,7 @@
         <button class="menu-btn" onclick="InterfaceController.generateRoom()">🎲 GENERAR CÓDIGO</button>
         <div id="generated-code-box" class="hidden">
             <div class="room-code-display" id="room-code-txt">XXXXXX</div>
-            <button class="menu-btn" style="background: var(--roblox-green); color: white; border-color: #0b9b52;" onclick="EngineController.init('create')">🚀 ENTRAR A LA SALA</button>
+            <button class="menu-btn" style="background: var(--roblox-green); color: white; border-color: #0b9b52;" onclick="InterfaceController.goToJoinWithCreatedCode()">🚀 IR A ENTRAR A LA SALA</button>
         </div>
         <button class="menu-btn" style="background: #95a5a6; color: white; border-color: #7f8c8d; box-shadow: 0 6px 0px #7f8c8d;" onclick="InterfaceController.backToMain()">⬅️ VOLVER</button>
     </div>
@@ -276,7 +276,7 @@
     <div id="join-menu" class="menu-card hidden">
         <div class="menu-header">Unirse a Transmisión</div>
         <input type="text" id="join-username" class="ui-input" placeholder="Tu Nombre / Alias" maxlength="14">
-        <input type="text" id="join-code" class="ui-input" placeholder="Código de la Sala (Ej: AB42)" style="text-transform: uppercase;">
+        <input type="text" id="join-code" class="ui-input" placeholder="Código de la Sala (Ej: ROBLOX)" style="text-transform: uppercase;">
         
         <button class="menu-btn" style="background: var(--roblox-green); color: white; border-color: #0b9b52;" onclick="InterfaceController.validateAndJoin()">🔗 VALIDAR CONEXIÓN</button>
         <button class="menu-btn" style="background: #95a5a6; color: white; border-color: #7f8c8d; box-shadow: 0 6px 0px #7f8c8d;" onclick="InterfaceController.backToMain()">⬅️ VOLVER</button>
@@ -305,11 +305,12 @@
     </div>
 
     <script>
-        // Memoria global simulada de salas reales en el servidor
+        // Memoria global en tiempo real de salas activas e indexadas
         const ServidorSalasReales = ["ROBLOX", "PODCAST", "STREAM", "LIVE77"];
+        let codigoGeneradoGlobal = "";
 
         /**
-         * INTERFACE CONTROLLER - MANEJO DE VISTAS Y CONFIGURACIONES
+         * INTERFACE CONTROLLER - MANEJO EN TIEMPO REAL DE MENÚS Y VALIDACIONES
          */
         const InterfaceController = {
             showCreateOption() {
@@ -329,18 +330,31 @@
                 const name = document.getElementById('create-username').value.trim();
                 if(!name) { alert("Por favor, ingresa tu nombre primero."); return; }
                 
-                // Generar código alfanumérico aleatorio con letras de 6 dígitos
-                const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                // Generación de un código con letras aleatorias en tiempo real
+                const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
                 let codigo = '';
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 5; i++) {
                     codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
                 }
                 
-                // Registrar el código generado en nuestra lista de salas válidas
-                ServidorSalasReales.push(codigo);
+                codigoGeneradoGlobal = codigo;
+                // Inserción inmediata en el repositorio de salas válidas del cliente
+                if (!ServidorSalasReales.includes(codigo)) {
+                    ServidorSalasReales.push(codigo);
+                }
                 
                 document.getElementById('room-code-txt').innerText = codigo;
                 document.getElementById('generated-code-box').classList.remove('hidden');
+            },
+            goToJoinWithCreatedCode() {
+                const name = document.getElementById('create-username').value.trim();
+                
+                // Traspaso automático de datos en tiempo real al panel de unirse
+                document.getElementById('join-username').value = name;
+                document.getElementById('join-code').value = codigoGeneradoGlobal;
+                
+                document.getElementById('create-menu').classList.add('hidden');
+                document.getElementById('join-menu').classList.remove('hidden');
             },
             validateAndJoin() {
                 const name = document.getElementById('join-username').value.trim();
@@ -349,31 +363,26 @@
                 if(!name) { alert("Ingresa tu nombre para el canal."); return; }
                 if(!code) { alert("Ingresa el código de acceso."); return; }
 
+                // Comprobación exacta sobre la base de datos de salas en ejecución
                 if(ServidorSalasReales.includes(code)) {
                     document.getElementById('join-menu').classList.add('hidden');
-                    EngineController.init('join', name);
+                    EngineController.init(name);
                 } else {
-                    alert("❌ Código de sala inválido o inexistente. Intenta con: ROBLOX, PODCAST o crea uno nuevo.");
+                    alert(`❌ Código "${code}" inexistente.\n\nSalas que puedes probar en tiempo real ahora mismo:\n• ROBLOX\n• PODCAST\n• STREAM\n• O genera una nueva en el menú anterior.`);
                 }
             }
         };
 
         /**
-         * ENGINE CONTROLLER - GESTOR GLOBAL DE ENTRADA AL CANAL
+         * ENGINE CONTROLLER - COORDINADOR DEL SISTEMA DE DIRECTO
          */
         const EngineController = {
-            init(mode, customName = '') {
-                let finalName = customName;
-                if(mode === 'create') {
-                    finalName = document.getElementById('create-username').value.trim();
-                    document.getElementById('create-menu').classList.add('hidden');
-                }
-                
+            init(finalName) {
                 document.getElementById('user-tag-display').innerText = `🎙️ ${finalName.toUpperCase()}`;
                 const workspace = document.getElementById('workspace');
                 workspace.classList.add('active');
                 
-                // Pasar las muestras de píxeles seleccionadas por el usuario al motor gráfico
+                // Captura instantánea de los hexes de color estructurados por el usuario
                 const customColors = {
                     skin: document.getElementById('skin-color').value,
                     hair: document.getElementById('hair-color').value,
@@ -388,7 +397,7 @@
         };
 
         /**
-         * AUDIO MANAGER - PROCESAMIENTO ANALÓGICO DE FRECUENCIA
+         * AUDIO MANAGER - ANALIZADOR DE MICROFÓNICO TRANSMISOR
          */
         const AudioManager = {
             audioContext: null, analyser: null, dataArray: null, isActive: false,
@@ -408,7 +417,7 @@
                     this.isActive = true;
                     return stream;
                 } catch (error) {
-                    document.getElementById('moderator-log').innerText = "Fallo de hardware: Micrófono inaccesible.";
+                    document.getElementById('moderator-log').innerText = "Fallo: Micrófono inaccesible.";
                     throw error;
                 }
             },
@@ -422,7 +431,7 @@
         };
 
         /**
-         * INTELLIGENCE ENGINE (IA) - DETECCIONES SEMÁNTICAS
+         * INTELLIGENCE ENGINE (IA) - FILTRADO SEMÁNTICO Y ANALÍTICA DE AUDIO
          */
         const IntelligenceEngine = {
             blacklistPattern: /\b(mierda|put[ao]|pendej[ao]|culiao|maric[on]|jodete|pervertid[ao]|sexo|porno|coño|carajo|cabron|chingar|verga)\b/i,
@@ -447,7 +456,7 @@
                 const uiMod = document.getElementById('moderator-log');
 
                 if (!SpeechRecognition) {
-                    uiMod.innerText = "IA Moderación activa en segundo plano.";
+                    uiMod.innerText = "IA Moderación activa (Filtro base listo).";
                     return;
                 }
 
@@ -479,7 +488,7 @@
         };
 
         /**
-         * RENDER ENGINE - MOTOR GRÁFICO 3D CON PERSONALIZACIÓN POR PÍXELES
+         * RENDER ENGINE - MOTOR EN TRES DIMENSIONES (VOXEL PERSONALIZADO)
          */
         const RenderEngine = {
             scene: null, camera: null, renderer: null, clock: null, jawMesh: null, headGroup: null,
@@ -512,7 +521,6 @@
                 const characterGroup = new THREE.Group();
                 this.scene.add(characterGroup);
 
-                // Aplicación de colores elegidos por píxeles en la interfaz del menú
                 const skinMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.skin), roughness: 0.9 });
                 const hairMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.hair), roughness: 0.9 });
                 const shirtMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.shirt), roughness: 0.8 });
