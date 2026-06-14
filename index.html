@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>nexPLAY - Juega Sin Límites</title>
+<title>nexPLAY - Gapro Juega Sin Límites</title>
 <style>
 :root {
   --primary: #6C3CE1;
@@ -46,12 +46,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 @keyframes particles{0%{transform:translateY(0) translateX(0);opacity:1}100%{transform:translateY(-100px) translateX(var(--x));opacity:0}}
 
 /* SCREEN SYSTEM */
-.screen{display:none;animation:fadeIn 0.4s ease}
+.screen{display:none;animation:fadeIn 0.10s ease}
 .screen.active{display:block}
 
 /* LOADING */
 #loadingScreen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
-.loader-logo{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:pulse 1.5s infinite}
+.loader-logo{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:pulse 3.5s infinite}
 .loader-bar{width:300px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .loader-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:2px;animation:shimmer 1.5s infinite;background-size:200% 100%}
 
@@ -410,7 +410,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 <!-- LOADING SCREEN -->
 <div id="loadingScreen">
-  <div class="loader-logo">nexPLAY</div>
+  <div class="loader-logo">nexPLAY-Gapro</div>
   <p style="color:var(--text2);font-size:0.9rem">Cargando tu experiencia...</p>
   <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
@@ -443,7 +443,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <button class="btn btn-secondary btn-full" style="font-size:1.1rem;padding:16px" onclick="showScreen('registerScreen')">✨ Registrarse</button>
     </div>
     <div style="margin-top:40px;color:var(--text2);font-size:0.8rem;text-align:center">
-      <span style="background:rgba(108,60,225,0.2);padding:4px 10px;border-radius:6px">v2.1.0 — Actualización disponible 🆕</span>
+      <span style="background:rgba(108,60,225,0.2);padding:4px 10px;border-radius:6px">v1000.12.9 — Actualización disponible 🆕</span>
     </div>
   </div>
 </div>
@@ -451,7 +451,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <!-- LOGIN -->
 <div class="screen" id="loginScreen">
   <div class="auth-wrap">
-    <div class="auth-logo">nexPLAY</div>
+    <div class="auth-logo">nexPLAY-Gapro</div>
     <div class="auth-sub">Bienvenido de vuelta 👾</div>
     <div class="auth-card">
       <h2>Iniciar Sesión</h2>
@@ -466,7 +466,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       </div>
       <button class="btn btn-primary btn-full" style="margin-top:8px" onclick="doLogin()">Entrar →</button>
       <div class="divider">o</div>
-      <button class="btn btn-secondary btn-full" onclick="showScreen('registerScreen')">¿No tienes cuenta? Regístrate</button>
+      <button class="btn btn-secondary btn-full" onclick="showScreen('registerScreen')">¿No tienes cuenta? Regístrate y ser pro</button>
       <button class="link-btn" style="display:block;text-align:center;margin-top:12px" onclick="showScreen('splashScreen')">← Volver</button>
     </div>
   </div>
@@ -476,7 +476,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div class="screen" id="registerScreen">
   <div class="auth-wrap">
     <div class="auth-logo">nexPLAY</div>
-    <div class="auth-sub">Únete a la comunidad 🚀</div>
+    <div class="auth-sub">Únete a la comunidad de Gapro 🚀</div>
     <div class="auth-card">
       <h2>Crear Cuenta</h2>
       <div class="form-group">
@@ -497,7 +497,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <div class="form-group">
         <label>Confirmar contraseña <span style="color:var(--accent)">*</span></label>
         <input type="password" id="regPass2" placeholder="Repite tu contraseña" autocomplete="new-password">
-        <div class="error-msg" id="regPassError">Las contraseñas no coinciden</div>
+        <div class="error-msg" id="regPassError">Las contraseñas no coinciden por favor ingrese bien</div>
       </div>
       <div class="error-msg" id="regGenError" style="margin-bottom:8px;display:block;visibility:hidden">.</div>
       <button class="btn btn-primary btn-full" onclick="doRegister()">Crear cuenta 🎮</button>
@@ -510,8 +510,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div class="screen" id="welcomeScreen">
   <div class="welcome-wrap">
     <div class="welcome-avatar" id="welcomeAvatar">🎮</div>
-    <div class="welcome-title">¡Bienvenido a nexPLAY, <span id="welcomeName" style="color:var(--secondary)">Jugador</span>! 🎉</div>
-    <div class="welcome-sub">Tu aventura gaming acaba de comenzar. Esto es lo que puedes hacer:</div>
+    <div class="welcome-title">¡Bienvenido a nexPLAY-Gapro, <span id="welcomeName" style="color:var(--secondary)">Jugador</span>! 🎉</div>
+    <div class="welcome-sub">¡Bienvenido Tu aventura gaming acaba de comenzar. Esto es lo que puedes hacer:</div>
     <div class="welcome-features">
       <div class="feature-card"><div class="feature-icon">🎮</div><div class="feature-title">Juega sin límites</div><div class="feature-desc">Cientos de juegos en todos los géneros, gratis y sin descargas.</div></div>
       <div class="feature-card"><div class="feature-icon">🏆</div><div class="feature-title">Equipos y comunidad</div><div class="feature-desc">Crea o únete a equipos de desarrolladores y jugadores.</div></div>
@@ -526,7 +526,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div class="screen" id="termsScreen">
   <div class="terms-wrap">
     <div class="terms-card">
-      <h1>⚖️ Términos de Servicio</h1>
+      <h1>⚖️ Términos de Servicio de Gapro</h1>
       <p style="color:var(--text2);margin-bottom:8px">Por favor, lee y acepta antes de continuar.</p>
       <div class="terms-content">
         <h3>1. Aceptación de Términos</h3>
@@ -554,12 +554,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
         <p>nexPLAY puede suspender cuentas que violen estos términos sin previo aviso.</p>
         <h3>8. Ley Aplicable</h3>
         <p>Estos términos se rigen por las leyes aplicables del territorio del usuario.</p>
+        <p>no Compartir informacion y hecho con amor<p>
+        <h3>🔒Ley IMPORTANTE de cuenta</h3>
       </div>
       <label class="terms-checkbox">
         <input type="checkbox" id="termsCheck">
-        <span>He leído y acepto los Términos de Servicio de nexPLAY</span>
+        <span>He leído y acepto los Términos de Servicio de nexPLAY-Gapro</span>
       </label>
-      <button class="btn btn-primary btn-full" id="acceptTermsBtn" onclick="acceptTerms()" disabled style="opacity:0.5">Aceptar y Entrar a nexPLAY</button>
+      <button class="btn btn-primary btn-full" id="acceptTermsBtn" onclick="acceptTerms()" disabled style="opacity:0.5">Aceptar y Entrar a Gapro</button>
     </div>
   </div>
 </div>
@@ -583,14 +585,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
   <div class="nav-section">Navegación</div>
   <div class="nav-item active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span> Inicio</div>
-  <div class="nav-item" onclick="showPage('gamesPage',this)"><span class="nav-icon">🎮</span> Juegos</div>
+  <div class="nav-item" onclick="showPage('gamesPage',this)"><span class="nav-icon">🕹️</span> Juegos</div>
   <div class="nav-item" onclick="showPage('teamsPage',this)"><span class="nav-icon">🏆</span> Equipos</div>
   <div class="nav-section">Mi Cuenta</div>
-  <div class="nav-item" onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span> Mi Perfil</div>
+  <div class="nav-item" onclick="showPage('profilePage',this)"><span class="nav-icon">🧑.👩</span> Mi Perfil</div>
   <div class="nav-item" onclick="showPage('publishPage',this)" id="publishNavItem"><span class="nav-icon">📤</span> Publicar Juego</div>
   <div class="nav-item" onclick="showPage('settingsPage',this)"><span class="nav-icon">⚙️</span> Configuración</div>
   <div class="nav-section admin-only" id="adminNavSection" style="display:none">Administración</div>
-  <div class="nav-item admin-only" id="adminNavItem" style="display:none" onclick="showPage('adminPage',this)"><span class="nav-icon">🔧</span> Panel Admin <span class="nav-badge">ADMIN</span></div>
+  <div class="nav-item admin-only" id="adminNavItem" style="display:none" onclick="showPage('adminPage',this)"><span class="nav-icon">🔧.⚙️.🛡️</span> Panel Admin <span class="nav-badge">ADMIN</span></div>
   <div style="margin-top:auto;padding:16px">
     <button class="btn btn-danger btn-full" style="font-size:0.85rem" onclick="doLogout()">← Cerrar Sesión</button>
   </div>
@@ -605,8 +607,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <div class="search-results" id="searchResults"></div>
   </div>
   <div class="topbar-actions">
-    <div class="adblock-indicator" id="adblockStatus">🛡️ Sin Anuncios</div>
-    <div class="icon-btn" onclick="toggleNotifs()" id="notifBtn" title="Notificaciones">🔔<span class="notif-dot" id="notifDot"></span></div>
+    <div class="adblock-indicator" id="adblockStatus">🔒 Sin Anuncios</div>
+    <div class="icon-btn" onclick="toggleNotifs()" id="notifBtn" title="Notificaciones">🔔̃<span class="notif-dot" id="notifDot"></span></div>
     <div class="icon-btn" onclick="showPage('profilePage',null)" title="Perfil" id="topbarAvatar">👤</div>
   </div>
 </header>
@@ -614,7 +616,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <!-- NOTIFICATIONS PANEL -->
 <div id="notifPanel" style="position:fixed;top:70px;right:16px;width:320px;background:var(--card);border:1px solid var(--border);border-radius:16px;z-index:150;display:none;animation:fadeIn 0.3s ease;overflow:hidden">
   <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
-    <span style="font-weight:700">🔔 Notificaciones</span>
+    <span style="font-weight:700">🔔̃ Notificaciones</span>
     <button onclick="markAllRead()" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.8rem">Marcar todo leído</button>
   </div>
   <div id="notifList" style="max-height:350px;overflow-y:auto"></div>
@@ -626,17 +628,17 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <!-- HOME PAGE -->
 <div class="page active" id="homePage">
   <div id="updateBanner" class="update-banner" style="display:none">
-    <div>🆕 <strong>nexPLAY v2.1.0</strong> — Nuevas funciones disponibles <span class="update-version">NUEVO</span></div>
+    <div>🆕 <strong>nexPLAY v1000.12.9</strong> — Nuevas funciones disponibles <span class="update-version">NUEVO</span></div>
     <button onclick="document.getElementById('updateBanner').style.display='none'" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.2rem">✕</button>
   </div>
   <div class="hero editable-content" id="heroSection">
     <button class="edit-overlay-btn" onclick="openEditSection('hero')" id="heroEditBtn" style="display:none">✏️ Editar</button>
     <div class="hero-content">
-      <div class="hero-tag">🌟 Plataforma N°1 de juegos web en Latinoamérica</div>
+      <div class="hero-tag">🌟 Plataforma de juegos web en Latinoamérica</div>
       <h1 id="heroTitle">Juega. Crea. Comparte.</h1>
       <p id="heroDesc">Miles de juegos gratuitos, sin descargas, desde cualquier dispositivo. Únete a la comunidad más grande de jugadores y desarrolladores.</p>
       <div class="hero-btns">
-        <button class="btn btn-primary" onclick="showPage('gamesPage',null)">🎮 Explorar Juegos</button>
+        <button class="btn btn-primary" onclick="showPage('gamesPage',null)">🕹️ Explorar Juegos</button>
         <button class="btn btn-secondary" onclick="showPage('publishPage',null)">🚀 Publicar mi Juego</button>
       </div>
     </div>
@@ -751,7 +753,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       </div>
     </div>
     <div class="publish-form">
-      <h3 style="margin-bottom:24px;color:var(--secondary)">🎮 Datos del Juego</h3>
+      <h3 style="margin-bottom:24px;color:var(--secondary)">🕹️ Datos del Juego</h3>
       <div class="form-group">
         <label>Nombre del Juego *</label>
         <input type="text" id="pubGameName" placeholder="Ej: Super Jump Adventure">
@@ -885,8 +887,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <button class="btn btn-secondary btn-full" onclick="doLogout()">← Cerrar Sesión</button>
     </div>
     <div class="settings-card">
-      <h3>ℹ️ Acerca de nexPLAY</h3>
-      <div class="settings-row"><div class="settings-label">Versión</div><span style="color:var(--secondary)">v2.1.0</span></div>
+      <h3>ℹ️ Acerca de nexPLAY-Gapro</h3>
+      <div class="settings-row"><div class="settings-label">Versión</div><span style="color:var(--secondary)">ℹ️ v1000.12.9</span></div>
       <div class="settings-row"><div class="settings-label">Build</div><span style="color:var(--text2)">2025.06</span></div>
       <div class="settings-row"><div class="settings-label">Licencia</div><span style="color:var(--text2)">nexPLAY © 2025</span></div>
     </div>
