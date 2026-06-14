@@ -1,594 +1,2295 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Profesional - Control de Voz & Configuración de Sala</title>
-    <style>
-        :root {
-            --bg-dark: #111216;
-            --panel-bg: #1f2026;
-            --panel-border: #3a3b45;
-            --roblox-green: #00e676;
-            --roblox-red: #ff3b30;
-            --roblox-muted: #45474f;
-            --ui-blue-gradient: linear-gradient(180deg, #5dade2 0%, #2471a3 100%);
-            --ui-blue-dark: #1b4f72;
-            --ui-blue-shadow: #154360;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nexPLAY - Juega Sin Límites</title>
+<style>
+:root {
+  --primary: #6C3CE1;
+  --primary-dark: #4A1FB8;
+  --secondary: #00D4AA;
+  --accent: #FF4D6D;
+  --gold: #FFD700;
+  --bg: #0B0D1A;
+  --bg2: #111327;
+  --bg3: #1A1D35;
+  --card: #161929;
+  --border: #2A2D4A;
+  --text: #E8EAFF;
+  --text2: #8890CC;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --elite: #FFD700;
+  --famous: #1DA1F2;
+  --education: #10B981;
+  --admin-v: #FF6200;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px}
 
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: var(--bg-dark);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #e3e4e8;
-        }
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes glow{0%,100%{box-shadow:0 0 10px var(--primary)}50%{box-shadow:0 0 30px var(--primary),0 0 60px var(--primary)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes badgePop{0%{transform:scale(0) rotate(-180deg)}70%{transform:scale(1.2) rotate(10deg)}100%{transform:scale(1) rotate(0deg)}}
+@keyframes starBurst{0%{transform:scale(0);opacity:1}100%{transform:scale(3);opacity:0}}
+@keyframes bounceIn{0%{transform:scale(0.3);opacity:0}50%{transform:scale(1.1)}70%{transform:scale(0.9)}100%{transform:scale(1);opacity:1}}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes notifSlide{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes particles{0%{transform:translateY(0) translateX(0);opacity:1}100%{transform:translateY(-100px) translateX(var(--x));opacity:0}}
 
-        /* --- SISTEMA DE INTERFAZ DE USUARIO (MENÚ PRINCIPAL) --- */
-        .menu-card {
-            position: absolute;
-            width: 360px;
-            background: var(--ui-blue-gradient);
-            border: 4px solid var(--ui-blue-dark);
-            border-radius: 28px;
-            padding: 25px;
-            box-shadow: 0 12px 0px #114162, 0 20px 40px rgba(0,0,0,0.6);
-            text-align: center;
-            z-index: 100;
-            box-sizing: border-box;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1), opacity 0.3s ease;
-        }
+/* SCREEN SYSTEM */
+.screen{display:none;animation:fadeIn 0.4s ease}
+.screen.active{display:block}
 
-        .hidden {
-            display: none !important;
-        }
+/* LOADING */
+#loadingScreen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.loader-logo{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:pulse 1.5s infinite}
+.loader-bar{width:300px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:2px;animation:shimmer 1.5s infinite;background-size:200% 100%}
 
-        .menu-header {
-            background-color: var(--ui-blue-dark);
-            color: white;
-            font-weight: 800;
-            padding: 12px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
+/* AUTH SCREENS */
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at top,#1A0A3E,var(--bg) 70%)}
+.auth-logo{font-size:3.5rem;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;animation:float 3s ease-in-out infinite}
+.auth-sub{color:var(--text2);margin-bottom:40px;font-size:1rem}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.auth-card h2{font-size:1.6rem;margin-bottom:24px;text-align:center}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;color:var(--text2);font-size:0.85rem;margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:1rem;transition:all 0.3s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,60,225,0.2)}
+.form-group textarea{resize:vertical;min-height:80px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(108,60,225,0.4)}
+.btn-secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:#c53030}
+.btn-success{background:var(--success);color:#fff}
+.btn-success:hover{background:#059669}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#FFA500);color:#000}
+.btn-full{width:100%}
+.link-btn{background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.9rem;text-decoration:underline;padding:0}
+.error-msg{color:var(--danger);font-size:0.8rem;margin-top:4px;display:none}
+.success-msg{color:var(--success);font-size:0.8rem;margin-top:4px;display:none}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text2);font-size:0.85rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-        .menu-btn {
-            background: white;
-            color: var(--ui-blue-dark);
-            font-size: 16px;
-            font-weight: 700;
-            padding: 14px 0;
-            width: 100%;
-            margin: 10px 0;
-            border: 3px solid var(--ui-blue-dark);
-            border-radius: 16px;
-            cursor: pointer;
-            box-shadow: 0 6px 0px var(--ui-blue-shadow);
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-sizing: border-box;
-        }
+/* WELCOME SCREEN */
+.welcome-wrap{min-height:100vh;background:radial-gradient(ellipse at top,#1A0A3E,var(--bg) 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+.welcome-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px;animation:bounceIn 0.8s ease}
+.welcome-title{font-size:2.5rem;font-weight:900;margin-bottom:10px;animation:fadeIn 0.6s ease 0.2s both}
+.welcome-sub{color:var(--text2);font-size:1.1rem;margin-bottom:40px;animation:fadeIn 0.6s ease 0.4s both}
+.welcome-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:40px;width:100%;max-width:800px;animation:fadeIn 0.6s ease 0.6s both}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:left;transition:all 0.3s}
+.feature-card:hover{border-color:var(--primary);transform:translateY(-4px)}
+.feature-icon{font-size:2rem;margin-bottom:12px}
+.feature-title{font-weight:700;margin-bottom:6px}
+.feature-desc{color:var(--text2);font-size:0.85rem}
 
-        .menu-btn:hover { background-color: #f8f9f9; }
-        .menu-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0px var(--ui-blue-shadow);
-        }
+/* TERMS SCREEN */
+.terms-wrap{min-height:100vh;background:var(--bg);display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+.terms-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;max-width:800px;width:100%}
+.terms-card h1{font-size:2rem;margin-bottom:8px;color:var(--accent)}
+.terms-content{max-height:400px;overflow-y:auto;margin:20px 0;padding-right:10px;color:var(--text2);line-height:1.8}
+.terms-content h3{color:var(--text);margin:16px 0 8px}
+.terms-checkbox{display:flex;align-items:center;gap:10px;margin:20px 0;cursor:pointer}
+.terms-checkbox input{width:18px;height:18px;accent-color:var(--primary)}
 
-        .ui-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 3px solid var(--ui-blue-dark);
-            font-size: 16px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 12px;
-            box-sizing: border-box;
-        }
+/* MAIN APP */
+#mainApp{display:none}
+.app-layout{display:flex;min-height:100vh}
 
-        .room-code-display {
-            background: #111216;
-            color: #fff;
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 4px;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-            border: 2px dashed #fff;
-        }
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;transition:all 0.3s}
+.sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.sidebar-logo-text{font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-user{padding:12px 20px;display:flex;align-items:center;gap:12px;margin-bottom:8px;background:var(--bg3);border-radius:12px;margin:0 12px 16px}
+.user-avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.user-info-sm{flex:1;min-width:0}
+.user-name-sm{font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role-sm{font-size:0.7rem;color:var(--text2)}
+.nav-section{padding:8px 12px 4px;font-size:0.7rem;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 20px;cursor:pointer;transition:all 0.2s;border-radius:10px;margin:2px 8px;font-size:0.9rem;color:var(--text2)}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:linear-gradient(135deg,rgba(108,60,225,0.3),rgba(0,212,170,0.1));color:var(--text);border-left:3px solid var(--primary)}
+.nav-icon{font-size:1.1rem;width:20px;text-align:center}
+.nav-badge{background:var(--accent);color:#fff;font-size:0.65rem;padding:2px 6px;border-radius:20px;margin-left:auto}
 
-        /* --- EDITOR DE PERSONAJE POR PIXELES --- */
-        .customizer-group {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-            background: rgba(0,0,0,0.2);
-            padding: 10px;
-            border-radius: 14px;
-        }
+/* TOP BAR */
+.topbar{position:fixed;top:0;left:240px;right:0;height:64px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;z-index:99}
+.search-bar{flex:1;max-width:400px;display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 16px}
+.search-bar input{background:none;border:none;color:var(--text);flex:1;outline:none}
+.topbar-actions{display:flex;align-items:center;gap:12px;margin-left:auto}
+.icon-btn{width:40px;height:40px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:1.1rem;position:relative;color:var(--text)}
+.icon-btn:hover{border-color:var(--primary);color:var(--primary)}
+.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--accent);border-radius:50%}
+.adblock-indicator{background:linear-gradient(135deg,var(--success),#059669);color:#fff;padding:4px 10px;border-radius:6px;font-size:0.7rem;font-weight:700}
 
-        .color-picker-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-        }
+/* MAIN CONTENT */
+.main-content{margin-left:240px;margin-top:64px;padding:24px;min-height:calc(100vh - 64px)}
 
-        .color-picker-wrapper input[type="color"] {
-            border: 2px solid var(--ui-blue-dark);
-            border-radius: 8px;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            background: none;
-            margin-top: 5px;
-        }
+/* PAGES */
+.page{display:none;animation:fadeIn 0.3s ease}
+.page.active{display:block}
 
-        /* --- ESPACIO DE TRABAJO EN DIRECTO --- */
-        #workspace {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            pointer-events: none;
-        }
+/* SECTION HEADERS */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.section-title{font-size:1.4rem;font-weight:700}
+.section-sub{color:var(--text2);font-size:0.85rem;margin-top:2px}
 
-        #workspace.active {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--primary-dark),var(--bg2));border-radius:20px;padding:40px;margin-bottom:28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 50%,rgba(0,212,170,0.15),transparent 60%)}
+.hero-content{position:relative;z-index:1}
+.hero h1{font-size:2.2rem;font-weight:900;margin-bottom:10px}
+.hero p{color:rgba(232,234,255,0.8);max-width:500px;line-height:1.6}
+.hero-btns{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);padding:4px 12px;border-radius:20px;font-size:0.8rem;margin-bottom:16px}
 
-        .voice-avatar-frame {
-            position: relative;
-            width: 260px;
-            height: 260px;
-            border-radius: 50%;
-            background: #2a2b30;
-            border: 6px solid var(--roblox-muted); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            transition: border-color 0.2s cubic-bezier(0.1, 0.8, 0.2, 1), box-shadow 0.2s ease;
-        }
+/* GAMES GRID */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.game-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.3s;position:relative}
+.game-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.4);border-color:var(--primary)}
+.game-card.featured{border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.2)}
+.game-card.banned{opacity:0.4;pointer-events:none}
+.game-thumb{width:100%;height:130px;object-fit:cover;background:linear-gradient(135deg,var(--bg3),var(--border));display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative}
+.game-thumb img{width:100%;height:100%;object-fit:cover}
+.game-info{padding:12px}
+.game-title{font-weight:700;font-size:0.9rem;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.game-team{font-size:0.75rem;color:var(--text2)}
+.game-stats{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.75rem;color:var(--text2)}
+.game-badge{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:6px;font-size:0.65rem;font-weight:700}
+.badge-featured{background:var(--gold);color:#000}
+.badge-new{background:var(--secondary);color:#000}
+.badge-hot{background:var(--accent);color:#fff}
+.game-actions{display:flex;gap:6px;padding:0 12px 12px;flex-wrap:wrap}
+.game-action-btn{flex:1;padding:6px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text2);cursor:pointer;font-size:0.75rem;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:4px}
+.game-action-btn:hover{border-color:var(--primary);color:var(--primary)}
+.game-action-btn.liked{color:var(--accent);border-color:var(--accent)}
+.game-action-btn.disliked{color:var(--primary);border-color:var(--primary)}
 
-        .voice-avatar-frame.talking {
-            border-color: var(--roblox-green);
-            box-shadow: 0 0 35px rgba(0, 230, 118, 0.5);
-        }
+/* GAME PLAYER */
+.game-player-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:200;display:none;flex-direction:column;animation:fadeIn 0.3s ease}
+.game-player-overlay.active{display:flex}
+.player-header{display:flex;align-items:center;gap:16px;padding:16px 24px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.player-title{font-weight:700;font-size:1.1rem}
+.player-team{font-size:0.8rem;color:var(--text2)}
+.player-actions{display:flex;gap:10px;margin-left:auto;align-items:center}
+.game-frame-container{flex:1;display:flex;align-items:center;justify-content:center;background:#000;position:relative}
+.game-frame{width:100%;height:100%;border:none;background:#000}
+.game-mode-bar{display:flex;align-items:center;gap:12px;padding:8px 16px;background:var(--bg2);font-size:0.8rem;flex-wrap:wrap}
+.mode-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);transition:all 0.2s}
+.mode-toggle.active{border-color:var(--secondary);color:var(--secondary)}
+.cheat-panel{position:absolute;top:50px;right:16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;width:220px;z-index:10;display:none;animation:slideIn 0.3s ease}
+.cheat-panel.visible{display:block}
+.cheat-title{font-size:0.75rem;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.cheat-item{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:0.85rem}
+.toggle-switch{position:relative;width:40px;height:22px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--border);border-radius:11px;transition:0.3s}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s}
+.toggle-switch input:checked + .toggle-slider{background:var(--secondary)}
+.toggle-switch input:checked + .toggle-slider::before{transform:translateX(18px)}
 
-        .voice-avatar-frame.flagged {
-            border-color: var(--roblox-red) !important;
-            box-shadow: 0 0 45px rgba(255, 59, 48, 0.7) !important;
-        }
+/* CATEGORIES */
+.categories-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;margin-bottom:24px;scrollbar-width:none}
+.categories-scroll::-webkit-scrollbar{display:none}
+.cat-chip{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;cursor:pointer;white-space:nowrap;font-size:0.85rem;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+.cat-chip:hover,.cat-chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
 
-        #canvas3d {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-overlay.active{display:flex;animation:fadeIn 0.3s ease}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;position:relative;animation:bounceIn 0.4s ease}
+.modal h2{font-size:1.5rem;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--bg2);border:none;color:var(--text);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;transition:all 0.2s}
+.modal-close:hover{background:var(--danger);color:#fff}
 
-        .status-badge {
-            position: absolute;
-            top: -8px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background-color: var(--roblox-red); 
-            border-radius: 50%;
-            border: 3px solid var(--bg-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-            z-index: 10;
-        }
+/* PROFILE */
+.profile-header{background:linear-gradient(135deg,var(--primary-dark),var(--bg2));border-radius:20px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden}
+.profile-avatar-big{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:2.5rem;border:4px solid var(--border);margin-bottom:16px;position:relative}
+.profile-name{font-size:1.8rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.profile-stats{display:flex;gap:24px;margin-top:16px;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-size:1.3rem;font-weight:800;color:var(--primary)}
+.stat-lbl{font-size:0.75rem;color:var(--text2)}
+.profile-tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:12px;padding:4px;width:fit-content}
+.profile-tab{padding:8px 20px;border-radius:8px;cursor:pointer;font-size:0.9rem;transition:all 0.2s;color:var(--text2)}
+.profile-tab.active{background:var(--primary);color:#fff}
 
-        .status-badge.active { background-color: var(--roblox-green); }
-        .status-badge svg { width: 20px; height: 20px; fill: white; }
+/* TEAMS */
+.team-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.3s;cursor:pointer}
+.team-card:hover{transform:translateY(-4px);border-color:var(--primary)}
+.team-card.featured-team{border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.15)}
+.team-card.banned-team{opacity:0.5;pointer-events:none}
+.team-logo{width:60px;height:60px;border-radius:12px;object-fit:cover;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px}
+.team-logo img{width:100%;height:100%;border-radius:12px;object-fit:cover}
+.team-name-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.team-name{font-size:1.1rem;font-weight:700}
+.team-desc{color:var(--text2);font-size:0.85rem;line-height:1.5;margin-bottom:12px}
+.team-meta{display:flex;gap:16px;font-size:0.75rem;color:var(--text2);flex-wrap:wrap}
 
-        .dashboard-panel {
-            width: 360px;
-            background: var(--panel-bg);
-            border: 2px solid var(--panel-border);
-            border-radius: 18px;
-            padding: 15px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            box-sizing: border-box;
-        }
+/* ADMIN PANEL */
+.admin-wrap{padding:0}
+.admin-header{background:linear-gradient(135deg,#FF6200,#FF8533);padding:32px;border-radius:20px;margin-bottom:28px;position:relative;overflow:hidden}
+.admin-header::after{content:'⚙️';position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:5rem;opacity:0.2}
+.admin-tabs{display:flex;gap:4px;background:var(--card);border-radius:12px;padding:4px;margin-bottom:28px;overflow-x:auto;flex-wrap:wrap}
+.admin-tab{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;color:var(--text2);white-space:nowrap}
+.admin-tab.active{background:var(--primary);color:#fff}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.admin-stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.admin-stat-num{font-size:2rem;font-weight:800;margin-bottom:4px}
+.admin-stat-lbl{font-size:0.8rem;color:var(--text2)}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{padding:12px 16px;background:var(--bg2);text-align:left;font-size:0.8rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+.data-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:0.9rem;vertical-align:middle}
+.data-table tr:hover td{background:rgba(108,60,225,0.05)}
+.action-btns{display:flex;gap:6px;flex-wrap:wrap}
+.mini-btn{padding:4px 10px;border-radius:6px;font-size:0.75rem;border:none;cursor:pointer;font-weight:600;transition:all 0.2s}
+.mini-btn:hover{opacity:0.85;transform:scale(1.05)}
 
-        .panel-header {
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 10px;
-        }
+/* VERIFIED BADGES */
+.badge-famous{display:inline-flex;align-items:center}
+.badge-famous svg,.badge-edu svg,.badge-admin svg,.badge-elite svg{width:20px;height:20px}
+.badge-wrap{display:inline-flex;align-items:center;cursor:pointer;position:relative}
+.badge-tooltip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:0.75rem;white-space:nowrap;z-index:10;display:none;pointer-events:none}
+.badge-wrap:hover .badge-tooltip{display:block}
 
-        .ai-output {
-            background: #141519;
-            padding: 12px;
-            border-radius: 10px;
-            min-height: 40px;
-            font-size: 13.5px;
-            line-height: 1.5;
-            box-sizing: border-box;
-            border-left: 4px solid var(--panel-border);
-        }
+/* NOTIFICATIONS */
+.notif-container{position:fixed;top:80px;right:20px;z-index:500;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.notif{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;min-width:300px;pointer-events:all;animation:notifSlide 0.4s ease;box-shadow:0 8px 30px rgba(0,0,0,0.4)}
+.notif-icon{font-size:1.3rem}
+.notif-text{flex:1}
+.notif-title{font-weight:600;font-size:0.9rem}
+.notif-msg{color:var(--text2);font-size:0.8rem}
+.notif.success{border-color:var(--success)}
+.notif.warning{border-color:var(--warning)}
+.notif.error{border-color:var(--danger)}
+.notif.info{border-color:var(--primary)}
 
-        #user-tag-display {
-            color: #fff;
-            font-weight: bold;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-top: 5px;
-            display: inline-block;
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+/* UPDATE BANNER */
+.update-banner{background:linear-gradient(135deg,var(--primary),var(--secondary));padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-radius:12px;margin-bottom:20px;animation:fadeIn 0.5s ease}
+.update-text{font-weight:600;font-size:0.9rem}
+.update-version{background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:4px;font-size:0.75rem;margin-left:8px}
+
+/* BAN NOTICE */
+.ban-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:400;display:none;align-items:center;justify-content:center;padding:20px}
+.ban-overlay.active{display:flex;animation:fadeIn 0.3s ease}
+.ban-card{background:var(--card);border:2px solid var(--danger);border-radius:20px;padding:40px;max-width:500px;text-align:center}
+.ban-icon{font-size:4rem;margin-bottom:20px}
+.ban-title{font-size:1.8rem;font-weight:800;color:var(--danger);margin-bottom:12px}
+
+/* TEAM VIEW */
+.team-view-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:20px;padding:32px;margin-bottom:24px;border:1px solid var(--border)}
+.team-view-logo{width:100px;height:100px;border-radius:16px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:3rem;margin-bottom:20px;border:2px solid var(--border)}
+.team-view-logo img{width:100%;height:100%;border-radius:14px;object-fit:cover}
+.team-members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.member-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;transition:all 0.2s}
+.member-card:hover{border-color:var(--primary)}
+.member-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 10px}
+.social-links{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.social-link{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border-radius:8px;font-size:0.8rem;color:var(--text2);text-decoration:none;transition:all 0.2s}
+.social-link:hover{color:var(--primary);border:1px solid var(--primary)}
+
+/* IMAGE PROTECTION */
+.protected-img{user-select:none;-webkit-user-drag:none;pointer-events:none;position:relative}
+.img-overlay{position:absolute;inset:0;background:transparent;z-index:5}
+
+/* PUBLISH GAME FORM */
+.publish-form{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.img-upload-zone{border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative}
+.img-upload-zone:hover{border-color:var(--primary);background:rgba(108,60,225,0.05)}
+.img-upload-zone.has-img{border-style:solid;border-color:var(--success)}
+.img-preview{width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:none}
+.steps-list{counter-reset:steps;list-style:none}
+.steps-list li{counter-increment:steps;display:flex;gap:16px;margin-bottom:20px}
+.steps-list li::before{content:counter(steps);display:flex;align-items:center;justify-content:center;width:32px;height:32px;min-width:32px;background:var(--primary);border-radius:50%;font-weight:700;font-size:0.85rem}
+.step-content{padding-top:6px}
+.step-title{font-weight:600;margin-bottom:4px}
+.step-desc{color:var(--text2);font-size:0.85rem;line-height:1.5}
+
+/* PERFORMANCE OPTIONS */
+.perf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px}
+.perf-option{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s}
+.perf-option:hover{border-color:var(--secondary)}
+.perf-option.active{border-color:var(--secondary);background:rgba(0,212,170,0.1)}
+.perf-option h4{font-size:0.9rem;margin-bottom:4px}
+.perf-option p{font-size:0.75rem;color:var(--text2)}
+
+/* REPORT FORM */
+.report-reasons{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.report-reason{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg2);border-radius:8px;cursor:pointer;transition:all 0.2s}
+.report-reason:hover,.report-reason.selected{background:rgba(108,60,225,0.15);border:1px solid var(--primary)}
+.report-reason input{accent-color:var(--primary)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.sidebar{transform:translateX(-100%);width:280px}.sidebar.open{transform:translateX(0)}
+.topbar{left:0}.main-content{margin-left:0}
+.form-row{grid-template-columns:1fr}
+.games-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.admin-stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* SEARCH RESULTS */
+.search-results{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-top:4px;max-height:300px;overflow-y:auto;z-index:50;display:none}
+.search-result-item{padding:10px 16px;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:10px}
+.search-result-item:hover{background:var(--bg2)}
+
+/* TABS CONTENT */
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text2)}
+.empty-state-icon{font-size:4rem;margin-bottom:16px;opacity:0.5}
+.empty-state h3{font-size:1.2rem;margin-bottom:8px;color:var(--text)}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.settings-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.settings-card h3{font-size:1rem;margin-bottom:16px;color:var(--secondary)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:0.9rem}
+.settings-desc{font-size:0.75rem;color:var(--text2);margin-top:2px}
+
+/* COLOR PICKER */
+.color-picker-row{display:flex;gap:8px;flex-wrap:wrap}
+.color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+.color-dot.active,.color-dot:hover{transform:scale(1.2);border-color:#fff}
+
+/* Verified elite animation */
+.elite-badge-animated{animation:float 3s ease-in-out infinite,glow 2s ease-in-out infinite}
+
+/* CHARTS */
+.chart-bar{height:200px;display:flex;align-items:flex-end;gap:8px;padding:16px 0}
+.bar{flex:1;background:linear-gradient(0deg,var(--primary),var(--secondary));border-radius:4px 4px 0 0;min-height:4px;transition:all 0.5s ease;position:relative;cursor:pointer}
+.bar:hover{opacity:0.8}
+.bar::after{content:attr(data-val);position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:0.7rem;white-space:nowrap}
+.chart-labels{display:flex;gap:8px;padding:0 0 8px}
+.chart-label{flex:1;text-align:center;font-size:0.7rem;color:var(--text2)}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text2);margin-bottom:20px}
+.breadcrumb span{cursor:pointer;transition:color 0.2s}
+.breadcrumb span:hover{color:var(--primary)}
+.breadcrumb .sep{color:var(--border)}
+
+/* INPUT FILE CUSTOM */
+.file-input-hidden{display:none}
+.file-input-label{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;color:var(--text2)}
+.file-input-label:hover{color:var(--primary)}
+
+/* SCROLLABLE CONTAINER */
+.scroll-x{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.scroll-x::-webkit-scrollbar{display:none}
+.scroll-item{flex-shrink:0}
+
+/* EDIT BANNER */
+.editable-content{position:relative}
+.editable-content .edit-overlay-btn{position:absolute;top:8px;right:8px;background:var(--primary);color:#fff;border:none;padding:4px 10px;border-radius:6px;font-size:0.75rem;cursor:pointer;display:none}
+.editable-content:hover .edit-overlay-btn{display:block}
+
+/* ADMIN EDIT MODAL */
+.admin-section-editor{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+</style>
 </head>
 <body>
 
-    <div id="main-menu" class="menu-card">
-        <div class="menu-header">Panel de Transmisión</div>
-        <button class="menu-btn" onclick="InterfaceController.showCreateOption()">🔑 CREAR SALA PRIVADA</button>
-        <button class="menu-btn" onclick="InterfaceController.showJoinOption()">🚪 UNIRME A UNA SALA</button>
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="loader-logo">nexPLAY</div>
+  <p style="color:var(--text2);font-size:0.9rem">Cargando tu experiencia...</p>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- NOTIFICATIONS CONTAINER -->
+<div class="notif-container" id="notifContainer"></div>
+
+<!-- BAN OVERLAY -->
+<div class="ban-overlay" id="banOverlay">
+  <div class="ban-card">
+    <div class="ban-icon">🚫</div>
+    <div class="ban-title">Cuenta Baneada</div>
+    <p style="color:var(--text2);margin-bottom:16px" id="banReason">Tu cuenta ha sido suspendida por violar los términos de servicio.</p>
+    <p style="font-size:0.8rem;color:var(--text2)">Fecha: <span id="banDate"></span></p>
+    <p style="font-size:0.8rem;color:var(--text2);margin-bottom:24px">Hora: <span id="banTime"></span></p>
+    <button class="btn btn-secondary btn-full" onclick="document.getElementById('banOverlay').classList.remove('active')">Cerrar</button>
+  </div>
+</div>
+
+<!-- ==================== AUTH SCREENS ==================== -->
+<div id="authScreens">
+
+<!-- SPLASH -->
+<div class="screen active" id="splashScreen">
+  <div class="auth-wrap">
+    <div style="font-size:4rem;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;animation:float 3s ease-in-out infinite">nexPLAY</div>
+    <div style="color:var(--text2);margin-bottom:60px;font-size:0.95rem">La plataforma de juegos que te conecta</div>
+    <div style="display:flex;flex-direction:column;gap:14px;width:100%;max-width:340px">
+      <button class="btn btn-primary btn-full" style="font-size:1.1rem;padding:16px" onclick="showScreen('loginScreen')">🎮 Iniciar Sesión</button>
+      <button class="btn btn-secondary btn-full" style="font-size:1.1rem;padding:16px" onclick="showScreen('registerScreen')">✨ Registrarse</button>
     </div>
-
-    <div id="create-menu" class="menu-card hidden">
-        <div class="menu-header">Nueva Sala Privada</div>
-        <input type="text" id="create-username" class="ui-input" placeholder="Tu Nombre / Alias" maxlength="14">
-        
-        <div style="font-size: 13px; font-weight: bold; color: white;">EDITAR PIXELES DEL AVATAR:</div>
-        <div class="customizer-group">
-            <div class="color-picker-wrapper">Piel<input type="color" id="skin-color" value="#e5a67c"></div>
-            <div class="color-picker-wrapper">Pelo<input type="color" id="hair-color" value="#4a231a"></div>
-            <div class="color-picker-wrapper">Ropa<input type="color" id="shirt-color" value="#b5cbb7"></div>
-        </div>
-
-        <button class="menu-btn" onclick="InterfaceController.generateRoom()">🎲 GENERAR CÓDIGO</button>
-        <div id="generated-code-box" class="hidden">
-            <div class="room-code-display" id="room-code-txt">XXXXXX</div>
-            <button class="menu-btn" style="background: var(--roblox-green); color: white; border-color: #0b9b52;" onclick="InterfaceController.goToJoinWithCreatedCode()">🚀 IR A ENTRAR A LA SALA</button>
-        </div>
-        <button class="menu-btn" style="background: #95a5a6; color: white; border-color: #7f8c8d; box-shadow: 0 6px 0px #7f8c8d;" onclick="InterfaceController.backToMain()">⬅️ VOLVER</button>
+    <div style="margin-top:40px;color:var(--text2);font-size:0.8rem;text-align:center">
+      <span style="background:rgba(108,60,225,0.2);padding:4px 10px;border-radius:6px">v2.1.0 — Actualización disponible 🆕</span>
     </div>
+  </div>
+</div>
 
-    <div id="join-menu" class="menu-card hidden">
-        <div class="menu-header">Unirse a Transmisión</div>
-        <input type="text" id="join-username" class="ui-input" placeholder="Tu Nombre / Alias" maxlength="14">
-        <input type="text" id="join-code" class="ui-input" placeholder="Código de la Sala (Ej: ROBLOX)" style="text-transform: uppercase;">
-        
-        <button class="menu-btn" style="background: var(--roblox-green); color: white; border-color: #0b9b52;" onclick="InterfaceController.validateAndJoin()">🔗 VALIDAR CONEXIÓN</button>
-        <button class="menu-btn" style="background: #95a5a6; color: white; border-color: #7f8c8d; box-shadow: 0 6px 0px #7f8c8d;" onclick="InterfaceController.backToMain()">⬅️ VOLVER</button>
+<!-- LOGIN -->
+<div class="screen" id="loginScreen">
+  <div class="auth-wrap">
+    <div class="auth-logo">nexPLAY</div>
+    <div class="auth-sub">Bienvenido de vuelta 👾</div>
+    <div class="auth-card">
+      <h2>Iniciar Sesión</h2>
+      <div class="form-group">
+        <label>Usuario o Email</label>
+        <input type="text" id="loginUser" placeholder="Tu usuario o correo" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="loginPass" placeholder="Tu contraseña" autocomplete="current-password">
+        <div class="error-msg" id="loginError">❌ Usuario o contraseña incorrectos</div>
+      </div>
+      <button class="btn btn-primary btn-full" style="margin-top:8px" onclick="doLogin()">Entrar →</button>
+      <div class="divider">o</div>
+      <button class="btn btn-secondary btn-full" onclick="showScreen('registerScreen')">¿No tienes cuenta? Regístrate</button>
+      <button class="link-btn" style="display:block;text-align:center;margin-top:12px" onclick="showScreen('splashScreen')">← Volver</button>
     </div>
+  </div>
+</div>
 
-    <div id="workspace">
-        <div class="voice-avatar-frame" id="avatar-ui-frame">
-            <div class="status-badge" id="mic-badge">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
-                </svg>
-            </div>
-            <div id="canvas3d"></div>
-        </div>
-        <center><div id="user-tag-display">Usuario</div></center>
-
-        <div class="dashboard-panel">
-            <div class="panel-header" style="color: var(--roblox-green);">🤖 Copiloto de Contenido (IA)</div>
-            <div class="ai-output" id="advice-log">Analizando contexto...</div>
-        </div>
-
-        <div class="dashboard-panel">
-            <div class="panel-header" style="color: var(--roblox-red);">🛡️ Moderación Semántica (IA)</div>
-            <div class="ai-output" id="moderator-log">Esperando flujo de voz...</div>
-        </div>
+<!-- REGISTER -->
+<div class="screen" id="registerScreen">
+  <div class="auth-wrap">
+    <div class="auth-logo">nexPLAY</div>
+    <div class="auth-sub">Únete a la comunidad 🚀</div>
+    <div class="auth-card">
+      <h2>Crear Cuenta</h2>
+      <div class="form-group">
+        <label>Nombre de usuario <span style="color:var(--accent)">*</span></label>
+        <input type="text" id="regUser" placeholder="Ej: GamerPro123" oninput="validateUsername(this)" autocomplete="username">
+        <div class="error-msg" id="regUserError"></div>
+        <div class="success-msg" id="regUserOk">✅ Nombre disponible</div>
+      </div>
+      <div class="form-group">
+        <label>Email <span style="color:var(--accent)">*</span></label>
+        <input type="email" id="regEmail" placeholder="tu@email.com" autocomplete="email">
+        <div class="error-msg" id="regEmailError"></div>
+      </div>
+      <div class="form-group">
+        <label>Contraseña <span style="color:var(--accent)">*</span></label>
+        <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label>Confirmar contraseña <span style="color:var(--accent)">*</span></label>
+        <input type="password" id="regPass2" placeholder="Repite tu contraseña" autocomplete="new-password">
+        <div class="error-msg" id="regPassError">Las contraseñas no coinciden</div>
+      </div>
+      <div class="error-msg" id="regGenError" style="margin-bottom:8px;display:block;visibility:hidden">.</div>
+      <button class="btn btn-primary btn-full" onclick="doRegister()">Crear cuenta 🎮</button>
+      <button class="link-btn" style="display:block;text-align:center;margin-top:16px" onclick="showScreen('loginScreen')">¿Ya tienes cuenta? Inicia sesión</button>
     </div>
+  </div>
+</div>
 
-    <script>
-        // Memoria global en tiempo real de salas activas e indexadas
-        const ServidorSalasReales = ["ROBLOX", "PODCAST", "STREAM", "LIVE77"];
-        let codigoGeneradoGlobal = "";
+<!-- WELCOME -->
+<div class="screen" id="welcomeScreen">
+  <div class="welcome-wrap">
+    <div class="welcome-avatar" id="welcomeAvatar">🎮</div>
+    <div class="welcome-title">¡Bienvenido a nexPLAY, <span id="welcomeName" style="color:var(--secondary)">Jugador</span>! 🎉</div>
+    <div class="welcome-sub">Tu aventura gaming acaba de comenzar. Esto es lo que puedes hacer:</div>
+    <div class="welcome-features">
+      <div class="feature-card"><div class="feature-icon">🎮</div><div class="feature-title">Juega sin límites</div><div class="feature-desc">Cientos de juegos en todos los géneros, gratis y sin descargas.</div></div>
+      <div class="feature-card"><div class="feature-icon">🏆</div><div class="feature-title">Equipos y comunidad</div><div class="feature-desc">Crea o únete a equipos de desarrolladores y jugadores.</div></div>
+      <div class="feature-card"><div class="feature-icon">🚀</div><div class="feature-title">Publica tus juegos</div><div class="feature-desc">Comparte tus creaciones con millones de jugadores.</div></div>
+      <div class="feature-card"><div class="feature-icon">🛡️</div><div class="feature-title">100% seguro</div><div class="feature-desc">Bloqueador de anuncios integrado y protección de privacidad.</div></div>
+    </div>
+    <button class="btn btn-primary" style="font-size:1.1rem;padding:16px 40px" onclick="showScreen('termsScreen')">Continuar →</button>
+  </div>
+</div>
 
-        /**
-         * INTERFACE CONTROLLER - MANEJO EN TIEMPO REAL DE MENÚS Y VALIDACIONES
-         */
-        const InterfaceController = {
-            showCreateOption() {
-                document.getElementById('main-menu').classList.add('hidden');
-                document.getElementById('create-menu').classList.remove('hidden');
-            },
-            showJoinOption() {
-                document.getElementById('main-menu').classList.add('hidden');
-                document.getElementById('join-menu').classList.remove('hidden');
-            },
-            backToMain() {
-                document.getElementById('create-menu').classList.add('hidden');
-                document.getElementById('join-menu').classList.add('hidden');
-                document.getElementById('main-menu').classList.remove('hidden');
-            },
-            generateRoom() {
-                const name = document.getElementById('create-username').value.trim();
-                if(!name) { alert("Por favor, ingresa tu nombre primero."); return; }
-                
-                // Generación de un código con letras aleatorias en tiempo real
-                const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-                let codigo = '';
-                for (let i = 0; i < 5; i++) {
-                    codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-                }
-                
-                codigoGeneradoGlobal = codigo;
-                // Inserción inmediata en el repositorio de salas válidas del cliente
-                if (!ServidorSalasReales.includes(codigo)) {
-                    ServidorSalasReales.push(codigo);
-                }
-                
-                document.getElementById('room-code-txt').innerText = codigo;
-                document.getElementById('generated-code-box').classList.remove('hidden');
-            },
-            goToJoinWithCreatedCode() {
-                const name = document.getElementById('create-username').value.trim();
-                
-                // Traspaso automático de datos en tiempo real al panel de unirse
-                document.getElementById('join-username').value = name;
-                document.getElementById('join-code').value = codigoGeneradoGlobal;
-                
-                document.getElementById('create-menu').classList.add('hidden');
-                document.getElementById('join-menu').classList.remove('hidden');
-            },
-            validateAndJoin() {
-                const name = document.getElementById('join-username').value.trim();
-                const code = document.getElementById('join-code').value.trim().toUpperCase();
+<!-- TERMS -->
+<div class="screen" id="termsScreen">
+  <div class="terms-wrap">
+    <div class="terms-card">
+      <h1>⚖️ Términos de Servicio</h1>
+      <p style="color:var(--text2);margin-bottom:8px">Por favor, lee y acepta antes de continuar.</p>
+      <div class="terms-content">
+        <h3>1. Aceptación de Términos</h3>
+        <p>Al usar nexPLAY, aceptas estos términos en su totalidad. Si no estás de acuerdo, no uses la plataforma.</p>
+        <h3>2. Límite de Responsabilidad — IMPORTANTE</h3>
+        <p><strong style="color:var(--danger)">nexPLAY NO se hace responsable de:</strong></p>
+        <ul style="margin:10px 0 10px 20px;line-height:2">
+          <li>🔐 Robo, hackeo o acceso no autorizado a tu cuenta</li>
+          <li>💻 Pérdida de datos, progreso de juegos o información personal</li>
+          <li>🎮 Contenido publicado por terceros o desarrolladores</li>
+          <li>💰 Pérdidas económicas derivadas del uso de la plataforma</li>
+          <li>🌐 Tiempo de inactividad, errores o interrupciones del servicio</li>
+          <li>🔗 Contenido de sitios o juegos de terceros</li>
+          <li>😰 Daños indirectos, incidentales o consecuentes</li>
+        </ul>
+        <h3>3. Conducta del Usuario</h3>
+        <p>Queda prohibido: usar lenguaje ofensivo o inapropiado, hacer spam, publicar contenido ilegal, hackear o modificar juegos sin autorización (solo administradores), suplantar identidades.</p>
+        <h3>4. Contenido de Juegos</h3>
+        <p>Los juegos son responsabilidad de sus desarrolladores. nexPLAY actúa como plataforma intermediaria.</p>
+        <h3>5. Privacidad</h3>
+        <p>Tus datos se usan únicamente para mejorar tu experiencia. No los vendemos a terceros.</p>
+        <h3>6. Modificaciones</h3>
+        <p>nexPLAY puede modificar estos términos en cualquier momento. Se notificará a los usuarios activos.</p>
+        <h3>7. Suspensión de Cuenta</h3>
+        <p>nexPLAY puede suspender cuentas que violen estos términos sin previo aviso.</p>
+        <h3>8. Ley Aplicable</h3>
+        <p>Estos términos se rigen por las leyes aplicables del territorio del usuario.</p>
+      </div>
+      <label class="terms-checkbox">
+        <input type="checkbox" id="termsCheck">
+        <span>He leído y acepto los Términos de Servicio de nexPLAY</span>
+      </label>
+      <button class="btn btn-primary btn-full" id="acceptTermsBtn" onclick="acceptTerms()" disabled style="opacity:0.5">Aceptar y Entrar a nexPLAY</button>
+    </div>
+  </div>
+</div>
 
-                if(!name) { alert("Ingresa tu nombre para el canal."); return; }
-                if(!code) { alert("Ingresa el código de acceso."); return; }
+</div><!-- end authScreens -->
 
-                // Comprobación exacta sobre la base de datos de salas en ejecución
-                if(ServidorSalasReales.includes(code)) {
-                    document.getElementById('join-menu').classList.add('hidden');
-                    EngineController.init(name);
-                } else {
-                    alert(`❌ Código "${code}" inexistente.\n\nSalas que puedes probar en tiempo real ahora mismo:\n• ROBLOX\n• PODCAST\n• STREAM\n• O genera una nueva en el menú anterior.`);
-                }
-            }
-        };
+<!-- ==================== MAIN APP ==================== -->
+<div id="mainApp">
 
-        /**
-         * ENGINE CONTROLLER - COORDINADOR DEL SISTEMA DE DIRECTO
-         */
-        const EngineController = {
-            init(finalName) {
-                document.getElementById('user-tag-display').innerText = `🎙️ ${finalName.toUpperCase()}`;
-                const workspace = document.getElementById('workspace');
-                workspace.classList.add('active');
-                
-                // Captura instantánea de los hexes de color estructurados por el usuario
-                const customColors = {
-                    skin: document.getElementById('skin-color').value,
-                    hair: document.getElementById('hair-color').value,
-                    shirt: document.getElementById('shirt-color').value
-                };
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-text">nexPLAY</div>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-avatar-sm" id="sidebarAvatar">👤</div>
+    <div class="user-info-sm">
+      <div class="user-name-sm" id="sidebarName">Usuario</div>
+      <div class="user-role-sm" id="sidebarRole">Jugador</div>
+    </div>
+  </div>
+  <div class="nav-section">Navegación</div>
+  <div class="nav-item active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span> Inicio</div>
+  <div class="nav-item" onclick="showPage('gamesPage',this)"><span class="nav-icon">🎮</span> Juegos</div>
+  <div class="nav-item" onclick="showPage('teamsPage',this)"><span class="nav-icon">🏆</span> Equipos</div>
+  <div class="nav-section">Mi Cuenta</div>
+  <div class="nav-item" onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span> Mi Perfil</div>
+  <div class="nav-item" onclick="showPage('publishPage',this)" id="publishNavItem"><span class="nav-icon">📤</span> Publicar Juego</div>
+  <div class="nav-item" onclick="showPage('settingsPage',this)"><span class="nav-icon">⚙️</span> Configuración</div>
+  <div class="nav-section admin-only" id="adminNavSection" style="display:none">Administración</div>
+  <div class="nav-item admin-only" id="adminNavItem" style="display:none" onclick="showPage('adminPage',this)"><span class="nav-icon">🔧</span> Panel Admin <span class="nav-badge">ADMIN</span></div>
+  <div style="margin-top:auto;padding:16px">
+    <button class="btn btn-danger btn-full" style="font-size:0.85rem" onclick="doLogout()">← Cerrar Sesión</button>
+  </div>
+</aside>
 
-                RenderEngine.setup(customColors);
-                AudioManager.start().then(stream => {
-                    IntelligenceEngine.startAnalysis(stream);
-                });
-            }
-        };
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="icon-btn" onclick="toggleSidebar()" style="display:none" id="menuBtn">☰</button>
+  <div class="search-bar" style="position:relative">
+    <span>🔍</span>
+    <input type="text" placeholder="Buscar juegos, equipos..." id="searchInput" oninput="doSearch(this.value)">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <div class="topbar-actions">
+    <div class="adblock-indicator" id="adblockStatus">🛡️ Sin Anuncios</div>
+    <div class="icon-btn" onclick="toggleNotifs()" id="notifBtn" title="Notificaciones">🔔<span class="notif-dot" id="notifDot"></span></div>
+    <div class="icon-btn" onclick="showPage('profilePage',null)" title="Perfil" id="topbarAvatar">👤</div>
+  </div>
+</header>
 
-        /**
-         * AUDIO MANAGER - ANALIZADOR DE MICROFÓNICO TRANSMISOR
-         */
-        const AudioManager = {
-            audioContext: null, analyser: null, dataArray: null, isActive: false,
+<!-- NOTIFICATIONS PANEL -->
+<div id="notifPanel" style="position:fixed;top:70px;right:16px;width:320px;background:var(--card);border:1px solid var(--border);border-radius:16px;z-index:150;display:none;animation:fadeIn 0.3s ease;overflow:hidden">
+  <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+    <span style="font-weight:700">🔔 Notificaciones</span>
+    <button onclick="markAllRead()" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.8rem">Marcar todo leído</button>
+  </div>
+  <div id="notifList" style="max-height:350px;overflow-y:auto"></div>
+</div>
 
-            async start() {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-                    this.audioContext = new AudioContextClass();
-                    this.analyser = this.audioContext.createAnalyser();
-                    this.analyser.fftSize = 256;
-                    
-                    const source = this.audioContext.createMediaStreamSource(stream);
-                    source.connect(this.analyser);
-                    
-                    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
-                    this.isActive = true;
-                    return stream;
-                } catch (error) {
-                    document.getElementById('moderator-log').innerText = "Fallo: Micrófono inaccesible.";
-                    throw error;
-                }
-            },
-            getVolume() {
-                if (!this.isActive) return 0;
-                this.analyser.getByteFrequencyData(this.dataArray);
-                let sum = 0;
-                for (let i = 0; i < this.dataArray.length; i++) sum += this.dataArray[i];
-                return sum / this.dataArray.length;
-            }
-        };
+<!-- MAIN CONTENT -->
+<main class="main-content">
 
-        /**
-         * INTELLIGENCE ENGINE (IA) - FILTRADO SEMÁNTICO Y ANALÍTICA DE AUDIO
-         */
-        const IntelligenceEngine = {
-            blacklistPattern: /\b(mierda|put[ao]|pendej[ao]|culiao|maric[on]|jodete|pervertid[ao]|sexo|porno|coño|carajo|cabron|chingar|verga)\b/i,
-            advices: [
-                "💡 IA Insight: Fluidez léxica estable. Mantén el ritmo temático actual.",
-                "💡 IA Insight: Compromiso del oyente óptimo. Introduce preguntas abiertas.",
-                "💡 IA Insight: Métricas de tono perfectas. Buen control de los armónicos.",
-                "💡 IA Insight: Excelente modulación de voz."
-            ],
+<!-- HOME PAGE -->
+<div class="page active" id="homePage">
+  <div id="updateBanner" class="update-banner" style="display:none">
+    <div>🆕 <strong>nexPLAY v2.1.0</strong> — Nuevas funciones disponibles <span class="update-version">NUEVO</span></div>
+    <button onclick="document.getElementById('updateBanner').style.display='none'" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.2rem">✕</button>
+  </div>
+  <div class="hero editable-content" id="heroSection">
+    <button class="edit-overlay-btn" onclick="openEditSection('hero')" id="heroEditBtn" style="display:none">✏️ Editar</button>
+    <div class="hero-content">
+      <div class="hero-tag">🌟 Plataforma N°1 de juegos web en Latinoamérica</div>
+      <h1 id="heroTitle">Juega. Crea. Comparte.</h1>
+      <p id="heroDesc">Miles de juegos gratuitos, sin descargas, desde cualquier dispositivo. Únete a la comunidad más grande de jugadores y desarrolladores.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" onclick="showPage('gamesPage',null)">🎮 Explorar Juegos</button>
+        <button class="btn btn-secondary" onclick="showPage('publishPage',null)">🚀 Publicar mi Juego</button>
+      </div>
+    </div>
+  </div>
 
-            startAnalysis(stream) {
-                const uiAdvice = document.getElementById('advice-log');
-                uiAdvice.innerText = "💡 IA Insight: Analizando voz del emisor...";
-                setInterval(() => {
-                    uiAdvice.innerText = this.advices[Math.floor(Math.random() * this.advices.length)];
-                }, 12000);
-                this.setupSpeechModerator();
-            },
+  <div class="categories-scroll" id="homeCats"></div>
 
-            setupSpeechModerator() {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                const uiMod = document.getElementById('moderator-log');
+  <div class="section-header">
+    <div><div class="section-title">⭐ Juegos Destacados</div></div>
+    <button class="btn btn-secondary" onclick="showPage('gamesPage',null)">Ver todos →</button>
+  </div>
+  <div class="games-grid" id="featuredGames"></div>
 
-                if (!SpeechRecognition) {
-                    uiMod.innerText = "IA Moderación activa (Filtro base listo).";
-                    return;
-                }
+  <div class="section-header" style="margin-top:32px">
+    <div><div class="section-title">🔥 Populares Ahora</div></div>
+  </div>
+  <div class="games-grid" id="popularGames"></div>
 
-                const recognition = new SpeechRecognition();
-                recognition.continuous = true;
-                recognition.interimResults = true;
-                recognition.lang = 'es-ES';
+  <div class="section-header" style="margin-top:32px">
+    <div><div class="section-title">🏆 Equipos Destacados</div></div>
+  </div>
+  <div class="games-grid" id="homeTeamsGrid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
+</div>
 
-                recognition.onresult = (event) => {
-                    let transcript = "";
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        transcript += event.results[i][0].transcript;
-                    }
+<!-- GAMES PAGE -->
+<div class="page" id="gamesPage">
+  <div class="section-header">
+    <div><div class="section-title">🎮 Todos los Juegos</div><div class="section-sub" id="gamesCount">Cargando...</div></div>
+  </div>
+  <div class="categories-scroll" id="gamesCats"></div>
+  <div class="games-grid" id="allGamesGrid"></div>
+</div>
 
-                    uiMod.style.color = "#b3b4b8";
-                    uiMod.innerText = `Inspectando audio: "${transcript}"`;
+<!-- TEAMS PAGE -->
+<div class="page" id="teamsPage">
+  <div class="section-header">
+    <div><div class="section-title">🏆 Equipos</div></div>
+    <button class="btn btn-primary" onclick="openModal('createTeamModal')">+ Crear Equipo</button>
+  </div>
+  <div class="games-grid" id="teamsGrid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
+</div>
 
-                    if (this.blacklistPattern.test(transcript)) {
-                        const uiFrame = document.getElementById('avatar-ui-frame');
-                        uiFrame.classList.add('flagged');
-                        uiMod.style.color = "#ff3b30";
-                        uiMod.innerText = "⚠️ [INFRACCIÓN DE COMPORTAMIENTO] IA detectó palabras inapropiadas o pervertidas.";
-                        setTimeout(() => { uiFrame.classList.remove('flagged'); }, 3000);
-                    }
-                };
-                recognition.onend = () => { recognition.start(); };
-                recognition.start();
-            }
-        };
+<!-- PROFILE PAGE -->
+<div class="page" id="profilePage">
+  <div class="profile-header">
+    <div style="display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap">
+      <div class="profile-avatar-big" id="profileAvatarBig">👤</div>
+      <div style="flex:1">
+        <div class="profile-name" id="profileDisplayName">
+          <span id="profileUsername"></span>
+          <span id="profileBadges"></span>
+        </div>
+        <div style="color:var(--text2);margin-bottom:8px" id="profileRoleLabel"></div>
+        <div class="profile-stats">
+          <div class="stat-item"><div class="stat-num" id="statGames">0</div><div class="stat-lbl">Juegos</div></div>
+          <div class="stat-item"><div class="stat-num" id="statLikes">0</div><div class="stat-lbl">Likes</div></div>
+          <div class="stat-item"><div class="stat-num" id="statTeam">-</div><div class="stat-lbl">Equipo</div></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+          <button class="btn btn-secondary" onclick="openModal('editProfileModal')">✏️ Editar Perfil</button>
+          <button class="btn btn-secondary" onclick="openModal('changeCredentialsModal')">🔐 Cambiar Credenciales</button>
+          <button class="btn btn-secondary" onclick="shareProfile()">📤 Compartir Perfil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-tabs">
+    <div class="profile-tab active" onclick="switchProfileTab('myGames',this)">🎮 Mis Juegos</div>
+    <div class="profile-tab" onclick="switchProfileTab('myLikes',this)">❤️ Me Gusta</div>
+    <div class="profile-tab" onclick="switchProfileTab('myTeam',this)">🏆 Mi Equipo</div>
+    <div class="profile-tab" onclick="switchProfileTab('myActivity',this)">📊 Actividad</div>
+  </div>
+  <div class="tab-content active" id="myGames">
+    <div class="games-grid" id="myGamesGrid"></div>
+  </div>
+  <div class="tab-content" id="myLikes">
+    <div class="games-grid" id="myLikesGrid"></div>
+  </div>
+  <div class="tab-content" id="myTeam">
+    <div id="myTeamContent"></div>
+  </div>
+  <div class="tab-content" id="myActivity">
+    <div id="activityList" style="display:flex;flex-direction:column;gap:12px"></div>
+  </div>
+</div>
 
-        /**
-         * RENDER ENGINE - MOTOR EN TRES DIMENSIONES (VOXEL PERSONALIZADO)
-         */
-        const RenderEngine = {
-            scene: null, camera: null, renderer: null, clock: null, jawMesh: null, headGroup: null,
+<!-- PUBLISH PAGE -->
+<div class="page" id="publishPage">
+  <div class="section-header">
+    <div><div class="section-title">📤 Publicar Juego</div><div class="section-sub">Comparte tu juego con la comunidad nexPLAY</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:24px;flex-wrap:wrap" id="publishGrid">
+    <div>
+      <div class="publish-form" style="margin-bottom:20px">
+        <h3 style="margin-bottom:20px;color:var(--secondary)">📋 Pasos para Publicar</h3>
+        <ol class="steps-list">
+          <li><div class="step-content"><div class="step-title">Completa el formulario</div><div class="step-desc">Nombre, descripción, portada y URL de tu juego</div></div></li>
+          <li><div class="step-content"><div class="step-title">Espera la revisión</div><div class="step-desc">El admin revisará tu juego (1-3 días hábiles)</div></div></li>
+          <li><div class="step-content"><div class="step-title">¡Publicado!</div><div class="step-desc">Tu juego aparecerá en nexPLAY para todos los jugadores</div></div></li>
+          <li><div class="step-content"><div class="step-title">Recibe estadísticas</div><div class="step-desc">Vistas, likes y comentarios en tiempo real</div></div></li>
+        </ol>
+      </div>
+      <div class="publish-form">
+        <h3 style="margin-bottom:16px;color:var(--secondary)">⚡ Requisitos</h3>
+        <ul style="color:var(--text2);font-size:0.85rem;line-height:2;list-style:none">
+          <li>✅ Juego en HTML5, Unity WebGL o similar</li>
+          <li>✅ Portada de al menos 400×300px</li>
+          <li>✅ Sin anuncios externos</li>
+          <li>✅ Contenido apropiado para todas las edades</li>
+          <li>✅ Descripción clara en español o inglés</li>
+        </ul>
+      </div>
+    </div>
+    <div class="publish-form">
+      <h3 style="margin-bottom:24px;color:var(--secondary)">🎮 Datos del Juego</h3>
+      <div class="form-group">
+        <label>Nombre del Juego *</label>
+        <input type="text" id="pubGameName" placeholder="Ej: Super Jump Adventure">
+      </div>
+      <div class="form-group">
+        <label>Nombre del Desarrollador/Equipo *</label>
+        <input type="text" id="pubDevName" placeholder="Tu nombre o nombre del equipo">
+      </div>
+      <div class="form-group">
+        <label>Descripción *</label>
+        <textarea id="pubGameDesc" placeholder="Describe tu juego: mecánicas, historia, controles..." style="min-height:100px"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Portada del Juego *</label>
+        <div class="img-upload-zone" onclick="document.getElementById('pubCoverInput').click()" id="pubCoverZone">
+          <img id="pubCoverPreview" class="img-preview">
+          <div class="file-input-label" id="pubCoverLabel">
+            <span style="font-size:2rem">🖼️</span>
+            <span style="font-weight:600">Seleccionar imagen</span>
+            <span style="font-size:0.8rem">PNG, JPG, WEBP — Máx 5MB</span>
+          </div>
+        </div>
+        <input type="file" class="file-input-hidden" id="pubCoverInput" accept="image/*" onchange="handleCoverUpload(this,'pubCoverPreview','pubCoverLabel','pubCoverZone')">
+      </div>
+      <div class="form-group">
+        <label>URL del Juego *</label>
+        <input type="url" id="pubGameUrl" placeholder="https://tu-juego.com o itch.io/tu-juego">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Género *</label>
+          <select id="pubGenre">
+            <option value="">Seleccionar...</option>
+            <option>Acción</option><option>Aventura</option><option>Puzzle</option>
+            <option>Plataformas</option><option>Carreras</option><option>Deportes</option>
+            <option>Estrategia</option><option>RPG</option><option>Terror</option>
+            <option>Educativo</option><option>Casual</option><option>Multijugador</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Motor / Tecnología</label>
+          <input type="text" id="pubEngine" placeholder="Unity, Godot, Phaser...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>¿Pertenece a un equipo?</label>
+        <select id="pubTeamSelect">
+          <option value="">Ninguno / Independiente</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" style="margin-top:8px" onclick="submitGame()">🚀 Enviar para Revisión</button>
+    </div>
+  </div>
+</div>
 
-            setup(colors) {
-                const container = document.getElementById('canvas3d');
-                this.clock = new THREE.Clock();
+<!-- SETTINGS PAGE -->
+<div class="page" id="settingsPage">
+  <div class="section-header">
+    <div><div class="section-title">⚙️ Configuración</div></div>
+  </div>
+  <div class="settings-grid">
+    <div class="settings-card">
+      <h3>🎨 Apariencia</h3>
+      <div class="settings-row">
+        <div><div class="settings-label">Color de Acento</div></div>
+        <div class="color-picker-row">
+          <div class="color-dot active" style="background:#6C3CE1" onclick="setAccentColor('#6C3CE1','#4A1FB8',this)" title="Morado"></div>
+          <div class="color-dot" style="background:#00D4AA" onclick="setAccentColor('#00D4AA','#009980',this)" title="Verde"></div>
+          <div class="color-dot" style="background:#FF4D6D" onclick="setAccentColor('#FF4D6D','#cc2244',this)" title="Rojo"></div>
+          <div class="color-dot" style="background:#FFD700" onclick="setAccentColor('#FFD700','#ccaa00',this)" title="Dorado"></div>
+          <div class="color-dot" style="background:#1DA1F2" onclick="setAccentColor('#1DA1F2','#0d7fcc',this)" title="Azul"></div>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Modo Oscuro</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked disabled><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Animaciones</div><div class="settings-desc">Efectos visuales en la interfaz</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="animToggle" checked onchange="toggleAnimations(this)"><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3>🛡️ Privacidad y Seguridad</h3>
+      <div class="settings-row">
+        <div><div class="settings-label">Bloqueador de Anuncios</div><div class="settings-desc">Bloquea todos los anuncios</div></div>
+        <label class="toggle-switch"><input type="checkbox" id="adBlockToggle" checked onchange="toggleAdBlock(this)"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Perfil Público</div><div class="settings-desc">Otros pueden ver tu perfil</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Mostrar en Equipos</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3>🎮 Rendimiento de Juegos</h3>
+      <p style="color:var(--text2);font-size:0.8rem;margin-bottom:12px">Optimiza para tu equipo</p>
+      <div class="perf-grid">
+        <div class="perf-option" onclick="setPerfMode('auto',this)"><h4>⚡ Auto</h4><p>Detecta automáticamente</p></div>
+        <div class="perf-option active" onclick="setPerfMode('high',this)"><h4>🔥 Alto</h4><p>Máxima calidad</p></div>
+        <div class="perf-option" onclick="setPerfMode('medium',this)"><h4>⚙️ Medio</h4><p>Balance calidad/rendimiento</p></div>
+        <div class="perf-option" onclick="setPerfMode('low',this)"><h4>🐌 Bajo</h4><p>PC antigua / Slow PC Mode</p></div>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3>🔔 Notificaciones</h3>
+      <div class="settings-row">
+        <div><div class="settings-label">Actualizaciones de nexPLAY</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Juegos nuevos</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Actividad del equipo</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Respuestas a comentarios</div></div>
+        <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+    <div class="settings-card">
+      <h3>🗑️ Zona de Peligro</h3>
+      <p style="color:var(--text2);font-size:0.85rem;margin-bottom:16px">Acciones irreversibles</p>
+      <button class="btn btn-danger btn-full" style="margin-bottom:10px" onclick="if(confirm('¿Seguro? Esta acción no se puede deshacer.'))showNotif('⚠️','Cuenta eliminada','Tu cuenta ha sido eliminada','error')">🗑️ Eliminar mi cuenta</button>
+      <button class="btn btn-secondary btn-full" onclick="doLogout()">← Cerrar Sesión</button>
+    </div>
+    <div class="settings-card">
+      <h3>ℹ️ Acerca de nexPLAY</h3>
+      <div class="settings-row"><div class="settings-label">Versión</div><span style="color:var(--secondary)">v2.1.0</span></div>
+      <div class="settings-row"><div class="settings-label">Build</div><span style="color:var(--text2)">2025.06</span></div>
+      <div class="settings-row"><div class="settings-label">Licencia</div><span style="color:var(--text2)">nexPLAY © 2025</span></div>
+    </div>
+  </div>
+</div>
 
-                this.scene = new THREE.Scene();
-                this.scene.background = new THREE.Color(0x2a2b30);
+<!-- ADMIN PAGE -->
+<div class="page" id="adminPage">
+  <div class="admin-header">
+    <div style="display:flex;align-items:center;gap:16px">
+      <span style="font-size:3rem">🔧</span>
+      <div>
+        <div style="font-size:0.8rem;opacity:0.7;text-transform:uppercase;letter-spacing:2px">Panel de Control</div>
+        <h1 style="font-size:2rem;font-weight:900">Administración nexPLAY</h1>
+        <div style="opacity:0.8;font-size:0.9rem">Control total de la plataforma</div>
+      </div>
+    </div>
+  </div>
+  <div class="admin-tabs">
+    <div class="admin-tab active" onclick="switchAdminTab('statsTab',this)">📊 Estadísticas</div>
+    <div class="admin-tab" onclick="switchAdminTab('usersTab',this)">👥 Usuarios</div>
+    <div class="admin-tab" onclick="switchAdminTab('gamesAdminTab',this)">🎮 Juegos</div>
+    <div class="admin-tab" onclick="switchAdminTab('teamsAdminTab',this)">🏆 Equipos</div>
+    <div class="admin-tab" onclick="switchAdminTab('reportsTab',this)">🚨 Reportes</div>
+    <div class="admin-tab" onclick="switchAdminTab('contentTab',this)">✏️ Contenido</div>
+    <div class="admin-tab" onclick="switchAdminTab('notifAdminTab',this)">🔔 Notificaciones</div>
+    <div class="admin-tab" onclick="switchAdminTab('credAdminTab',this)">🔐 Credenciales</div>
+  </div>
 
-                this.camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-                this.camera.position.set(1.4, 1.4, 3.2);
-                this.camera.lookAt(0, 1.05, 0);
+  <!-- STATS TAB -->
+  <div class="admin-section active" id="statsTab">
+    <div class="admin-stat-grid">
+      <div class="admin-stat"><div class="admin-stat-num" id="statUsers" style="color:var(--primary)">0</div><div class="admin-stat-lbl">👥 Usuarios Registrados</div></div>
+      <div class="admin-stat"><div class="admin-stat-num" id="statGamesTotal" style="color:var(--secondary)">0</div><div class="admin-stat-lbl">🎮 Juegos Publicados</div></div>
+      <div class="admin-stat"><div class="admin-stat-num" id="statTeamsTotal" style="color:var(--accent)">0</div><div class="admin-stat-lbl">🏆 Equipos</div></div>
+      <div class="admin-stat"><div class="admin-stat-num" id="statPendingGames" style="color:var(--warning)">0</div><div class="admin-stat-lbl">⏳ Juegos Pendientes</div></div>
+      <div class="admin-stat"><div class="admin-stat-num" id="statBannedUsers" style="color:var(--danger)">0</div><div class="admin-stat-lbl">🚫 Usuarios Baneados</div></div>
+      <div class="admin-stat"><div class="admin-stat-num" id="statReports" style="color:var(--warning)">0</div><div class="admin-stat-lbl">🚨 Reportes Pendientes</div></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+      <h3 style="margin-bottom:16px">📈 Actividad (Últimos 7 días)</h3>
+      <div class="chart-bar" id="adminChart"></div>
+      <div class="chart-labels" id="adminChartLabels"></div>
+    </div>
+  </div>
 
-                this.renderer = new THREE.WebGLRenderer({ antialias: true });
-                this.renderer.setSize(260, 260);
-                container.appendChild(this.renderer.domElement);
+  <!-- USERS TAB -->
+  <div class="admin-section" id="usersTab">
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+      <input type="text" placeholder="🔍 Buscar usuario..." id="adminUserSearch" oninput="renderAdminUsers()" style="padding:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);flex:1;min-width:200px">
+      <select id="adminUserFilter" onchange="renderAdminUsers()" style="padding:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text)">
+        <option value="all">Todos</option>
+        <option value="active">Activos</option>
+        <option value="banned">Baneados</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead><tr><th>Usuario</th><th>Email</th><th>Rol</th><th>Estado</th><th>Verificado</th><th>Acciones</th></tr></thead>
+        <tbody id="adminUsersTable"></tbody>
+      </table>
+    </div>
+  </div>
 
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-                const dirLight = new THREE.DirectionalLight(0xfffaed, 0.9);
-                dirLight.position.set(3, 5, 4);
-                this.scene.add(ambientLight, dirLight);
+  <!-- GAMES ADMIN TAB -->
+  <div class="admin-section" id="gamesAdminTab">
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+      <input type="text" placeholder="🔍 Buscar juego..." id="adminGameSearch" oninput="renderAdminGames()" style="padding:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);flex:1">
+      <select id="adminGameFilter" onchange="renderAdminGames()" style="padding:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text)">
+        <option value="all">Todos</option>
+        <option value="pending">Pendientes</option>
+        <option value="approved">Aprobados</option>
+        <option value="banned">Baneados</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead><tr><th>Juego</th><th>Desarrollador</th><th>Género</th><th>Estado</th><th>👍</th><th>Acciones</th></tr></thead>
+        <tbody id="adminGamesTable"></tbody>
+      </table>
+    </div>
+  </div>
 
-                this.buildVoxelCharacter(colors);
-                this.loop();
-            },
+  <!-- TEAMS ADMIN TAB -->
+  <div class="admin-section" id="teamsAdminTab">
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead><tr><th>Equipo</th><th>Creador</th><th>Juegos</th><th>Estado</th><th>Verificado</th><th>Acciones</th></tr></thead>
+        <tbody id="adminTeamsTable"></tbody>
+      </table>
+    </div>
+  </div>
 
-            buildVoxelCharacter(colors) {
-                const characterGroup = new THREE.Group();
-                this.scene.add(characterGroup);
+  <!-- REPORTS TAB -->
+  <div class="admin-section" id="reportsTab">
+    <div id="adminReportsList">
+      <div class="empty-state"><div class="empty-state-icon">🚨</div><h3>Sin reportes pendientes</h3></div>
+    </div>
+  </div>
 
-                const skinMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.skin), roughness: 0.9 });
-                const hairMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.hair), roughness: 0.9 });
-                const shirtMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.shirt), roughness: 0.8 });
-                const eyeMat   = new THREE.MeshBasicMaterial({ color: 0x111111 });
+  <!-- CONTENT TAB -->
+  <div class="admin-section" id="contentTab">
+    <h3 style="margin-bottom:20px">✏️ Editar Contenido de la Plataforma</h3>
+    <div class="admin-section-editor">
+      <h4 style="margin-bottom:12px;color:var(--secondary)">🦸 Hero / Banner Principal</h4>
+      <div class="form-group"><label>Título del Hero</label><input type="text" id="editHeroTitle" placeholder="Juega. Crea. Comparte."></div>
+      <div class="form-group"><label>Descripción</label><textarea id="editHeroDesc" placeholder="Descripción del hero..."></textarea></div>
+      <button class="btn btn-primary" onclick="saveHeroContent()">💾 Guardar Hero</button>
+    </div>
+    <div class="admin-section-editor">
+      <h4 style="margin-bottom:12px;color:var(--secondary)">📢 Banner de Anuncio</h4>
+      <div class="form-group"><label>Texto del Banner</label><input type="text" id="editBannerText" placeholder="Nuevo evento, actualización..."></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveBannerContent()">💾 Publicar Banner</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('updateBanner').style.display='none'">🗑️ Ocultar Banner</button>
+      </div>
+    </div>
+    <div class="admin-section-editor">
+      <h4 style="margin-bottom:12px;color:var(--secondary)">🎮 Categorías</h4>
+      <div class="form-group"><label>Añadir Categoría</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="newCatInput" placeholder="Nombre de categoría...">
+          <input type="text" id="newCatIcon" placeholder="Emoji" style="width:80px">
+          <button class="btn btn-primary" onclick="addCategory()">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                this.headGroup = new THREE.Group();
-                this.headGroup.position.y = 1.1;
-                characterGroup.add(this.headGroup);
+  <!-- NOTIF ADMIN TAB -->
+  <div class="admin-section" id="notifAdminTab">
+    <h3 style="margin-bottom:20px">📢 Enviar Notificación Global</h3>
+    <div class="admin-section-editor">
+      <div class="form-group"><label>Tipo</label>
+        <select id="adminNotifType" style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);width:100%">
+          <option value="info">ℹ️ Información</option>
+          <option value="success">✅ Éxito</option>
+          <option value="warning">⚠️ Advertencia</option>
+          <option value="error">❌ Error</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Título</label><input type="text" id="adminNotifTitle" placeholder="Título de la notificación"></div>
+      <div class="form-group"><label>Mensaje</label><textarea id="adminNotifMsg" placeholder="Mensaje de la notificación..."></textarea></div>
+      <button class="btn btn-primary" onclick="sendAdminNotif()">📢 Enviar a todos</button>
+    </div>
+    <h3 style="margin:20px 0 12px">🆕 Notificación de Actualización</h3>
+    <div class="admin-section-editor">
+      <div class="form-group"><label>Versión</label><input type="text" id="updateVersion" placeholder="v2.2.0"></div>
+      <div class="form-group"><label>Mensaje</label><input type="text" id="updateMsg" placeholder="Nuevas funciones..."></div>
+      <button class="btn btn-primary" onclick="sendUpdateNotif()">🚀 Publicar Actualización</button>
+    </div>
+  </div>
 
-                const headBox = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.65, 0.65), skinMat);
-                this.headGroup.add(headBox);
+  <!-- CRED ADMIN TAB -->
+  <div class="admin-section" id="credAdminTab">
+    <h3 style="margin-bottom:20px">🔐 Cambiar Credenciales Admin</h3>
+    <div class="admin-section-editor" style="max-width:500px">
+      <div class="form-group"><label>Nuevo Usuario Admin</label><input type="text" id="newAdminUser" placeholder="Nuevo nombre de usuario"></div>
+      <div class="form-group"><label>Nueva Contraseña Admin</label><input type="password" id="newAdminPass" placeholder="Nueva contraseña"></div>
+      <div class="form-group"><label>Confirmar Contraseña</label><input type="password" id="newAdminPass2" placeholder="Repite la contraseña"></div>
+      <div class="form-group"><label>Contraseña Actual (verificación)</label><input type="password" id="currentAdminPass" placeholder="Tu contraseña actual"></div>
+      <button class="btn btn-primary" onclick="changeAdminCredentials()">💾 Actualizar Credenciales</button>
+    </div>
+  </div>
+</div>
 
-                const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.18, 0.69), hairMat);
-                hairTop.position.set(0, 0.26, 0);
-                const hairBack = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.45, 0.2), hairMat);
-                hairBack.position.set(0, 0.05, -0.26);
-                this.headGroup.add(hairTop, hairBack);
+<!-- TEAM VIEW PAGE -->
+<div class="page" id="teamViewPage">
+  <div class="breadcrumb">
+    <span onclick="showPage('teamsPage',null)">🏆 Equipos</span>
+    <span class="sep">›</span>
+    <span id="teamViewBreadcrumb">Equipo</span>
+  </div>
+  <div class="team-view-header" id="teamViewHeader"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap" id="teamViewGrid">
+    <div>
+      <h3 style="margin-bottom:16px">👥 Miembros</h3>
+      <div class="team-members-grid" id="teamViewMembers"></div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:16px">🎮 Juegos del Equipo</h3>
+      <div class="games-grid" id="teamViewGames" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))"></div>
+    </div>
+  </div>
+</div>
 
-                const eyeL = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.03), eyeMat); eyeL.position.set(-0.16, 0.08, 0.33);
-                const eyeR = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.03), eyeMat); eyeR.position.set(0.16, 0.08, 0.33);
-                const nose = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.14, 0.07), skinMat); nose.position.set(0, 0.01, 0.35);
-                this.headGroup.add(eyeL, eyeR, nose);
+</main>
+</div><!-- end mainApp -->
 
-                const beard = new THREE.Mesh(new THREE.BoxGeometry(0.69, 0.3, 0.24), hairMat);
-                beard.position.set(0, -0.18, 0.23);
-                this.headGroup.add(beard);
+<!-- ==================== MODALS ==================== -->
 
-                const mouthContainer = new THREE.Group();
-                mouthContainer.position.set(0, -0.14, 0.34);
-                this.headGroup.add(mouthContainer);
+<!-- EDIT PROFILE -->
+<div class="modal-overlay" id="editProfileModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('editProfileModal')">✕</button>
+    <h2>✏️ Editar Perfil</h2>
+    <div class="form-group"><label>Avatar (Emoji)</label><input type="text" id="editAvatar" placeholder="Ej: 🎮 🎯 👾" maxlength="2"></div>
+    <div class="form-group"><label>Bio</label><textarea id="editBio" placeholder="Cuéntanos sobre ti..."></textarea></div>
+    <div class="form-group"><label>Redes Sociales — Twitter/X</label><input type="text" id="editTwitter" placeholder="@tu_usuario"></div>
+    <div class="form-group"><label>YouTube</label><input type="text" id="editYoutube" placeholder="Canal de YouTube"></div>
+    <div class="form-group"><label>Twitch</label><input type="text" id="editTwitch" placeholder="Tu canal de Twitch"></div>
+    <div class="form-group"><label>Discord</label><input type="text" id="editDiscord" placeholder="Tu#1234"></div>
+    <button class="btn btn-primary btn-full" onclick="saveProfile()">💾 Guardar Cambios</button>
+  </div>
+</div>
 
-                const mouthCavity = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.1, 0.02), new THREE.MeshBasicMaterial({ color: 0x240a0a }));
-                mouthContainer.add(mouthCavity);
+<!-- CHANGE CREDENTIALS -->
+<div class="modal-overlay" id="changeCredentialsModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('changeCredentialsModal')">✕</button>
+    <h2>🔐 Cambiar Credenciales</h2>
+    <div class="form-group"><label>Nuevo nombre de usuario</label><input type="text" id="newUsername" placeholder="Nuevo usuario"></div>
+    <div class="form-group"><label>Nuevo email</label><input type="email" id="newEmail" placeholder="Nuevo email"></div>
+    <div class="form-group"><label>Nueva contraseña</label><input type="password" id="newPassword" placeholder="Nueva contraseña"></div>
+    <div class="form-group"><label>Confirmar contraseña</label><input type="password" id="newPassword2" placeholder="Repite la contraseña"></div>
+    <div class="form-group"><label>Contraseña actual *</label><input type="password" id="currentPassword" placeholder="Tu contraseña actual"></div>
+    <button class="btn btn-primary btn-full" onclick="saveCredentials()">💾 Actualizar</button>
+  </div>
+</div>
 
-                this.jawMesh = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.07, 0.03), hairMat);
-                this.jawMesh.position.set(0, -0.03, 0.01);
-                mouthContainer.add(this.jawMesh);
+<!-- CREATE TEAM -->
+<div class="modal-overlay" id="createTeamModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('createTeamModal')">✕</button>
+    <h2>🏆 Crear Equipo</h2>
+    <div class="form-group">
+      <label>Logo del Equipo</label>
+      <div class="img-upload-zone" onclick="document.getElementById('teamLogoInput').click()" id="teamLogoZone">
+        <img id="teamLogoPreview" class="img-preview">
+        <div class="file-input-label" id="teamLogoLabel">
+          <span style="font-size:2rem">🖼️</span>
+          <span style="font-weight:600">Seleccionar logo</span>
+          <span style="font-size:0.8rem">PNG, JPG — Máx 2MB</span>
+        </div>
+      </div>
+      <input type="file" class="file-input-hidden" id="teamLogoInput" accept="image/*" onchange="handleCoverUpload(this,'teamLogoPreview','teamLogoLabel','teamLogoZone')">
+    </div>
+    <div class="form-group"><label>Nombre del Equipo *</label><input type="text" id="teamName" placeholder="Ej: Dragon Studio, PixelForge..."></div>
+    <div class="form-group"><label>Descripción</label><textarea id="teamDesc" placeholder="¿Qué hace tu equipo?"></textarea></div>
+    <div class="form-group"><label>Twitter/X</label><input type="text" id="teamTwitter" placeholder="@equipo_twitter"></div>
+    <div class="form-group"><label>YouTube</label><input type="text" id="teamYoutube" placeholder="Canal de YouTube"></div>
+    <div class="form-group"><label>Discord</label><input type="text" id="teamDiscord" placeholder="discord.gg/tu-servidor"></div>
+    <div class="form-group"><label>Sitio Web</label><input type="url" id="teamWebsite" placeholder="https://tu-equipo.com"></div>
+    <button class="btn btn-primary btn-full" onclick="createTeam()">🚀 Crear Equipo</button>
+  </div>
+</div>
 
-                const torso = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.5, 0.45), shirtMat);
-                torso.position.y = 0.52;
-                characterGroup.add(torso);
+<!-- GAME DETAIL MODAL -->
+<div class="modal-overlay" id="gameDetailModal">
+  <div class="modal" style="max-width:700px">
+    <button class="modal-close" onclick="closeModal('gameDetailModal')">✕</button>
+    <div id="gameDetailContent"></div>
+  </div>
+</div>
 
-                characterGroup.rotation.y = 0.45;
-            },
+<!-- REPORT MODAL -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('reportModal')">✕</button>
+    <h2>🚨 Reportar</h2>
+    <p style="color:var(--text2);margin-bottom:16px">Selecciona el motivo del reporte:</p>
+    <div class="report-reasons">
+      <label class="report-reason"><input type="radio" name="reportReason" value="inappropriate">Contenido inapropiado</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="spam">Spam o publicidad</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="copyright">Violación de derechos de autor</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="harassment">Acoso o abuso</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="malware">Malware o contenido peligroso</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="other">Otro</label>
+    </div>
+    <div class="form-group"><label>Detalles adicionales</label><textarea id="reportDetails" placeholder="Describe el problema..."></textarea></div>
+    <button class="btn btn-danger btn-full" onclick="submitReport()">📤 Enviar Reporte</button>
+  </div>
+</div>
 
-            loop() {
-                requestAnimationFrame(() => this.loop());
-                const time = this.clock.getElapsedTime();
-                const uiFrame = document.getElementById('avatar-ui-frame');
-                const uiMic = document.getElementById('mic-badge');
+<!-- BAN REASON MODAL (Admin) -->
+<div class="modal-overlay" id="banReasonModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('banReasonModal')">✕</button>
+    <h2>🚫 Banear</h2>
+    <input type="hidden" id="banTargetId">
+    <input type="hidden" id="banTargetType">
+    <div class="form-group"><label>Motivo del ban *</label><textarea id="banReasonText" placeholder="Especifica el motivo del baneo..." style="min-height:100px"></textarea></div>
+    <button class="btn btn-danger btn-full" onclick="executeBan()">🚫 Confirmar Ban</button>
+  </div>
+</div>
 
-                this.headGroup.position.y = 1.1 + Math.sin(time * 2) * 0.005;
-                const volume = AudioManager.getVolume();
+<!-- SHARE PROFILE -->
+<div class="modal-overlay" id="shareProfileModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('shareProfileModal')">✕</button>
+    <h2>📤 Compartir Perfil</h2>
+    <p style="color:var(--text2);margin-bottom:16px">Tu perfil público como jugador:</p>
+    <div id="shareProfileContent" style="background:var(--bg2);border-radius:12px;padding:20px;text-align:center"></div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn btn-primary btn-full" onclick="copyShareLink()">📋 Copiar enlace</button>
+    </div>
+  </div>
+</div>
 
-                if (volume > 12) {
-                    this.jawMesh.position.y = -0.03 - Math.min(volume / 90, 0.12);
-                    if (!uiFrame.classList.contains('flagged')) {
-                        uiFrame.classList.add('talking');
-                        uiMic.classList.add('active');
-                    }
-                } else {
-                    this.jawMesh.position.y = -0.03;
-                    uiFrame.classList.remove('talking');
-                    uiMic.classList.remove('active');
-                }
-                this.renderer.render(this.scene, this.camera);
-            }
-        };
-    </script>
+<!-- GAME PLAYER -->
+<div class="game-player-overlay" id="gamePlayer">
+  <div class="player-header">
+    <button onclick="closeGamePlayer()" style="background:none;border:none;color:var(--text);cursor:pointer;font-size:1.5rem;padding:4px">✕</button>
+    <div>
+      <div class="player-title" id="playerTitle">Juego</div>
+      <div class="player-team" id="playerTeam">nexPLAY</div>
+    </div>
+    <div class="player-actions">
+      <button class="btn btn-secondary" id="playerLikeBtn" onclick="toggleLikeFromPlayer()">❤️ <span id="playerLikeCount">0</span></button>
+      <button class="btn btn-secondary" onclick="openReportFromPlayer()">🚨 Reportar</button>
+      <button class="btn btn-secondary" onclick="toggleFullscreenGame()">⛶ Pantalla Completa</button>
+      <div id="adminCheatToggle" style="display:none">
+        <button class="btn btn-secondary" onclick="toggleCheatPanel()">🔧 Cheat Panel</button>
+      </div>
+    </div>
+    <div class="cheat-panel" id="cheatPanel">
+      <div class="cheat-title">🔧 Panel Admin — Cheat Engine</div>
+      <div class="cheat-item"><span>Atravesar Paredes</span><label class="toggle-switch"><input type="checkbox" id="cheatWalls" onchange="applyCheat('walls',this.checked)"><span class="toggle-slider"></span></label></div>
+      <div class="cheat-item"><span>Inmunidad Total</span><label class="toggle-switch"><input type="checkbox" id="cheatImmu" onchange="applyCheat('immunity',this.checked)"><span class="toggle-slider"></span></label></div>
+      <div class="cheat-item"><span>Vidas Infinitas</span><label class="toggle-switch"><input type="checkbox" id="cheatLives" onchange="applyCheat('lives',this.checked)"><span class="toggle-slider"></span></label></div>
+      <div class="cheat-item"><span>Velocidad ×2</span><label class="toggle-switch"><input type="checkbox" id="cheatSpeed" onchange="applyCheat('speed',this.checked)"><span class="toggle-slider"></span></label></div>
+      <div class="cheat-item"><span>Dinero Infinito</span><label class="toggle-switch"><input type="checkbox" id="cheatMoney" onchange="applyCheat('money',this.checked)"><span class="toggle-slider"></span></label></div>
+      <div style="font-size:0.7rem;color:var(--text2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">Solo visible para administradores</div>
+    </div>
+  </div>
+  <div class="game-mode-bar" id="gameModeBar">
+    <span style="color:var(--text2);font-size:0.8rem">Modo:</span>
+    <div class="mode-toggle active" onclick="setGamePerf('normal',this)">⚡ Normal</div>
+    <div class="mode-toggle" onclick="setGamePerf('performance',this)">🔥 Rendimiento</div>
+    <div class="mode-toggle" onclick="setGamePerf('lowend',this)">🐌 PC Antigua</div>
+  </div>
+  <div class="game-frame-container">
+    <iframe class="game-frame" id="gameFrame" sandbox="allow-scripts allow-same-origin allow-forms" allow="fullscreen"></iframe>
+  </div>
+</div>
+
+<script>
+// ==================== DATA STORE ====================
+let DB = {
+  users: [],
+  games: [],
+  teams: [],
+  reports: [],
+  notifications: [],
+  categories: [
+    {id:'all',name:'Todos',icon:'🎮'},
+    {id:'action',name:'Acción',icon:'⚔️'},
+    {id:'adventure',name:'Aventura',icon:'🗺️'},
+    {id:'puzzle',name:'Puzzle',icon:'🧩'},
+    {id:'platform',name:'Plataformas',icon:'🏃'},
+    {id:'racing',name:'Carreras',icon:'🏎️'},
+    {id:'sports',name:'Deportes',icon:'⚽'},
+    {id:'strategy',name:'Estrategia',icon:'♟️'},
+    {id:'rpg',name:'RPG',icon:'🐉'},
+    {id:'casual',name:'Casual',icon:'🎈'},
+    {id:'multiplayer',name:'Multi',icon:'👥'},
+    {id:'educational',name:'Educativo',icon:'📚'},
+  ],
+  settings: {perfMode:'high',adBlock:true,animations:true}
+};
+
+let currentUser = null;
+let currentGameId = null;
+let currentReportTarget = null;
+let selectedPerfMode = 'high';
+let adminCredentials = {user:'nexPLAY.admin', pass:'julio2012*'};
+let inboxNotifs = [];
+
+function saveDB(){try{localStorage.setItem('nexplay_db',JSON.stringify(DB));localStorage.setItem('nexplay_admin',JSON.stringify(adminCredentials));}catch(e){}}
+function loadDB(){
+  try{
+    const d=localStorage.getItem('nexplay_db');
+    if(d){const p=JSON.parse(d);DB={...DB,...p};if(!DB.settings)DB.settings={perfMode:'high',adBlock:true,animations:true};}
+    const a=localStorage.getItem('nexplay_admin');
+    if(a)adminCredentials=JSON.parse(a);
+  }catch(e){}
+  // Seed games if empty
+  if(DB.games.length===0){
+    DB.games=[
+      {id:'g1',name:'Marble Run 3D',desc:'Guía la bola de mármol por pistas llenas de obstáculos. ¡Desafía tus reflejos!',url:'about:blank',cover:'',genre:'Plataformas',engine:'Unity',team:'',dev:'OSA Studio',approved:true,featured:true,banned:false,likes:[],dislikes:[],plays:4250,date:'2025-01-10',badge:'hot'},
+      {id:'g2',name:'Space Defender',desc:'Defiende la galaxia de oleadas de enemigos alienígenas.',url:'about:blank',cover:'',genre:'Acción',engine:'Phaser',team:'',dev:'PixelForge',approved:true,featured:true,banned:false,likes:[],dislikes:[],plays:3100,date:'2025-02-05',badge:'featured'},
+      {id:'g3',name:'Puzzle Master X',desc:'100 niveles de puzzles únicos que desafiarán tu mente.',url:'about:blank',cover:'',genre:'Puzzle',engine:'Godot',team:'',dev:'BrainGames',approved:true,featured:false,banned:false,likes:[],dislikes:[],plays:1890,date:'2025-03-12',badge:'new'},
+      {id:'g4',name:'Super Runner',desc:'Plataformas clásicas con mecánicas modernas y gráficos vibrantes.',url:'about:blank',cover:'',genre:'Plataformas',engine:'GDevelop',team:'',dev:'RetroLabs',approved:true,featured:false,banned:false,likes:[],dislikes:[],plays:2750,date:'2025-03-28',badge:''},
+      {id:'g5',name:'Word Storm',desc:'Desafío de palabras multijugador en tiempo real.',url:'about:blank',cover:'',genre:'Casual',engine:'Phaser',team:'',dev:'WordWizard',approved:true,featured:false,banned:false,likes:[],dislikes:[],plays:980,date:'2025-04-15',badge:'new'},
+      {id:'g6',name:'Dragon Quest Mini',desc:'RPG de bolsillo con una épica historia de fantasía.',url:'about:blank',cover:'',genre:'RPG',engine:'Unity',team:'',dev:'DragonDev',approved:true,featured:false,banned:false,likes:[],dislikes:[],plays:3400,date:'2025-04-20',badge:'hot'},
+    ];
+  }
+}
+
+// ==================== VERIFIED BADGES SVG ====================
+const BADGES = {
+  famous:`<div class="badge-wrap"><svg width="20" height="20" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#1DA1F2" stroke="#fff" stroke-width="8"/><path d="M32 50 L45 65 L72 35" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="badge-tooltip">✨ Verificado Famoso</div></div>`,
+  education:`<div class="badge-wrap"><svg width="20" height="20" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#10B981" stroke="#fff" stroke-width="8"/><path d="M32 50 L45 65 L72 35" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="badge-tooltip">📚 Verificado Educación</div></div>`,
+  admin:`<div class="badge-wrap"><svg width="20" height="20" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#FF6200" stroke="#fff" stroke-width="8"/><g transform="translate(50 50) rotate(-35)"><rect x="-8" y="8" width="7" height="34" rx="2" fill="#1C1C1E"/><rect x="-19" y="-13" width="30" height="16" rx="3" fill="#1C1C1E"/><rect x="-17" y="-11" width="26" height="12" fill="#FF8533"/></g><circle cx="50" cy="50" r="46" fill="none" stroke="#FFD700" stroke-width="4"/></svg><div class="badge-tooltip">🔧 Admin nexPLAY</div></div>`,
+  elite:`<div class="badge-wrap" style="animation:float 3s ease-in-out infinite"><svg width="20" height="20" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#0F0F14" stroke="#FFD700" stroke-width="10"/><circle cx="50" cy="50" r="38" fill="#1A1A24" stroke="#FFD700" stroke-width="5"/><path d="M31 50 L46 68 L74 33" fill="none" stroke="#FFD700" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="36" cy="37" r="3.5" fill="#FFD700"/><circle cx="64" cy="37" r="3.5" fill="#FFD700"/></svg><div class="badge-tooltip">👑 Verificado Élite</div></div>`
+};
+
+function getBadgesHTML(user){
+  let html='';
+  if(user.isAdmin)html+=BADGES.admin;
+  if(user.verifiedElite)html+=BADGES.elite;
+  if(user.verifiedFamous)html+=BADGES.famous;
+  if(user.verifiedEducation)html+=BADGES.education;
+  return html;
+}
+
+// ==================== SCREEN MANAGEMENT ====================
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showPage(id,navEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(navEl){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));navEl.classList.add('active');}
+  if(id==='homePage')renderHome();
+  if(id==='gamesPage')renderGamesPage();
+  if(id==='teamsPage')renderTeams();
+  if(id==='profilePage')renderProfile();
+  if(id==='adminPage')renderAdmin();
+  if(id==='publishPage')populateTeamDropdown();
+  // Close notif panel
+  document.getElementById('notifPanel').style.display='none';
+}
+
+// ==================== AUTH ====================
+function validateUsername(input){
+  const val=input.value.trim();
+  const badWords=['puta','mierda','culo','coño','verga','pendejo','idiota','estupido','cabron','joder','fuck','shit','ass','damn','bitch','crap','bastard','porno','sex','xxx','drug','kill','hate'];
+  const hasBad=badWords.some(w=>val.toLowerCase().includes(w));
+  const errEl=document.getElementById('regUserError');
+  const okEl=document.getElementById('regUserOk');
+  errEl.style.display='none';okEl.style.display='none';
+  if(val.length<3){errEl.textContent='❌ Mínimo 3 caracteres';errEl.style.display='block';return false;}
+  if(hasBad){errEl.textContent='❌ Este nombre contiene palabras no permitidas';errEl.style.display='block';return false;}
+  if(!/^[a-zA-Z0-9_.-]+$/.test(val)){errEl.textContent='❌ Solo letras, números, _ . -';errEl.style.display='block';return false;}
+  const exists=DB.users.find(u=>u.username.toLowerCase()===val.toLowerCase());
+  if(exists){errEl.textContent='❌ Este nombre ya está en uso';errEl.style.display='block';return false;}
+  okEl.style.display='block';return true;
+}
+
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  // Check admin
+  if(u===adminCredentials.user&&p===adminCredentials.pass){
+    const admin=DB.users.find(usr=>usr.isAdmin);
+    if(admin){currentUser=admin;}else{
+      const a={id:'admin',username:adminCredentials.user,email:'admin@nexplay.com',pass:adminCredentials.pass,role:'Administrador',isAdmin:true,avatar:'⚙️',bio:'Administrador de nexPLAY',banned:false,games:[],likes:[],team:null,joined:new Date().toISOString(),verifiedFamous:false,verifiedEducation:false,verifiedElite:true,twitter:'',youtube:'',twitch:'',discord:''};
+      DB.users.push(a);saveDB();currentUser=a;
+    }
+    showNotif('⚙️','Bienvenido Admin','Acceso de administrador activado','success');
+    launchApp();return;
+  }
+  const user=DB.users.find(usr=>(usr.username.toLowerCase()===u.toLowerCase()||usr.email===u)&&usr.pass===p);
+  if(!user){document.getElementById('loginError').style.display='block';return;}
+  if(user.banned){showBanOverlay(user.banReason,user.banDate);return;}
+  currentUser=user;
+  document.getElementById('loginError').style.display='none';
+  launchApp();
+}
+
+function doRegister(){
+  const u=document.getElementById('regUser').value.trim();
+  const e=document.getElementById('regEmail').value.trim();
+  const p=document.getElementById('regPass').value;
+  const p2=document.getElementById('regPass2').value;
+  const ge=document.getElementById('regGenError');
+  ge.style.visibility='hidden';
+  if(!validateUsername(document.getElementById('regUser'))){return;}
+  if(!e||!e.includes('@')){document.getElementById('regEmailError').textContent='❌ Email inválido';document.getElementById('regEmailError').style.display='block';return;}
+  const emailExists=DB.users.find(usr=>usr.email===e);
+  if(emailExists){document.getElementById('regEmailError').textContent='❌ Email ya registrado';document.getElementById('regEmailError').style.display='block';return;}
+  if(p.length<6){ge.textContent='❌ La contraseña debe tener mínimo 6 caracteres';ge.style.visibility='visible';return;}
+  if(p!==p2){document.getElementById('regPassError').style.display='block';return;}
+  const newUser={id:'u'+Date.now(),username:u,email:e,pass:p,role:'Jugador',isAdmin:false,avatar:'🎮',bio:'',banned:false,games:[],likes:[],dislikes:[],team:null,joined:new Date().toISOString(),verifiedFamous:false,verifiedEducation:false,verifiedElite:false,twitter:'',youtube:'',twitch:'',discord:''};
+  DB.users.push(newUser);saveDB();
+  currentUser=newUser;
+  // Show welcome
+  document.getElementById('welcomeName').textContent=u;
+  document.getElementById('welcomeAvatar').textContent='🎮';
+  showScreen('welcomeScreen');
+}
+
+function acceptTerms(){
+  const chk=document.getElementById('termsCheck');
+  if(!chk.checked){showNotif('⚠️','Términos','Debes aceptar los términos para continuar','warning');return;}
+  launchApp();
+}
+
+function launchApp(){
+  document.getElementById('authScreens').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  updateSidebar();
+  renderHome();
+  showAdminElements();
+  loadInboxNotifs();
+  setTimeout(()=>showNotif('👋','Bienvenido',`Hola ${currentUser.username}! Disfruta nexPLAY`,'success'),500);
+  setTimeout(()=>{document.getElementById('updateBanner').style.display='flex';},1500);
+}
+
+function doLogout(){
+  currentUser=null;
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('authScreens').style.display='block';
+  showScreen('splashScreen');
+}
+
+function showBanOverlay(reason,date){
+  document.getElementById('banOverlay').classList.add('active');
+  document.getElementById('banReason').textContent=reason||'Violación de términos de servicio';
+  if(date){const d=new Date(date);document.getElementById('banDate').textContent=d.toLocaleDateString('es');document.getElementById('banTime').textContent=d.toLocaleTimeString('es');}
+}
+
+// ==================== SIDEBAR / UI ====================
+function updateSidebar(){
+  if(!currentUser)return;
+  document.getElementById('sidebarName').textContent=currentUser.username;
+  document.getElementById('sidebarRole').textContent=currentUser.isAdmin?'Administrador ⚙️':'Jugador';
+  document.getElementById('sidebarAvatar').textContent=currentUser.avatar||'👤';
+  document.getElementById('topbarAvatar').textContent=currentUser.avatar||'👤';
+}
+
+function showAdminElements(){
+  const isAdmin=currentUser&&currentUser.isAdmin;
+  document.getElementById('adminNavSection').style.display=isAdmin?'':'none';
+  document.getElementById('adminNavItem').style.display=isAdmin?'flex':'none';
+  document.getElementById('adminCheatToggle').style.display=isAdmin?'block':'none';
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ==================== NOTIFICATIONS ====================
+function showNotif(icon,title,msg,type='info',duration=4000){
+  const c=document.getElementById('notifContainer');
+  const n=document.createElement('div');
+  n.className=`notif ${type}`;
+  n.innerHTML=`<span class="notif-icon">${icon}</span><div class="notif-text"><div class="notif-title">${title}</div><div class="notif-msg">${msg}</div></div><button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:1.1rem;margin-left:8px">✕</button>`;
+  c.appendChild(n);
+  setTimeout(()=>n.remove(),duration);
+  // Add to inbox
+  inboxNotifs.unshift({icon,title,msg,type,time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),read:false});
+  document.getElementById('notifDot').style.display='block';
+  saveDB();
+}
+
+function loadInboxNotifs(){
+  inboxNotifs=[{icon:'🎮',title:'Bienvenido a nexPLAY',msg:'Explora miles de juegos gratuitos',type:'info',time:'Ahora',read:false},{icon:'🆕',title:'nexPLAY v2.1.0',msg:'Nuevas funciones: equipos mejorados, verificados y más',type:'success',time:'Hoy',read:false}];
+  renderInboxNotifs();
+}
+
+function renderInboxNotifs(){
+  const list=document.getElementById('notifList');
+  if(!list)return;
+  if(inboxNotifs.length===0){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2)">Sin notificaciones</div>';return;}
+  list.innerHTML=inboxNotifs.map((n,i)=>`
+    <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;background:${n.read?'transparent':'rgba(108,60,225,0.05)'}">
+      <span style="font-size:1.2rem">${n.icon}</span>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:0.85rem">${n.title}</div>
+        <div style="color:var(--text2);font-size:0.75rem">${n.msg}</div>
+        <div style="color:var(--text2);font-size:0.7rem;margin-top:4px">${n.time}</div>
+      </div>
+      ${!n.read?'<span style="width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0;margin-top:4px"></span>':''}
+    </div>
+  `).join('');
+}
+
+function toggleNotifs(){
+  const p=document.getElementById('notifPanel');
+  p.style.display=p.style.display==='block'?'none':'block';
+  renderInboxNotifs();
+}
+
+function markAllRead(){
+  inboxNotifs.forEach(n=>n.read=true);
+  document.getElementById('notifDot').style.display='none';
+  renderInboxNotifs();
+}
+
+// ==================== RENDER HOME ====================
+function renderHome(){
+  renderCategories(document.getElementById('homeCats'));
+  const featured=DB.games.filter(g=>g.approved&&!g.banned&&g.featured);
+  const popular=DB.games.filter(g=>g.approved&&!g.banned).sort((a,b)=>b.plays-a.plays).slice(0,6);
+  renderGamesGrid(featured,document.getElementById('featuredGames'));
+  renderGamesGrid(popular,document.getElementById('popularGames'));
+  const teams=DB.teams.filter(t=>!t.banned&&t.featured).slice(0,4);
+  const tGrid=document.getElementById('homeTeamsGrid');
+  if(teams.length===0){tGrid.innerHTML='<div style="color:var(--text2);font-size:0.9rem;padding:20px">No hay equipos destacados aún.</div>';return;}
+  tGrid.innerHTML=teams.map(t=>teamCardHTML(t,true)).join('');
+  // Show admin edit btns
+  if(currentUser&&currentUser.isAdmin){document.getElementById('heroEditBtn').style.display='block';}
+}
+
+function renderCategories(container){
+  if(!container)return;
+  container.innerHTML=DB.categories.map(c=>`<div class="cat-chip ${c.id==='all'?'active':''}" onclick="filterByCategory('${c.id}',this)">${c.icon} ${c.name}</div>`).join('');
+}
+
+function filterByCategory(id,el){
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  showPage('gamesPage',null);
+  setTimeout(()=>renderGamesPage(id),100);
+}
+
+// ==================== GAMES ====================
+function renderGamesPage(catFilter='all'){
+  renderCategories(document.getElementById('gamesCats'));
+  let games=DB.games.filter(g=>g.approved&&!g.banned);
+  if(catFilter&&catFilter!=='all'){games=games.filter(g=>g.genre&&DB.categories.find(c=>c.id===catFilter&&(c.name===g.genre||g.genre.toLowerCase().includes(c.name.toLowerCase()))));}
+  document.getElementById('gamesCount').textContent=`${games.length} juegos disponibles`;
+  renderGamesGrid(games,document.getElementById('allGamesGrid'));
+}
+
+function renderGamesGrid(games,container){
+  if(!container)return;
+  if(games.length===0){container.innerHTML='<div class="empty-state"><div class="empty-state-icon">🎮</div><h3>No hay juegos aquí aún</h3><p>¡Sé el primero en publicar!</p></div>';return;}
+  container.innerHTML=games.map(g=>gameCardHTML(g)).join('');
+}
+
+function gameCardHTML(g){
+  const liked=currentUser&&g.likes&&g.likes.includes(currentUser.id);
+  const disliked=currentUser&&g.dislikes&&g.dislikes.includes(currentUser.id);
+  const coverStyle=g.cover?`background:url('${g.cover}') center/cover`:getLazyThumb(g);
+  return `<div class="game-card ${g.featured?'featured':''}" onclick="openGame('${g.id}')">
+    <div class="game-thumb protected-img" style="${coverStyle}">
+      <div class="img-overlay"></div>
+      ${!g.cover?`<span style="font-size:2.5rem;position:relative;z-index:1">${getGameEmoji(g.genre)}</span>`:''}
+      ${g.badge?`<span class="game-badge badge-${g.badge}">${g.badge==='hot'?'🔥 HOT':g.badge==='new'?'🆕 NEW':g.badge==='featured'?'⭐ DEST':g.badge.toUpperCase()}</span>`:''}
+    </div>
+    <div class="game-info">
+      <div class="game-title" title="${g.name}">${g.name}</div>
+      <div class="game-team">${g.dev||'Desarrollador'}</div>
+      <div class="game-stats"><span>▶️ ${formatNum(g.plays||0)}</span><span>❤️ ${g.likes?g.likes.length:0}</span></div>
+    </div>
+    <div class="game-actions" onclick="event.stopPropagation()">
+      <button class="game-action-btn ${liked?'liked':''}" onclick="toggleLike('${g.id}',event)">❤️ ${g.likes?g.likes.length:0}</button>
+      <button class="game-action-btn ${disliked?'disliked':''}" onclick="toggleDislike('${g.id}',event)">👎</button>
+      <button class="game-action-btn" onclick="openReportTarget('${g.id}','game',event)">🚨</button>
+      <button class="game-action-btn" onclick="shareGame('${g.id}',event)">📤</button>
+    </div>
+  </div>`;
+}
+
+function getLazyThumb(g){
+  const colors=['linear-gradient(135deg,#6C3CE1,#00D4AA)','linear-gradient(135deg,#FF4D6D,#FF8533)','linear-gradient(135deg,#1DA1F2,#10B981)','linear-gradient(135deg,#FFD700,#FF6200)','linear-gradient(135deg,#0F0F14,#6C3CE1)'];
+  const idx=g.name.charCodeAt(0)%colors.length;
+  return colors[idx];
+}
+
+function getGameEmoji(genre){
+  const m={'Acción':'⚔️','Aventura':'🗺️','Puzzle':'🧩','Plataformas':'🏃','Carreras':'🏎️','Deportes':'⚽','Estrategia':'♟️','RPG':'🐉','Casual':'🎈','Multijugador':'👥','Educativo':'📚','Terror':'👻'};
+  return m[genre]||'🎮';
+}
+
+function formatNum(n){if(n>=1000)return (n/1000).toFixed(1)+'k';return n;}
+
+function openGame(id){
+  const g=DB.games.find(x=>x.id===id);
+  if(!g)return;
+  if(g.banned){showNotif('🚫','Juego no disponible','Este juego ha sido suspendido','error');return;}
+  currentGameId=id;
+  g.plays=(g.plays||0)+1;saveDB();
+  document.getElementById('playerTitle').textContent=g.name;
+  document.getElementById('playerTeam').textContent='por '+( g.dev||'nexPLAY');
+  document.getElementById('gameFrame').src=g.url||'about:blank';
+  const liked=currentUser&&g.likes&&g.likes.includes(currentUser.id);
+  document.getElementById('playerLikeBtn').className=`btn ${liked?'btn-primary':'btn-secondary'}`;
+  document.getElementById('playerLikeCount').textContent=g.likes?g.likes.length:0;
+  document.getElementById('gamePlayer').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+
+function closeGamePlayer(){
+  document.getElementById('gamePlayer').classList.remove('active');
+  document.getElementById('gameFrame').src='about:blank';
+  document.body.style.overflow='';
+  currentGameId=null;
+}
+
+function toggleFullscreenGame(){
+  const container=document.getElementById('gamePlayer');
+  if(!document.fullscreenElement){container.requestFullscreen();}else{document.exitFullscreen();}
+}
+
+function toggleLike(id,event){
+  if(event)event.stopPropagation();
+  if(!currentUser){showNotif('⚠️','Inicia sesión','Debes iniciar sesión para dar like','warning');return;}
+  const g=DB.games.find(x=>x.id===id);
+  if(!g)return;
+  if(!g.likes)g.likes=[];
+  if(!g.dislikes)g.dislikes=[];
+  if(g.likes.includes(currentUser.id)){g.likes=g.likes.filter(x=>x!==currentUser.id);}
+  else{g.likes.push(currentUser.id);g.dislikes=g.dislikes.filter(x=>x!==currentUser.id);}
+  // Track user likes
+  if(!currentUser.likes)currentUser.likes=[];
+  const ul=currentUser.likes.indexOf(id);
+  if(ul>=0)currentUser.likes.splice(ul,1);else currentUser.likes.push(id);
+  saveDB();
+  // Re-render grids
+  renderAllGameGrids();
+}
+
+function toggleDislike(id,event){
+  if(event)event.stopPropagation();
+  if(!currentUser){showNotif('⚠️','Inicia sesión','Inicia sesión para interactuar','warning');return;}
+  const g=DB.games.find(x=>x.id===id);
+  if(!g)return;
+  if(!g.dislikes)g.dislikes=[];
+  if(!g.likes)g.likes=[];
+  if(g.dislikes.includes(currentUser.id)){g.dislikes=g.dislikes.filter(x=>x!==currentUser.id);}
+  else{g.dislikes.push(currentUser.id);g.likes=g.likes.filter(x=>x!==currentUser.id);if(currentUser.likes)currentUser.likes=currentUser.likes.filter(x=>x!==id);}
+  saveDB();
+  renderAllGameGrids();
+}
+
+function renderAllGameGrids(){
+  if(document.getElementById('featuredGames'))renderHome();
+  if(document.getElementById('allGamesGrid')&&document.getElementById('gamesPage').classList.contains('active'))renderGamesPage();
+  if(document.getElementById('myGamesGrid')&&document.getElementById('profilePage').classList.contains('active'))renderProfile();
+}
+
+function toggleLikeFromPlayer(){
+  if(currentGameId)toggleLike(currentGameId,null);
+  const g=DB.games.find(x=>x.id===currentGameId);
+  if(g){
+    const liked=currentUser&&g.likes&&g.likes.includes(currentUser.id);
+    document.getElementById('playerLikeBtn').className=`btn ${liked?'btn-primary':'btn-secondary'}`;
+    document.getElementById('playerLikeCount').textContent=g.likes?g.likes.length:0;
+  }
+}
+
+function shareGame(id,event){
+  if(event)event.stopPropagation();
+  const g=DB.games.find(x=>x.id===id);
+  if(!g)return;
+  if(navigator.share){navigator.share({title:g.name,text:`¡Juega ${g.name} en nexPLAY!`,url:window.location.href});}
+  else{navigator.clipboard.writeText(window.location.href+'#game='+id).then(()=>showNotif('📋','Link copiado','Enlace del juego copiado','success'));}
+}
+
+// ==================== REPORTS ====================
+function openReportTarget(id,type,event){
+  if(event)event.stopPropagation();
+  if(!currentUser){showNotif('⚠️','Inicia sesión','Debes iniciar sesión para reportar','warning');return;}
+  currentReportTarget={id,type};
+  openModal('reportModal');
+}
+
+function openReportFromPlayer(){
+  if(currentGameId)openReportTarget(currentGameId,'game',null);
+}
+
+function submitReport(){
+  const reason=document.querySelector('input[name="reportReason"]:checked');
+  if(!reason){showNotif('⚠️','Selecciona','Elige un motivo para el reporte','warning');return;}
+  const details=document.getElementById('reportDetails').value;
+  DB.reports.push({id:'r'+Date.now(),target:currentReportTarget,reason:reason.value,details,reporter:currentUser.id,date:new Date().toISOString(),resolved:false});
+  saveDB();
+  closeModal('reportModal');
+  showNotif('✅','Reporte enviado','Nuestro equipo lo revisará pronto','success');
+  currentReportTarget=null;
+}
+
+// ==================== TEAMS ====================
+function renderTeams(){
+  const grid=document.getElementById('teamsGrid');
+  if(DB.teams.length===0){grid.innerHTML='<div class="empty-state"><div class="empty-state-icon">🏆</div><h3>No hay equipos aún</h3><p>¡Sé el primero en crear uno!</p></div>';return;}
+  grid.innerHTML=DB.teams.filter(t=>!t.banned).map(t=>teamCardHTML(t,false)).join('');
+}
+
+function teamCardHTML(t,compact){
+  const logoHTML=t.logo?`<img src="${t.logo}" alt="${t.name}" style="width:100%;height:100%;border-radius:12px;object-fit:cover">`:'🏆';
+  const teamGames=DB.games.filter(g=>g.team===t.id&&g.approved).length;
+  return `<div class="team-card ${t.featured?'featured-team':''}" onclick="viewTeam('${t.id}')">
+    <div class="team-logo">${t.logo?`<div style="width:60px;height:60px;border-radius:12px;overflow:hidden">${logoHTML}</div>`:'🏆'}</div>
+    <div class="team-name-row">
+      <span class="team-name">${t.name}</span>
+      ${t.verifiedFamous?BADGES.famous:''}
+      ${t.verifiedEducation?BADGES.education:''}
+      ${t.verifiedElite?BADGES.elite:''}
+    </div>
+    <p class="team-desc">${(t.desc||'').substring(0,100)}${(t.desc||'').length>100?'...':''}</p>
+    <div class="team-meta">
+      <span>🎮 ${teamGames} juegos</span>
+      <span>📅 ${new Date(t.date).toLocaleDateString('es')}</span>
+      ${t.featured?'<span style="color:var(--gold)">⭐ Destacado</span>':''}
+    </div>
+  </div>`;
+}
+
+function createTeam(){
+  if(!currentUser){showNotif('⚠️','Error','Debes iniciar sesión','warning');return;}
+  const name=document.getElementById('teamName').value.trim();
+  if(!name){showNotif('⚠️','Error','El nombre del equipo es requerido','warning');return;}
+  if(DB.teams.find(t=>t.name.toLowerCase()===name.toLowerCase())){showNotif('❌','Error','Ya existe un equipo con ese nombre','error');return;}
+  const logoPreview=document.getElementById('teamLogoPreview');
+  const logo=logoPreview.src&&logoPreview.style.display!=='none'?logoPreview.src:'';
+  const team={
+    id:'t'+Date.now(),
+    name,
+    desc:document.getElementById('teamDesc').value,
+    logo,
+    creator:currentUser.id,
+    members:[currentUser.id],
+    date:new Date().toISOString(),
+    featured:false,banned:false,
+    verifiedFamous:false,verifiedEducation:false,verifiedElite:false,
+    twitter:document.getElementById('teamTwitter').value,
+    youtube:document.getElementById('teamYoutube').value,
+    discord:document.getElementById('teamDiscord').value,
+    website:document.getElementById('teamWebsite').value
+  };
+  DB.teams.push(team);
+  currentUser.team=team.id;
+  saveDB();
+  closeModal('createTeamModal');
+  renderTeams();
+  showNotif('🏆','Equipo creado',`¡${name} ha sido creado!`,'success');
+  // Clear form
+  ['teamName','teamDesc','teamTwitter','teamYoutube','teamDiscord','teamWebsite'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('teamLogoPreview').style.display='none';
+  document.getElementById('teamLogoLabel').style.display='flex';
+}
+
+function viewTeam(id){
+  const t=DB.teams.find(x=>x.id===id);
+  if(!t)return;
+  document.getElementById('teamViewBreadcrumb').textContent=t.name;
+  const creator=DB.users.find(u=>u.id===t.creator);
+  const logoHTML=t.logo?`<div class="team-view-logo"><img src="${t.logo}" alt="${t.name}"></div>`:'<div class="team-view-logo">🏆</div>';
+  const socials=[];
+  if(t.twitter)socials.push(`<a class="social-link" href="https://twitter.com/${t.twitter}" target="_blank">🐦 Twitter</a>`);
+  if(t.youtube)socials.push(`<a class="social-link" href="${t.youtube}" target="_blank">▶️ YouTube</a>`);
+  if(t.discord)socials.push(`<a class="social-link" href="https://discord.gg/${t.discord}" target="_blank">💬 Discord</a>`);
+  if(t.website)socials.push(`<a class="social-link" href="${t.website}" target="_blank">🌐 Web</a>`);
+  document.getElementById('teamViewHeader').innerHTML=`
+    ${logoHTML}
+    <div class="team-name-row" style="font-size:1.5rem;font-weight:800;margin-bottom:8px">
+      ${t.name}
+      ${t.verifiedFamous?BADGES.famous:''}${t.verifiedEducation?BADGES.education:''}${t.verifiedElite?BADGES.elite:''}
+    </div>
+    <p style="color:var(--text2);margin-bottom:12px">${t.desc||''}</p>
+    <div style="font-size:0.8rem;color:var(--text2);margin-bottom:16px">📅 Creado: ${new Date(t.date).toLocaleDateString('es',{year:'numeric',month:'long',day:'numeric'})}</div>
+    ${socials.length?`<div class="social-links">${socials.join('')}</div>`:''}
+    <div style="margin-top:16px;display:flex;gap:10px">
+      ${!t.members.includes(currentUser.id)?`<button class="btn btn-primary" onclick="joinTeam('${t.id}')">+ Unirse al Equipo</button>`:'<span style="color:var(--success)">✅ Eres miembro</span>'}
+    </div>
+  `;
+  // Members
+  const membersHTML=t.members.map(uid=>{
+    const u=DB.users.find(x=>x.id===uid);
+    if(!u)return '';
+    return `<div class="member-card"><div class="member-avatar">${u.avatar||'👤'}</div><div style="font-weight:600;font-size:0.85rem">${u.username}</div><div style="font-size:0.7rem;color:var(--text2)">${uid===t.creator?'👑 Creador':'Miembro'}</div></div>`;
+  }).join('');
+  document.getElementById('teamViewMembers').innerHTML=membersHTML||'<p style="color:var(--text2)">Sin miembros</p>';
+  // Team games
+  const tgames=DB.games.filter(g=>g.team===t.id&&g.approved&&!g.banned);
+  renderGamesGrid(tgames,document.getElementById('teamViewGames'));
+  showPage('teamViewPage',null);
+}
+
+function joinTeam(id){
+  if(!currentUser)return;
+  const t=DB.teams.find(x=>x.id===id);
+  if(!t||t.members.includes(currentUser.id))return;
+  if(currentUser.team){showNotif('⚠️','Ya tienes equipo','Sal de tu equipo actual primero','warning');return;}
+  t.members.push(currentUser.id);
+  currentUser.team=id;
+  saveDB();
+  showNotif('🏆','Unido',`Ahora eres miembro de ${t.name}`,'success');
+  viewTeam(id);
+}
+
+// ==================== PROFILE ====================
+function renderProfile(){
+  if(!currentUser)return;
+  document.getElementById('profileAvatarBig').textContent=currentUser.avatar||'👤';
+  document.getElementById('profileUsername').textContent=currentUser.username;
+  document.getElementById('profileBadges').innerHTML=getBadgesHTML(currentUser);
+  document.getElementById('profileRoleLabel').textContent=currentUser.isAdmin?'⚙️ Administrador de nexPLAY':'🎮 Jugador';
+  const myGames=DB.games.filter(g=>g.dev===currentUser.username||g.team===currentUser.team);
+  document.getElementById('statGames').textContent=myGames.length;
+  document.getElementById('statLikes').textContent=currentUser.likes?currentUser.likes.length:0;
+  const myTeam=DB.teams.find(t=>t.id===currentUser.team);
+  document.getElementById('statTeam').textContent=myTeam?myTeam.name:'-';
+  renderGamesGrid(myGames,document.getElementById('myGamesGrid'));
+  const likedGames=DB.games.filter(g=>g.likes&&g.likes.includes(currentUser.id));
+  renderGamesGrid(likedGames,document.getElementById('myLikesGrid'));
+  // My team
+  const mtContent=document.getElementById('myTeamContent');
+  if(myTeam){mtContent.innerHTML=`<div class="team-card" onclick="viewTeam('${myTeam.id}')">${teamCardHTML(myTeam,false)}</div>`;}
+  else{mtContent.innerHTML='<div class="empty-state"><div class="empty-state-icon">🏆</div><h3>Sin equipo</h3><button class="btn btn-primary" onclick="openModal(\'createTeamModal\')">Crear Equipo</button></div>';}
+  // Activity
+  const actList=document.getElementById('activityList');
+  actList.innerHTML=[
+    {icon:'🎮',text:`Cuenta creada en nexPLAY`,date:new Date(currentUser.joined).toLocaleDateString('es')},
+    ...(myGames.slice(0,5).map(g=>({icon:'📤',text:`Publicaste: ${g.name}`,date:new Date(g.date||currentUser.joined).toLocaleDateString('es')}))),
+  ].map(a=>`<div style="display:flex;gap:12px;align-items:center;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px"><span style="font-size:1.3rem">${a.icon}</span><div style="flex:1">${a.text}</div><span style="font-size:0.75rem;color:var(--text2)">${a.date}</span></div>`).join('');
+}
+
+function switchProfileTab(id,el){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.profile-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+
+function saveProfile(){
+  if(!currentUser)return;
+  const avatar=document.getElementById('editAvatar').value.trim();
+  if(avatar)currentUser.avatar=avatar;
+  currentUser.bio=document.getElementById('editBio').value;
+  currentUser.twitter=document.getElementById('editTwitter').value;
+  currentUser.youtube=document.getElementById('editYoutube').value;
+  currentUser.twitch=document.getElementById('editTwitch').value;
+  currentUser.discord=document.getElementById('editDiscord').value;
+  saveDB();closeModal('editProfileModal');
+  updateSidebar();renderProfile();
+  showNotif('✅','Perfil actualizado','Tus cambios han sido guardados','success');
+}
+
+function saveCredentials(){
+  const newUser=document.getElementById('newUsername').value.trim();
+  const newEmail=document.getElementById('newEmail').value.trim();
+  const newPass=document.getElementById('newPassword').value;
+  const newPass2=document.getElementById('newPassword2').value;
+  const currentPass=document.getElementById('currentPassword').value;
+  if(currentPass!==currentUser.pass){showNotif('❌','Error','Contraseña actual incorrecta','error');return;}
+  if(newPass&&newPass!==newPass2){showNotif('❌','Error','Las contraseñas no coinciden','error');return;}
+  if(newUser&&newUser!==currentUser.username){
+    if(DB.users.find(u=>u.username.toLowerCase()===newUser.toLowerCase()&&u.id!==currentUser.id)){showNotif('❌','Error','Nombre de usuario ya en uso','error');return;}
+    currentUser.username=newUser;
+  }
+  if(newEmail)currentUser.email=newEmail;
+  if(newPass)currentUser.pass=newPass;
+  saveDB();closeModal('changeCredentialsModal');updateSidebar();
+  showNotif('✅','Credenciales actualizadas','Tus datos han sido actualizados','success');
+}
+
+function shareProfile(){
+  const content=document.getElementById('shareProfileContent');
+  content.innerHTML=`<div style="font-size:2rem;margin-bottom:8px">${currentUser.avatar||'👤'}</div><div style="font-size:1.3rem;font-weight:700;margin-bottom:4px">${currentUser.username} ${getBadgesHTML(currentUser)}</div><div style="color:var(--text2);font-size:0.85rem">${currentUser.role||'Jugador'} en nexPLAY</div><div style="font-size:0.75rem;color:var(--text2);margin-top:8px">nexPLAY — La plataforma de juegos</div>`;
+  openModal('shareProfileModal');
+}
+
+function copyShareLink(){
+  navigator.clipboard.writeText(`nexPLAY | Perfil de ${currentUser.username}`).then(()=>showNotif('📋','Copiado','Enlace copiado al portapapeles','success'));
+}
+
+// ==================== GAME PUBLISH ====================
+function handleCoverUpload(input,previewId,labelId,zoneId){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){showNotif('⚠️','Archivo muy grande','Máx 5MB','warning');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const preview=document.getElementById(previewId);
+    const label=document.getElementById(labelId);
+    const zone=document.getElementById(zoneId);
+    preview.src=e.target.result;
+    preview.style.display='block';
+    label.style.display='none';
+    zone.classList.add('has-img');
+  };
+  reader.readAsDataURL(file);
+}
+
+function populateTeamDropdown(){
+  if(!currentUser)return;
+  const sel=document.getElementById('pubTeamSelect');
+  if(!sel)return;
+  sel.innerHTML='<option value="">Ninguno / Independiente</option>';
+  const myTeams=DB.teams.filter(t=>t.members.includes(currentUser.id));
+  myTeams.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.name;sel.appendChild(o);});
+}
+
+function submitGame(){
+  if(!currentUser){showNotif('⚠️','Error','Debes iniciar sesión','warning');return;}
+  const name=document.getElementById('pubGameName').value.trim();
+  const dev=document.getElementById('pubDevName').value.trim();
+  const desc=document.getElementById('pubGameDesc').value.trim();
+  const url=document.getElementById('pubGameUrl').value.trim();
+  const genre=document.getElementById('pubGenre').value;
+  const cover=document.getElementById('pubCoverPreview').src||'';
+  if(!name||!dev||!desc||!url||!genre){showNotif('⚠️','Completa el formulario','Todos los campos marcados * son requeridos','warning');return;}
+  if(cover==='about:blank'||cover===window.location.href){showNotif('⚠️','Portada requerida','Sube una imagen de portada','warning');return;}
+  const game={
+    id:'g'+Date.now(),name,dev,desc,url,genre,
+    engine:document.getElementById('pubEngine').value,
+    team:document.getElementById('pubTeamSelect').value,
+    cover:document.getElementById('pubCoverPreview').style.display!=='none'?document.getElementById('pubCoverPreview').src:'',
+    approved:false,featured:false,banned:false,
+    likes:[],dislikes:[],plays:0,
+    date:new Date().toISOString(),badge:'new',
+    submittedBy:currentUser.id
+  };
+  DB.games.push(game);saveDB();
+  showNotif('🚀','¡Juego enviado!','Tu juego está en revisión. El admin lo aprobará pronto','success');
+  // Clear form
+  ['pubGameName','pubDevName','pubGameDesc','pubGameUrl','pubEngine'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('pubGenre').value='';
+  document.getElementById('pubCoverPreview').style.display='none';
+  document.getElementById('pubCoverLabel').style.display='flex';
+  document.getElementById('pubCoverZone').classList.remove('has-img');
+}
+
+// ==================== ADMIN ====================
+function renderAdmin(){
+  renderAdminStats();
+  renderAdminUsers();
+  renderAdminGames();
+  renderAdminTeams();
+  renderAdminReports();
+  renderAdminChart();
+}
+
+function renderAdminStats(){
+  document.getElementById('statUsers').textContent=DB.users.filter(u=>!u.isAdmin).length;
+  document.getElementById('statGamesTotal').textContent=DB.games.filter(g=>g.approved).length;
+  document.getElementById('statTeamsTotal').textContent=DB.teams.length;
+  document.getElementById('statPendingGames').textContent=DB.games.filter(g=>!g.approved&&!g.banned).length;
+  document.getElementById('statBannedUsers').textContent=DB.users.filter(u=>u.banned).length;
+  document.getElementById('statReports').textContent=DB.reports.filter(r=>!r.resolved).length;
+}
+
+function renderAdminUsers(){
+  const search=(document.getElementById('adminUserSearch')||{value:''}).value.toLowerCase();
+  const filter=(document.getElementById('adminUserFilter')||{value:'all'}).value;
+  let users=DB.users.filter(u=>!u.isAdmin);
+  if(search)users=users.filter(u=>u.username.toLowerCase().includes(search)||u.email.toLowerCase().includes(search));
+  if(filter==='active')users=users.filter(u=>!u.banned);
+  if(filter==='banned')users=users.filter(u=>u.banned);
+  const tbody=document.getElementById('adminUsersTable');
+  if(!tbody)return;
+  tbody.innerHTML=users.map(u=>`<tr>
+    <td><div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.3rem">${u.avatar||'👤'}</span><strong>${u.username}</strong></div></td>
+    <td style="color:var(--text2)">${u.email}</td>
+    <td><span style="background:var(--bg2);padding:3px 8px;border-radius:6px;font-size:0.75rem">${u.role||'Jugador'}</span></td>
+    <td><span style="color:${u.banned?'var(--danger)':'var(--success)'}">${u.banned?'🚫 Baneado':'✅ Activo'}</span></td>
+    <td>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        ${u.verifiedFamous?BADGES.famous:'<span style="color:var(--text2);font-size:0.75rem">-</span>'}
+        ${u.verifiedElite?BADGES.elite:''}
+        ${u.verifiedEducation?BADGES.education:''}
+      </div>
+    </td>
+    <td>
+      <div class="action-btns">
+        ${!u.banned?`<button class="mini-btn" style="background:var(--danger);color:#fff" onclick="openBanModal('${u.id}','user')">🚫 Banear</button>`:`<button class="mini-btn" style="background:var(--success);color:#fff" onclick="unbanUser('${u.id}')">✅ Desbanear</button>`}
+        <button class="mini-btn" style="background:var(--primary);color:#fff" onclick="toggleVerified('${u.id}','famous')">⭐ Famoso</button>
+        <button class="mini-btn" style="background:var(--education);color:#fff" onclick="toggleVerified('${u.id}','education')">📚 Edu</button>
+        <button class="mini-btn" style="background:var(--elite);color:#000" onclick="toggleVerified('${u.id}','elite')">👑 Elite</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+function renderAdminGames(){
+  const search=(document.getElementById('adminGameSearch')||{value:''}).value.toLowerCase();
+  const filter=(document.getElementById('adminGameFilter')||{value:'all'}).value;
+  let games=DB.games;
+  if(search)games=games.filter(g=>g.name.toLowerCase().includes(search)||g.dev.toLowerCase().includes(search));
+  if(filter==='pending')games=games.filter(g=>!g.approved&&!g.banned);
+  if(filter==='approved')games=games.filter(g=>g.approved&&!g.banned);
+  if(filter==='banned')games=games.filter(g=>g.banned);
+  const tbody=document.getElementById('adminGamesTable');
+  if(!tbody)return;
+  tbody.innerHTML=games.map(g=>`<tr>
+    <td><strong>${g.name}</strong></td>
+    <td style="color:var(--text2)">${g.dev}</td>
+    <td><span style="background:var(--bg2);padding:3px 8px;border-radius:6px;font-size:0.75rem">${g.genre}</span></td>
+    <td><span style="color:${g.banned?'var(--danger)':g.approved?'var(--success)':'var(--warning)'}">${g.banned?'🚫 Baneado':g.approved?'✅ Aprobado':'⏳ Pendiente'}</span></td>
+    <td>❤️ ${g.likes?g.likes.length:0}</td>
+    <td>
+      <div class="action-btns">
+        ${!g.approved&&!g.banned?`<button class="mini-btn" style="background:var(--success);color:#fff" onclick="approveGame('${g.id}')">✅ Aprobar</button>`:''}
+        ${!g.banned?`<button class="mini-btn" style="background:var(--danger);color:#fff" onclick="openBanModal('${g.id}','game')">🚫 Banear</button>`:`<button class="mini-btn" style="background:var(--success);color:#fff" onclick="unbanGame('${g.id}')">✅ Desbanear</button>`}
+        <button class="mini-btn" style="background:${g.featured?'var(--text2)':'var(--gold)'};color:#000" onclick="toggleFeaturedGame('${g.id}')">${g.featured?'★ Quitar':'⭐ Destacar'}</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+function renderAdminTeams(){
+  const tbody=document.getElementById('adminTeamsTable');
+  if(!tbody)return;
+  tbody.innerHTML=DB.teams.map(t=>`<tr>
+    <td><strong>${t.name}</strong></td>
+    <td style="color:var(--text2)">${(DB.users.find(u=>u.id===t.creator)||{}).username||'?'}</td>
+    <td>${DB.games.filter(g=>g.team===t.id).length}</td>
+    <td><span style="color:${t.banned?'var(--danger)':'var(--success)'}">${t.banned?'🚫 Baneado':'✅ Activo'}</span></td>
+    <td>
+      <div style="display:flex;gap:4px">
+        ${t.verifiedFamous?BADGES.famous:''}
+        ${t.verifiedEducation?BADGES.education:''}
+        ${t.verifiedElite?BADGES.elite:''}
+      </div>
+    </td>
+    <td>
+      <div class="action-btns">
+        ${!t.banned?`<button class="mini-btn" style="background:var(--danger);color:#fff" onclick="openBanModal('${t.id}','team')">🚫 Banear</button>`:`<button class="mini-btn" style="background:var(--success);color:#fff" onclick="unbanTeam('${t.id}')">✅ Desbanear</button>`}
+        <button class="mini-btn" style="background:${t.featured?'var(--text2)':'var(--gold)'};color:#000" onclick="toggleFeaturedTeam('${t.id}')">${t.featured?'★ Quitar':'⭐ Destacar'}</button>
+        <button class="mini-btn" style="background:var(--famous);color:#fff" onclick="toggleTeamVerified('${t.id}','famous')">⭐ Famoso</button>
+        <button class="mini-btn" style="background:var(--education);color:#fff" onclick="toggleTeamVerified('${t.id}','education')">📚 Edu</button>
+        <button class="mini-btn" style="background:var(--elite);color:#000" onclick="toggleTeamVerified('${t.id}','elite')">👑 Elite</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+function renderAdminReports(){
+  const list=document.getElementById('adminReportsList');
+  if(!list)return;
+  const pending=DB.reports.filter(r=>!r.resolved);
+  if(pending.length===0){list.innerHTML='<div class="empty-state"><div class="empty-state-icon">✅</div><h3>Sin reportes pendientes</h3></div>';return;}
+  list.innerHTML=pending.map(r=>{
+    const reporter=DB.users.find(u=>u.id===r.reporter);
+    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-weight:700;margin-bottom:4px">🚨 Reporte: ${r.reason}</div>
+          <div style="color:var(--text2);font-size:0.85rem">Por: ${reporter?reporter.username:'Anónimo'} | Objetivo: ${r.target.type} #${r.target.id}</div>
+          ${r.details?`<div style="color:var(--text2);font-size:0.8rem;margin-top:8px">${r.details}</div>`:''}
+          <div style="font-size:0.75rem;color:var(--text2);margin-top:6px">${new Date(r.date).toLocaleString('es')}</div>
+        </div>
+        <div class="action-btns">
+          <button class="mini-btn" style="background:var(--success);color:#fff" onclick="resolveReport('${r.id}')">✅ Resolver</button>
+          <button class="mini-btn" style="background:var(--danger);color:#fff" onclick="openBanModal('${r.target.id}','${r.target.type}')">🚫 Banear objetivo</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAdminChart(){
+  const chart=document.getElementById('adminChart');
+  const labels=document.getElementById('adminChartLabels');
+  if(!chart||!labels)return;
+  const days=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const vals=[45,62,38,71,55,89,43];
+  const max=Math.max(...vals);
+  chart.innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${(v/max)*100}%" data-val="${v}" title="${days[i]}: ${v}"></div>`).join('');
+  labels.innerHTML=days.map(d=>`<div class="chart-label">${d}</div>`).join('');
+}
+
+function switchAdminTab(id,el){
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  if(id==='usersTab')renderAdminUsers();
+  if(id==='gamesAdminTab')renderAdminGames();
+  if(id==='teamsAdminTab')renderAdminTeams();
+  if(id==='reportsTab')renderAdminReports();
+}
+
+function openBanModal(id,type){
+  document.getElementById('banTargetId').value=id;
+  document.getElementById('banTargetType').value=type;
+  document.getElementById('banReasonText').value='';
+  openModal('banReasonModal');
+}
+
+function executeBan(){
+  const id=document.getElementById('banTargetId').value;
+  const type=document.getElementById('banTargetType').value;
+  const reason=document.getElementById('banReasonText').value.trim();
+  if(!reason){showNotif('⚠️','Motivo requerido','Especifica el motivo del ban','warning');return;}
+  if(type==='user'){
+    const u=DB.users.find(x=>x.id===id);
+    if(u){u.banned=true;u.banReason=reason;u.banDate=new Date().toISOString();showNotif('🚫','Usuario baneado',`${u.username} ha sido suspendido`,'success');}
+  }else if(type==='game'){
+    const g=DB.games.find(x=>x.id===id);
+    if(g){g.banned=true;g.banReason=reason;g.banDate=new Date().toISOString();showNotif('🚫','Juego baneado',`${g.name} ha sido suspendido`,'success');}
+  }else if(type==='team'){
+    const t=DB.teams.find(x=>x.id===id);
+    if(t){t.banned=true;t.banReason=reason;t.banDate=new Date().toISOString();showNotif('🚫','Equipo baneado',`${t.name} ha sido suspendido`,'success');}
+  }
+  saveDB();closeModal('banReasonModal');renderAdmin();
+}
+
+function unbanUser(id){const u=DB.users.find(x=>x.id===id);if(u){u.banned=false;delete u.banReason;delete u.banDate;}saveDB();renderAdminUsers();showNotif('✅','Desbaneado','El usuario ha sido desbaneado','success');}
+function unbanGame(id){const g=DB.games.find(x=>x.id===id);if(g){g.banned=false;delete g.banReason;}saveDB();renderAdminGames();showNotif('✅','Juego restaurado','El juego está disponible nuevamente','success');}
+function unbanTeam(id){const t=DB.teams.find(x=>x.id===id);if(t){t.banned=false;delete t.banReason;}saveDB();renderAdminTeams();showNotif('✅','Equipo restaurado','El equipo ha sido restaurado','success');}
+
+function approveGame(id){
+  const g=DB.games.find(x=>x.id===id);
+  if(g){g.approved=true;saveDB();renderAdminGames();showNotif('✅','Juego aprobado',`${g.name} ya está en nexPLAY`,'success');}
+}
+
+function toggleFeaturedGame(id){
+  const g=DB.games.find(x=>x.id===id);
+  if(g){g.featured=!g.featured;saveDB();renderAdminGames();showNotif(g.featured?'⭐':'★',g.featured?'Destacado':'Sin destacar',g.name,'info');}
+}
+
+function toggleFeaturedTeam(id){
+  const t=DB.teams.find(x=>x.id===id);
+  if(t){t.featured=!t.featured;saveDB();renderAdminTeams();showNotif(t.featured?'⭐':'★',t.featured?'Destacado':'Sin destacar',t.name,'info');}
+}
+
+function toggleVerified(uid,type){
+  const u=DB.users.find(x=>x.id===uid);
+  if(!u)return;
+  if(type==='famous')u.verifiedFamous=!u.verifiedFamous;
+  else if(type==='education')u.verifiedEducation=!u.verifiedEducation;
+  else if(type==='elite')u.verifiedElite=!u.verifiedElite;
+  saveDB();renderAdminUsers();
+  showNotif('✅','Verificado actualizado',`${u.username} — ${type}`,'info');
+}
+
+function toggleTeamVerified(tid,type){
+  const t=DB.teams.find(x=>x.id===tid);
+  if(!t)return;
+  if(type==='famous')t.verifiedFamous=!t.verifiedFamous;
+  else if(type==='education')t.verifiedEducation=!t.verifiedEducation;
+  else if(type==='elite')t.verifiedElite=!t.verifiedElite;
+  saveDB();renderAdminTeams();
+  showNotif('✅','Verificado actualizado',`${t.name} — ${type}`,'info');
+}
+
+function resolveReport(id){
+  const r=DB.reports.find(x=>x.id===id);
+  if(r)r.resolved=true;
+  saveDB();renderAdminReports();renderAdminStats();
+  showNotif('✅','Reporte resuelto','El reporte ha sido marcado como resuelto','success');
+}
+
+function sendAdminNotif(){
+  const type=document.getElementById('adminNotifType').value;
+  const title=document.getElementById('adminNotifTitle').value;
+  const msg=document.getElementById('adminNotifMsg').value;
+  if(!title||!msg){showNotif('⚠️','Completa','Título y mensaje son requeridos','warning');return;}
+  const icons={info:'ℹ️',success:'✅',warning:'⚠️',error:'❌'};
+  showNotif(icons[type],title,msg,type);
+  inboxNotifs.unshift({icon:icons[type],title,msg,type,time:'Ahora',read:false});
+  renderInboxNotifs();
+  document.getElementById('adminNotifTitle').value='';
+  document.getElementById('adminNotifMsg').value='';
+  showNotif('📢','Enviada',`Notificación "${title}" enviada a todos`,'success');
+}
+
+function sendUpdateNotif(){
+  const ver=document.getElementById('updateVersion').value;
+  const msg=document.getElementById('updateMsg').value;
+  const banner=document.getElementById('updateBanner');
+  if(ver){banner.querySelector('.update-version').textContent=ver;}
+  if(msg){banner.querySelector('.update-text').textContent='🆕 nexPLAY '+ver+' — '+msg;}
+  banner.style.display='flex';
+  showNotif('🆕','Actualización',`${ver}: ${msg}`,'info');
+}
+
+function saveHeroContent(){
+  const title=document.getElementById('editHeroTitle').value;
+  const desc=document.getElementById('editHeroDesc').value;
+  if(title)document.getElementById('heroTitle').textContent=title;
+  if(desc)document.getElementById('heroDesc').textContent=desc;
+  showNotif('✅','Hero actualizado','El banner principal ha sido actualizado','success');
+}
+
+function saveBannerContent(){
+  const text=document.getElementById('editBannerText').value;
+  if(text){document.getElementById('updateBanner').querySelector('.update-text').innerHTML='📢 '+text;document.getElementById('updateBanner').style.display='flex';}
+  showNotif('📢','Banner publicado','El banner está visible para todos','success');
+}
+
+function addCategory(){
+  const name=document.getElementById('newCatInput').value.trim();
+  const icon=document.getElementById('newCatIcon').value.trim()||'🎮';
+  if(!name){showNotif('⚠️','Nombre requerido','Escribe el nombre de la categoría','warning');return;}
+  DB.categories.push({id:name.toLowerCase().replace(/\s+/g,'_'),name,icon});
+  saveDB();
+  document.getElementById('newCatInput').value='';document.getElementById('newCatIcon').value='';
+  showNotif('✅','Categoría añadida',`${icon} ${name} fue añadida`,'success');
+}
+
+function changeAdminCredentials(){
+  const newUser=document.getElementById('newAdminUser').value.trim();
+  const newPass=document.getElementById('newAdminPass').value;
+  const newPass2=document.getElementById('newAdminPass2').value;
+  const currentPass=document.getElementById('currentAdminPass').value;
+  if(currentPass!==adminCredentials.pass){showNotif('❌','Error','Contraseña actual incorrecta','error');return;}
+  if(newPass&&newPass!==newPass2){showNotif('❌','Error','Las contraseñas no coinciden','error');return;}
+  if(newUser)adminCredentials.user=newUser;
+  if(newPass)adminCredentials.pass=newPass;
+  if(currentUser&&currentUser.isAdmin){if(newUser)currentUser.username=newUser;if(newPass)currentUser.pass=newPass;}
+  saveDB();
+  ['newAdminUser','newAdminPass','newAdminPass2','currentAdminPass'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  showNotif('✅','Credenciales admin actualizadas','Los cambios han sido guardados','success');
+}
+
+// ==================== GAME MODE / PERFORMANCE ====================
+function setPerfMode(mode,el){
+  document.querySelectorAll('.perf-option').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  selectedPerfMode=mode;
+  DB.settings.perfMode=mode;saveDB();
+  const msgs={auto:'🔄 Modo auto activado',high:'🔥 Alto rendimiento',medium:'⚙️ Modo medio',low:'🐌 Optimizado para PC antigua'};
+  showNotif('⚡','Rendimiento',msgs[mode],'info');
+}
+
+function setGamePerf(mode,el){
+  document.querySelectorAll('.mode-toggle').forEach(m=>m.classList.remove('active'));
+  el.classList.add('active');
+  const frame=document.getElementById('gameFrame');
+  if(mode==='lowend'){frame.style.imageRendering='pixelated';frame.style.filter='blur(0) contrast(0.9)';}
+  else if(mode==='performance'){frame.style.imageRendering='auto';frame.style.filter='none';}
+  else{frame.style.imageRendering='auto';frame.style.filter='none';}
+}
+
+function toggleCheatPanel(){
+  document.getElementById('cheatPanel').classList.toggle('visible');
+}
+
+function applyCheat(type,active){
+  if(!currentUser||!currentUser.isAdmin){showNotif('🔒','Acceso denegado','Solo administradores pueden usar cheats','error');return;}
+  const msgs={walls:'Atravesar paredes',immunity:'Inmunidad total',lives:'Vidas infinitas',speed:'Velocidad ×2',money:'Dinero infinito'};
+  showNotif('🔧','Cheat Engine',`${msgs[type]}: ${active?'✅ Activado':'❌ Desactivado'}`,active?'success':'warning');
+  // Inject into iframe
+  try{
+    const frame=document.getElementById('gameFrame');
+    if(frame.contentWindow){
+      frame.contentWindow.postMessage({nexplay_cheat:type,active},'*');
+    }
+  }catch(e){}
+}
+
+// ==================== SETTINGS ====================
+function toggleAdBlock(el){
+  DB.settings.adBlock=el.checked;saveDB();
+  document.getElementById('adblockStatus').textContent=el.checked?'🛡️ Sin Anuncios':'📢 Anuncios';
+  showNotif(el.checked?'🛡️':'📢',el.checked?'Bloqueador activado':'Bloqueador desactivado',el.checked?'Sin anuncios hasta nuevo aviso':'Algunos anuncios podrían aparecer','info');
+}
+
+function toggleAnimations(el){
+  DB.settings.animations=el.checked;saveDB();
+  document.documentElement.style.setProperty('--anim-dur',el.checked?'0.3s':'0s');
+}
+
+function setAccentColor(primary,dark,el){
+  document.documentElement.style.setProperty('--primary',primary);
+  document.documentElement.style.setProperty('--primary-dark',dark);
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active'));
+  el.classList.add('active');
+  showNotif('🎨','Color actualizado','El acento de color ha cambiado','success');
+}
+
+// ==================== SEARCH ====================
+function doSearch(q){
+  const res=document.getElementById('searchResults');
+  if(!q||q.length<2){res.style.display='none';return;}
+  const games=DB.games.filter(g=>g.approved&&!g.banned&&g.name.toLowerCase().includes(q.toLowerCase())).slice(0,5);
+  const teams=DB.teams.filter(t=>!t.banned&&t.name.toLowerCase().includes(q.toLowerCase())).slice(0,3);
+  if(games.length===0&&teams.length===0){res.style.display='none';return;}
+  res.innerHTML=`
+    ${games.length?`<div style="padding:8px 16px;font-size:0.75rem;color:var(--text2);text-transform:uppercase">Juegos</div>`:''}
+    ${games.map(g=>`<div class="search-result-item" onclick="openGame('${g.id}');document.getElementById('searchResults').style.display='none'"><span>${getGameEmoji(g.genre)}</span><div><div style="font-weight:600;font-size:0.85rem">${g.name}</div><div style="font-size:0.75rem;color:var(--text2)">${g.genre}</div></div></div>`).join('')}
+    ${teams.length?`<div style="padding:8px 16px;font-size:0.75rem;color:var(--text2);text-transform:uppercase;margin-top:4px">Equipos</div>`:''}
+    ${teams.map(t=>`<div class="search-result-item" onclick="viewTeam('${t.id}');document.getElementById('searchResults').style.display='none'"><span>🏆</span><div><div style="font-weight:600;font-size:0.85rem">${t.name}</div></div></div>`).join('')}
+  `;
+  res.style.display='block';
+}
+
+document.addEventListener('click',e=>{if(!e.target.closest('.search-bar'))document.getElementById('searchResults').style.display='none';});
+
+// ==================== MODALS ====================
+function openModal(id){document.getElementById(id).classList.add('active');}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('active');});});
+
+// ==================== TERMS CHECKBOX ====================
+document.getElementById('termsCheck').addEventListener('change',function(){
+  const btn=document.getElementById('acceptTermsBtn');
+  btn.disabled=!this.checked;btn.style.opacity=this.checked?'1':'0.5';
+});
+
+// ==================== EDIT SECTION MODAL ====================
+function openEditSection(type){if(!currentUser||!currentUser.isAdmin)return;showPage('adminPage',null);switchAdminTab('contentTab',document.querySelector('.admin-tab:nth-child(6)'));}
+
+// ==================== INIT ====================
+window.addEventListener('load',()=>{
+  loadDB();
+  setTimeout(()=>{
+    document.getElementById('loadingScreen').style.opacity='0';
+    setTimeout(()=>{document.getElementById('loadingScreen').style.display='none';},300);
+  },1800);
+});
+
+// Prevent default context menu on images (protection)
+document.addEventListener('contextmenu',e=>{if(e.target.tagName==='IMG'){e.preventDefault();}});
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeGamePlayer();
+    document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active'));
+    document.getElementById('notifPanel').style.display='none';
+  }
+});
+</script>
 </body>
 </html>
