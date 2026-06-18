@@ -1,559 +1,1305 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>nexPLAY — Brand Kit & Logo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>nexPLAY—Gapro Juega Sin Límites</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 :root{
---p:#7C3AED;--s:#06B6D4;--ac:#F43F5E;--go:#F59E0B;
---bg:#06070F;--bg2:#0D0F1E;--bg3:#131528;
+--p:#7C3AED;--pd:#5B21B6;--p2:#A78BFA;
+--s:#06B6D4;--s2:#67E8F9;
+--ac:#F43F5E;--go:#F59E0B;
+--bg:#06070F;--bg2:#0D0F1E;--bg3:#131528;--bg4:#1A1D35;
 --cd:#0F1120;--br:#1E2140;--br2:#2A2D4A;
 --tx:#F1F5F9;--t2:#94A3B8;--t3:#64748B;
+--ok:#10B981;--wn:#F59E0B;--dn:#EF4444;
+--r:16px;--r2:12px;--r3:8px;
+--sh:0 4px 24px rgba(0,0,0,.4);
+--sh2:0 8px 40px rgba(0,0,0,.6);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;min-height:100vh;font-size:15px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--p);border-radius:99px}
+img{-webkit-user-drag:none;pointer-events:none}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
 
-/* LOADING */
-#LS{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity .6s}
-#LS.hide{opacity:0;pointer-events:none}
-.ls-logo{font-size:3.5rem;font-weight:900;background:linear-gradient(135deg,#A78BFA,#67E8F9,#A78BFA);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradShift 2.5s ease infinite}
-.ls-sub{color:var(--t2);font-size:.9rem;letter-spacing:2px;text-transform:uppercase;animation:pulse 1.5s ease infinite}
-.ls-ring{width:56px;height:56px;border:3px solid var(--br2);border-top-color:var(--p);border-radius:50%;animation:spin 1s linear infinite}
-.ls-bar-wrap{width:280px;height:3px;background:var(--br2);border-radius:99px;overflow:hidden}
-.ls-bar{height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--s));border-radius:99px;transition:width .08s linear}
-.ls-pct{color:var(--t3);font-size:.75rem;font-weight:600;letter-spacing:1px}
-.ls-dots{display:flex;gap:8px;align-items:center}
-.ls-dot{width:8px;height:8px;border-radius:50%;animation:dotPop .6s ease infinite}
-.ls-dot:nth-child(1){background:var(--p);animation-delay:0s}
-.ls-dot:nth-child(2){background:var(--s);animation-delay:.2s}
-.ls-dot:nth-child(3){background:var(--ac);animation-delay:.4s}
-
+/* ANIM */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-@keyframes dotPop{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.5);opacity:1}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes shimmer{0%{transform:translateX(-120%) skewX(-15deg)}100%{transform:translateX(220%) skewX(-15deg)}}
-@keyframes glowPulse{0%,100%{filter:drop-shadow(0 0 6px #7C3AED)}50%{filter:drop-shadow(0 0 22px #A78BFA) drop-shadow(0 0 40px #7C3AED)}}
-@keyframes orbitSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes badgeSpin{0%{transform:scale(1) rotate(0deg)}100%{transform:scale(1.06) rotate(360deg)}}
-@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(400%)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes slideRight{from{transform:translateX(-100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes popIn{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes notifIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes gradMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes badgeGlow{0%,100%{filter:drop-shadow(0 0 6px currentColor)}50%{filter:drop-shadow(0 0 20px currentColor)}}
+
+/* LOAD */
+#LS{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .5s}
+.ll{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--p),var(--s),var(--p2));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradMove 3s ease infinite,pulse 2s ease infinite}
+.lb{width:240px;height:3px;background:var(--br);border-radius:99px;overflow:hidden}
+.lf{height:100%;width:0%;background:linear-gradient(90deg,var(--p),var(--s));border-radius:99px;transition:width .1s}
+
+/* UTILS */
+.sc{display:none!important}.sc.on{display:flex!important;flex-direction:column;animation:fadeUp .4s ease}
+.pg{display:none}.pg.on{display:block;animation:fadeUp .35s ease}
+.tct{display:none}.tct.on{display:block;animation:fadeIn .3s ease}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border:none;border-radius:var(--r2);font-size:.875rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;touch-action:manipulation;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.bp{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 15px rgba(124,58,237,.3)}
+.bp:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,.45)}
+.bs{background:var(--bg3);color:var(--tx);border:1px solid var(--br2)}
+.bs:hover{border-color:var(--p);color:var(--p2)}
+.bc2{background:transparent;color:var(--t2);border:1px solid var(--br2)}
+.bc2:hover{border-color:var(--p);color:var(--p2)}
+.bd{background:var(--dn);color:#fff}
+.bd:hover{background:#DC2626}
+.bgo{background:linear-gradient(135deg,var(--s),var(--p));color:#fff;box-shadow:0 4px 15px rgba(6,182,212,.3)}
+.bf{width:100%}
+.ib{width:38px;height:38px;border-radius:var(--r2);background:var(--bg3);border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:1rem;color:var(--t2);flex-shrink:0;touch-action:manipulation}
+.ib:hover{border-color:var(--p);color:var(--p2)}
+
+/* FORMS */
+.fg{margin-bottom:14px}
+.fg label{display:block;color:var(--t2);font-size:.8rem;font-weight:500;margin-bottom:5px}
+.inp{width:100%;padding:11px 14px;background:var(--bg3);border:1.5px solid var(--br2);border-radius:var(--r2);color:var(--tx);font-size:.9rem;font-family:inherit;transition:all .2s;-webkit-appearance:none}
+.inp:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+.inp::placeholder{color:var(--t3)}
+textarea.inp{resize:vertical;min-height:80px}
+select.inp{cursor:pointer}
+.em{color:var(--dn);font-size:.75rem;margin-top:4px;display:none}
+.sm{color:var(--ok);font-size:.75rem;margin-top:4px;display:none}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* AUTH */
+.auth-wrap{min-height:100vh;background:radial-gradient(ellipse at 30% 20%,rgba(124,58,237,.15),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(6,182,212,.1),transparent 60%),var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;flex-direction:column}
+.auth-logo{font-size:3.5rem;font-weight:900;background:linear-gradient(135deg,var(--p2),var(--s));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;animation:float 4s ease infinite}
+.auth-sub{color:var(--t2);font-size:.95rem;margin-bottom:36px;text-align:center}
+.auth-card{background:var(--cd);border:1px solid var(--br2);border-radius:20px;padding:32px;width:100%;max-width:420px;box-shadow:var(--sh2)}
+.auth-card h2{font-size:1.5rem;font-weight:700;margin-bottom:24px;text-align:center}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--t3);font-size:.8rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--br2)}
+.link-btn{background:none;border:none;color:var(--p2);font-size:.875rem;cursor:pointer;text-decoration:underline;font-family:inherit;transition:color .2s}
+.link-btn:hover{color:var(--s)}
+
+/* TERMS */
+.terms-card{background:var(--cd);border:1px solid var(--br2);border-radius:20px;padding:32px;max-width:720px;width:100%;box-shadow:var(--sh2)}
+.tco{max-height:380px;overflow-y:auto;margin:16px 0;padding-right:8px;color:var(--t2);line-height:1.8;font-size:.875rem}
+.tco h3{color:var(--tx);font-size:.95rem;margin:14px 0 6px}
+.tchk{display:flex;align-items:center;gap:10px;margin:18px 0;cursor:pointer;font-size:.9rem}
+.tchk input{width:18px;height:18px;accent-color:var(--p)}
+
+/* WELCOME */
+.wf{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;width:100%;max-width:760px;margin-bottom:36px}
+.wc{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r);padding:22px;text-align:left;transition:all .3s;cursor:default}
+.wc:hover{border-color:var(--p);transform:translateY(-4px);box-shadow:0 8px 30px rgba(124,58,237,.2)}
+
+/* MAIN LAYOUT */
+#MA{display:none}
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sb{width:240px;background:var(--bg2);border-right:1px solid var(--br);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;overflow-y:auto;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sb-logo{padding:20px;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:12px}
+.sb-logo-text{font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--p2),var(--s));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sb-logo-badge{background:var(--p);color:#fff;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.5px}
+.sb-user{padding:12px 14px;margin:10px;background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r2);display:flex;align-items:center;gap:10px}
+.sb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--s));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;overflow:hidden}
+.sb-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.sb-name{font-weight:600;font-size:.82rem;line-height:1.2}
+.sb-role{font-size:.7rem;color:var(--t2)}
+.nav-sec{padding:10px 18px 4px;font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 16px;margin:2px 8px;border-radius:var(--r2);cursor:pointer;font-size:.875rem;color:var(--t2);transition:all .18s;touch-action:manipulation}
+.ni:hover,.ni:active{background:var(--bg3);color:var(--tx)}
+.ni.on{background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(6,182,212,.1));color:var(--p2);font-weight:600}
+.ni.on::before{content:'';position:absolute;left:8px;width:3px;height:28px;background:linear-gradient(var(--p),var(--s));border-radius:99px}
+.ni{position:relative}
+.nb{background:var(--ac);color:#fff;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:auto}
+.sb-footer{margin-top:auto;padding:14px}
+
+/* TOPBAR */
+.tb{position:fixed;top:0;left:240px;right:0;height:58px;background:rgba(13,15,30,.8);border-bottom:1px solid var(--br);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 20px;gap:12px;z-index:100;transition:left .3s}
+.search-box{flex:1;max-width:360px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--br2);border-radius:99px;padding:7px 16px;position:relative;transition:all .2s}
+.search-box:focus-within{border-color:var(--p);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+.search-box input{background:none;border:none;color:var(--tx);flex:1;outline:none;font-size:.875rem;font-family:inherit}
+.search-box input::placeholder{color:var(--t3)}
+.tb-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.ab-badge{background:linear-gradient(135deg,var(--ok),#059669);color:#fff;padding:3px 10px;border-radius:99px;font-size:.68rem;font-weight:700;white-space:nowrap}
+.ndot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--ac);border-radius:50%;border:2px solid var(--bg2)}
+.tb-av{width:34px;height:34px;border-radius:50%;overflow:hidden;cursor:pointer;border:2px solid var(--br2);transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:.95rem}
+.tb-av:hover{border-color:var(--p)}
+.tb-av img{width:100%;height:100%;object-fit:cover}
 
 /* MAIN */
-.page{opacity:0;pointer-events:none;transition:opacity .5s}
-.page.show{opacity:1;pointer-events:all}
-.container{max-width:1100px;margin:0 auto;padding:40px 24px}
+.main{margin-left:240px;margin-top:58px;padding:24px;min-height:calc(100vh - 58px);transition:margin .3s}
 
-/* HEADER */
-.site-header{background:rgba(13,15,30,.85);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
-.site-header-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
-.site-logo{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.site-nav{display:flex;gap:8px}
-.site-nav button{background:none;border:1px solid var(--br2);color:var(--t2);padding:6px 14px;border-radius:99px;font-size:.8rem;cursor:pointer;transition:all .2s;font-family:inherit}
-.site-nav button:hover,.site-nav button.on{background:var(--p);border-color:var(--p);color:#fff}
-
-/* HERO SECTION */
-.hero-sec{text-align:center;padding:60px 24px 40px;position:relative}
-.hero-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.4);padding:5px 14px;border-radius:99px;font-size:.75rem;font-weight:600;color:#A78BFA;margin-bottom:20px;letter-spacing:.5px}
-.hero-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;margin-bottom:12px;background:linear-gradient(135deg,#F1F5F9,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.15}
-.hero-sub{color:var(--t2);font-size:1rem;max-width:500px;margin:0 auto 36px;line-height:1.7}
+/* CARDS generic */
+.card{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r);padding:20px}
+.card-sm{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r2);padding:16px}
 
 /* SECTION */
-.sec{margin-bottom:60px;animation:fadeUp .5s ease both}
-.sec-label{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-.sec-label-text{font-size:.72rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:2px}
-.sec-label-line{flex:1;height:1px;background:var(--br)}
-.sec-label-num{width:26px;height:26px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
+.sec-title{font-size:1.2rem;font-weight:700}
+.sec-sub{font-size:.8rem;color:var(--t2);margin-top:2px}
 
-/* LOGO GRID */
-.logo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.logo-card{background:var(--cd);border:1px solid var(--br2);border-radius:18px;overflow:hidden;transition:all .3s;cursor:pointer;position:relative}
-.logo-card:hover{transform:translateY(-5px);box-shadow:0 16px 50px rgba(0,0,0,.5);border-color:var(--p)}
-.logo-card-preview{display:flex;align-items:center;justify-content:center;padding:36px 24px;min-height:200px;position:relative;overflow:hidden}
-.logo-card-info{padding:16px 20px;border-top:1px solid var(--br2);display:flex;align-items:center;justify-content:space-between}
-.logo-card-name{font-weight:600;font-size:.9rem}
-.logo-card-sub{font-size:.75rem;color:var(--t2);margin-top:2px}
-.logo-card-dl{background:var(--p);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
-.logo-card-dl:hover{background:#9333EA}
+/* HERO */
+.hero{background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.1)),var(--bg2);border:1px solid var(--br2);border-radius:20px;padding:36px;margin-bottom:24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:300px;height:300px;background:radial-gradient(circle,rgba(124,58,237,.15),transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-40px;right:120px;width:200px;height:200px;background:radial-gradient(circle,rgba(6,182,212,.1),transparent 70%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);padding:4px 12px;border-radius:99px;font-size:.75rem;font-weight:600;color:var(--p2);margin-bottom:14px}
+.hero h1{font-size:2.2rem;font-weight:900;line-height:1.2;margin-bottom:10px;background:linear-gradient(135deg,var(--tx),var(--p2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--t2);font-size:.95rem;line-height:1.7;max-width:520px;margin-bottom:22px}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.hero-edit{position:absolute;top:14px;right:14px;display:none}
+
+/* UPDATE BANNER */
+.upd-banner{background:linear-gradient(135deg,var(--p),var(--s));border-radius:var(--r2);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;animation:fadeUp .4s ease;gap:12px}
+.upd-banner b{font-size:.9rem}
+.upd-close{background:rgba(255,255,255,.2);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* GAME CARDS */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:16px}
+.gc{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .25s;position:relative;group:true}
+.gc:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,.5);border-color:var(--p)}
+.gc:active{transform:scale(.98)}
+.gc.feat{border-color:var(--go);box-shadow:0 0 20px rgba(245,158,11,.15)}
+.gc.feat::before{content:'';position:absolute;inset:0;background:linear-gradient(rgba(245,158,11,.05),transparent);pointer-events:none;z-index:1}
+.gt{width:100%;height:125px;display:flex;align-items:center;justify-content:center;font-size:2.6rem;position:relative;overflow:hidden;background:var(--bg3)}
+.gt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gt-em{position:relative;z-index:1}
+.gbdg{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:6px;font-size:.62rem;font-weight:700;z-index:2}
+.gbdg.hot{background:#F43F5E;color:#fff}
+.gbdg.new{background:var(--s);color:#000}
+.gbdg.feat{background:var(--go);color:#000}
+.gi{padding:12px}
+.gn{font-weight:700;font-size:.88rem;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gdev{font-size:.72rem;color:var(--t2);margin-bottom:7px}
+.gst{display:flex;gap:8px;font-size:.72rem;color:var(--t3)}
+.ga{display:flex;gap:5px;padding:0 12px 12px}
+.gab{flex:1;padding:5px 2px;background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r3);color:var(--t2);cursor:pointer;font-size:.7rem;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:3px;touch-action:manipulation}
+.gab:hover,.gab:active{border-color:var(--p);color:var(--p2)}
+.gab.lk{color:var(--ac);border-color:var(--ac);background:rgba(244,63,94,.08)}
+.gab.dk{color:var(--s);border-color:var(--s)}
+
+/* CATS */
+.cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cats::-webkit-scrollbar{display:none}
+.cc{padding:6px 14px;background:var(--bg3);border:1px solid var(--br2);border-radius:99px;cursor:pointer;white-space:nowrap;font-size:.82rem;font-weight:500;transition:all .2s;touch-action:manipulation}
+.cc:hover,.cc.on{background:var(--p);border-color:var(--p);color:#fff}
+
+/* TEAM CARDS */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.tcd{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r);padding:22px;cursor:pointer;transition:all .25s}
+.tcd:hover{transform:translateY(-4px);border-color:var(--p);box-shadow:var(--sh)}
+.tcd.feat{border-color:var(--go)}
+.t-logo{width:52px;height:52px;border-radius:var(--r2);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px;overflow:hidden;flex-shrink:0}
+.t-logo img{width:100%;height:100%;object-fit:cover}
+.t-nrow{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap}
+.t-name{font-size:1rem;font-weight:700}
+.t-desc{font-size:.8rem;color:var(--t2);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.t-meta{display:flex;gap:12px;font-size:.72rem;color:var(--t3);flex-wrap:wrap}
+
+/* MODALS */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.mo.on{display:flex;animation:fadeIn .2s ease}
+.md{background:var(--cd);border:1px solid var(--br2);border-radius:20px;padding:28px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;position:relative;animation:popIn .3s ease;box-shadow:var(--sh2)}
+.md h2{font-size:1.3rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:9px}
+.mc{position:absolute;top:14px;right:14px;width:28px;height:28px;background:var(--bg3);border:1px solid var(--br2);border:none;border-radius:var(--r3);color:var(--t2);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.mc:hover{background:var(--dn);color:#fff}
+
+/* PROFILE */
+.prof-hd{background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(6,182,212,.08)),var(--bg2);border:1px solid var(--br2);border-radius:20px;padding:28px;margin-bottom:22px}
+.prof-av{width:82px;height:82px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--s));display:flex;align-items:center;justify-content:center;font-size:2rem;border:3px solid var(--br2);cursor:pointer;overflow:hidden;position:relative;transition:all .2s;flex-shrink:0}
+.prof-av:hover{border-color:var(--p)}
+.prof-av img{width:100%;height:100%;object-fit:cover}
+.av-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;opacity:0;transition:opacity .2s}
+.prof-av:hover .av-overlay{opacity:1}
+.prof-name{font-size:1.7rem;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.prof-role{font-size:.82rem;color:var(--t2);margin-bottom:12px}
+.prof-stats{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px}
+.stat-i{text-align:center}
+.stat-n{font-size:1.2rem;font-weight:800;color:var(--p2)}
+.stat-l{font-size:.68rem;color:var(--t2)}
+.prof-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* PROFILE TABS */
+.ptabs{display:flex;gap:3px;background:var(--bg2);border-radius:var(--r2);padding:4px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+.ptabs::-webkit-scrollbar{display:none}
+.pti{padding:7px 16px;border-radius:var(--r3);cursor:pointer;font-size:.82rem;font-weight:500;color:var(--t2);white-space:nowrap;transition:all .2s;touch-action:manipulation}
+.pti.on{background:var(--p);color:#fff}
+
+/* ADMIN */
+.adm-hd{background:linear-gradient(135deg,#FF6200,#FF8533);border-radius:20px;padding:28px;margin-bottom:24px;position:relative;overflow:hidden}
+.adm-hd::after{content:'⚙';position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:6rem;opacity:.1;line-height:1}
+.adm-tabs{display:flex;gap:3px;background:var(--bg2);border-radius:var(--r2);padding:4px;margin-bottom:24px;overflow-x:auto;scrollbar-width:none}
+.adm-tabs::-webkit-scrollbar{display:none}
+.ati{padding:7px 14px;border-radius:var(--r3);cursor:pointer;font-size:.8rem;font-weight:500;color:var(--t2);white-space:nowrap;transition:all .2s;touch-action:manipulation}
+.ati.on{background:var(--p);color:#fff}
+.asec{display:none}.asec.on{display:block;animation:fadeUp .3s ease}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-bottom:24px}
+.ast{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r2);padding:18px}
+.ast-n{font-size:1.8rem;font-weight:800;margin-bottom:3px}
+.ast-l{font-size:.75rem;color:var(--t2)}
+.dt{width:100%;border-collapse:collapse}
+.dt th{padding:10px 14px;background:var(--bg2);text-align:left;font-size:.72rem;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0}
+.dt td{padding:10px 14px;border-bottom:1px solid var(--br);font-size:.82rem;vertical-align:middle}
+.dt tr:hover td{background:rgba(124,58,237,.04)}
+.ab2{display:flex;gap:4px;flex-wrap:wrap}
+.mb{padding:4px 9px;border-radius:6px;font-size:.68rem;font-family:inherit;border:none;cursor:pointer;font-weight:600;transition:all .18s;touch-action:manipulation}
+.mb:hover{opacity:.85;transform:scale(1.03)}
+
+/* SETTINGS */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.sc3{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r2);padding:18px}
+.sc3 h3{font-size:.9rem;font-weight:600;color:var(--s);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br)}
+.sr:last-child{border-bottom:none}
+.sr-label{font-size:.85rem}
+.sr-sub{font-size:.72rem;color:var(--t2);margin-top:2px}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.tslider{position:absolute;cursor:pointer;inset:0;background:var(--br2);border-radius:11px;transition:.25s}
+.tslider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s}
+.toggle input:checked+.tslider{background:var(--s)}
+.toggle input:checked+.tslider::before{transform:translateX(18px)}
+
+/* NOTIFS */
+.nc{position:fixed;top:70px;right:16px;z-index:600;display:flex;flex-direction:column;gap:7px;pointer-events:none;max-width:320px;width:calc(100vw - 32px)}
+.nf{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r2);padding:12px 14px;display:flex;align-items:center;gap:10px;pointer-events:all;animation:notifIn .35s ease;box-shadow:var(--sh2)}
+.nf.ok{border-color:var(--ok)}.nf.wn{border-color:var(--wn)}.nf.dn{border-color:var(--dn)}.nf.in{border-color:var(--p)}
+
+/* NOTIF PANEL */
+#NP{position:fixed;top:64px;right:16px;width:310px;max-width:calc(100vw - 32px);background:var(--cd);border:1px solid var(--br2);border-radius:var(--r);z-index:300;display:none;animation:popIn .25s ease;overflow:hidden;box-shadow:var(--sh2)}
+
+/* UPLOAD */
+.iuz{border:2px dashed var(--br2);border-radius:var(--r2);padding:22px;text-align:center;cursor:pointer;transition:all .2s;touch-action:manipulation}
+.iuz:hover,.iuz.has{border-color:var(--p);background:rgba(124,58,237,.04)}
+.iuz.has{border-style:solid;border-color:var(--ok)}
+.ip2{width:100%;max-height:160px;object-fit:cover;border-radius:var(--r3);display:none}
+.fih{display:none}
+.fil{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--t2);font-size:.85rem}
+
+/* BAN OVERLAY */
+.bo{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:700;display:none;align-items:center;justify-content:center;padding:20px}
+.bo.on{display:flex}
+.bo-card{background:var(--cd);border:2px solid var(--dn);border-radius:20px;padding:36px;max-width:460px;text-align:center;width:100%}
+
+/* BADGES */
+.bg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:16px}
+.bg-card{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.bg-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent);pointer-events:none}
+.bg-card:hover{transform:translateY(-6px);box-shadow:var(--sh2)}
+.bg-card svg{width:65px;height:65px;transition:all .3s;animation:badgeGlow 3s ease infinite}
+.bg-card:hover svg{transform:scale(1.15) rotate(8deg)}
+.bg-name{font-size:.78rem;font-weight:700;margin-top:10px}
+.bg-have{position:absolute;top:8px;right:8px;background:var(--ok);color:#fff;font-size:.58rem;padding:2px 6px;border-radius:4px;font-weight:700}
+.bw{display:inline-flex;align-items:center;cursor:pointer;position:relative}
+.btt{position:absolute;bottom:calc(100%+5px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--br2);border-radius:var(--r3);padding:5px 9px;font-size:.72rem;white-space:nowrap;z-index:10;display:none;pointer-events:none;box-shadow:var(--sh)}
+.bw:hover .btt{display:block}
+
+/* GAME PLAYER */
+.gpo{position:fixed;inset:0;background:#000;z-index:800;display:none;flex-direction:column}
+.gpo.on{display:flex;animation:fadeIn .2s ease}
+.g-ph{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--br);flex-wrap:wrap}
+.g-pa{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.g-frame{flex:1;position:relative;background:#000}
+.gf{width:100%;height:100%;border:none;position:absolute;inset:0}
+.g-bar{display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--bg2);border-top:1px solid var(--br);flex-wrap:wrap}
+.mt{padding:4px 12px;border-radius:99px;background:var(--bg3);border:1px solid var(--br2);cursor:pointer;font-size:.75rem;font-family:inherit;color:var(--t2);transition:all .2s;touch-action:manipulation}
+.mt.on{border-color:var(--s);color:var(--s)}
+.cheat-panel{position:absolute;right:0;top:0;bottom:0;width:210px;background:var(--bg2);border-left:1px solid var(--br);padding:14px;display:none;overflow-y:auto}
+.cheat-panel.on{display:block;animation:slideRight .25s ease}
+
+/* MOBILE NAV */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:58px;background:rgba(13,15,30,.95);border-top:1px solid var(--br);z-index:200;justify-content:space-around;align-items:center;backdrop-filter:blur(12px)}
+.mni{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:6px 12px;border-radius:var(--r2);transition:all .2s;color:var(--t2);font-size:.6rem;touch-action:manipulation}
+.mni.on,.mni:active{color:var(--p2)}
+.mni>span:first-child{font-size:1.3rem}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;backdrop-filter:blur(4px)}
+.sb-overlay.on{display:block}
+
+/* TEAM VIEW */
+.tvh{background:var(--bg2);border:1px solid var(--br2);border-radius:20px;padding:28px;margin-bottom:22px}
+.tvl{width:82px;height:82px;border-radius:var(--r);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin-bottom:16px;overflow:hidden}
+.tvl img{width:100%;height:100%;object-fit:cover}
+.mem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.mem-card{background:var(--cd);border:1px solid var(--br2);border-radius:var(--r2);padding:14px;text-align:center;transition:all .2s}
+.mem-card:hover{border-color:var(--p)}
+.mem-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--s));display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin:0 auto 8px;overflow:hidden}
+.mem-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* PERF */
+.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.po{background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r2);padding:12px;cursor:pointer;transition:all .2s;touch-action:manipulation}
+.po:hover,.po.on{border-color:var(--s);background:rgba(6,182,212,.08)}
+.po h4{font-size:.8rem;font-weight:600;margin-bottom:2px}
+.po p{font-size:.68rem;color:var(--t2)}
+
+/* SOCIAL */
+.soc-card{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r2);margin-bottom:8px}
+.soc-icon{font-size:1.4rem;flex-shrink:0}
+.soc-info .soc-type{font-size:.72rem;color:var(--t2)}
+.soc-info .soc-val{font-weight:600;font-size:.88rem}
+
+/* AVATAR PICKER */
+.av-opts{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0}
+.av-opt{aspect-ratio:1;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--s));display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;border:2px solid transparent;transition:all .2s;touch-action:manipulation}
+.av-opt:hover,.av-opt.on{border-color:var(--p2);transform:scale(1.1)}
+.av-upload{width:100%;padding:10px;background:var(--bg3);border:1.5px dashed var(--br2);border-radius:var(--r2);color:var(--t2);cursor:pointer;font-size:.85rem;text-align:center;transition:all .2s;font-family:inherit;touch-action:manipulation}
+.av-upload:hover{border-color:var(--p);color:var(--p2)}
+
+/* CHART */
+.chart-w{height:160px;display:flex;align-items:flex-end;gap:6px;padding:10px 0}
+.bar{flex:1;background:linear-gradient(0deg,var(--p),var(--s));border-radius:4px 4px 0 0;min-height:4px;transition:height .6s ease;position:relative;cursor:pointer}
+.bar::after{content:attr(data-v);position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.65rem;color:var(--t2);white-space:nowrap}
+.chart-l{display:flex;gap:6px}
+.cl{flex:1;text-align:center;font-size:.65rem;color:var(--t3)}
+
+/* EMPTY */
+.empty{text-align:center;padding:50px 20px;color:var(--t2)}
+.empty-ic{font-size:3.5rem;margin-bottom:14px;opacity:.4}
+.empty h3{font-size:1.05rem;font-weight:600;margin-bottom:7px;color:var(--t2)}
 
 /* COLORS */
-.colors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
-.color-card{background:var(--cd);border:1px solid var(--br2);border-radius:14px;overflow:hidden;transition:all .3s;cursor:pointer}
-.color-card:hover{transform:scale(1.03)}
-.color-swatch{height:80px;position:relative;overflow:hidden}
-.color-swatch::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent)}
-.color-info{padding:12px}
-.color-name{font-weight:600;font-size:.85rem;margin-bottom:3px}
-.color-hex{font-size:.75rem;color:var(--t2);font-family:monospace}
+.cp-row{display:flex;gap:7px;flex-wrap:wrap}
+.cd2{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;touch-action:manipulation}
+.cd2.on,.cd2:hover{transform:scale(1.2);border-color:#fff}
 
-/* TYPOGRAPHY */
-.typo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.typo-card{background:var(--cd);border:1px solid var(--br2);border-radius:14px;padding:24px}
-.typo-sample{font-size:2.5rem;font-weight:900;margin-bottom:12px;line-height:1}
-.typo-meta{color:var(--t2);font-size:.8rem;line-height:1.8}
+/* PUBLISH */
+.pub-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:20px}
+.steps-list{counter-reset:s;list-style:none}
+.steps-list li{counter-increment:s;display:flex;gap:12px;margin-bottom:16px}
+.steps-list li::before{content:counter(s);display:flex;align-items:center;justify-content:center;width:28px;height:28px;min-width:28px;background:var(--p);border-radius:50%;font-weight:700;font-size:.8rem;color:#fff}
+.step-c{padding-top:3px}
+.step-t{font-weight:600;font-size:.88rem;margin-bottom:2px}
+.step-d{font-size:.78rem;color:var(--t2);line-height:1.5}
 
-/* BADGE */
-.badge-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.badge-item{background:var(--bg3);border:1px solid var(--br2);border-radius:99px;padding:6px 14px;font-size:.78rem;font-weight:500;display:flex;align-items:center;gap:6px;transition:all .2s}
-.badge-item:hover{border-color:var(--p)}
-
-/* DARK / LIGHT bg toggle */
-.bg-dark{background:#06070F}
-.bg-mid{background:#111827}
-.bg-light{background:#F1F5F9}
-.bg-white{background:#ffffff}
-
-/* USAGE */
-.usage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.usage-card{border-radius:16px;overflow:hidden;border:1px solid var(--br2);transition:all .3s}
-.usage-card:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
-.usage-preview{height:140px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.usage-label{background:var(--cd);padding:12px 16px;font-size:.82rem;font-weight:500;color:var(--t2);border-top:1px solid var(--br2)}
-
-/* ANIMATED DISPLAY */
-.logo-float{animation:float 3.5s ease-in-out infinite}
-.logo-glow{animation:glowPulse 2.5s ease-in-out infinite}
-.orbit-wrap{position:absolute;width:120px;height:120px;animation:orbitSpin 6s linear infinite;pointer-events:none}
-.orbit-dot{position:absolute;width:6px;height:6px;border-radius:50%;top:0;left:50%;margin-left:-3px}
-.shimmer-bar{position:absolute;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shimmer 2.5s ease infinite}
-.scanline{position:absolute;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(103,232,249,.3),transparent);animation:scanline 3s ease-in-out infinite;pointer-events:none}
+/* SEARCH RESULTS */
+.sr2{position:absolute;top:calc(100%+6px);left:0;right:0;background:var(--cd);border:1px solid var(--br2);border-radius:var(--r2);max-height:280px;overflow-y:auto;z-index:50;display:none;box-shadow:var(--sh2)}
+.sri{padding:9px 14px;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:9px;font-size:.85rem}
+.sri:hover,.sri:active{background:var(--bg3)}
 
 /* RESPONSIVE */
-@media(max-width:600px){
-.logo-grid{grid-template-columns:1fr}
-.typo-grid{grid-template-columns:1fr}
-.site-nav button{padding:5px 10px;font-size:.72rem}
+@media(max-width:900px){
+  .sb{transform:translateX(-100%)}.sb.on{transform:translateX(0);box-shadow:0 0 60px rgba(0,0,0,.8)}
+  .tb{left:0}.main{margin-left:0;padding:14px;padding-bottom:72px}
+  .mob-nav{display:flex}
+  .hero h1{font-size:1.7rem}.hero{padding:24px}
+  .games-grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+  .frow{grid-template-columns:1fr}.pub-grid{grid-template-columns:1fr!important}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .sg{grid-template-columns:1fr}
+  .dt{font-size:.76rem}.dt th,.dt td{padding:8px 10px}
+  .mb{font-size:.65rem;padding:3px 7px}
+  .md{padding:22px;border-radius:var(--r)}
+}
+@media(max-width:480px){
+  .games-grid{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:1.5rem}.hero{padding:20px}
+  .bg-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .av-opts{grid-template-columns:repeat(5,1fr)}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
+<!-- LOADING -->
 <div id="LS">
-  <div class="ls-logo">nexPLAY</div>
-  <div class="ls-sub">Cargando Brand Kit</div>
-  <div class="ls-ring"></div>
-  <div>
-    <div class="ls-bar-wrap"><div class="ls-bar" id="LSB"></div></div>
-    <div style="text-align:center;margin-top:8px"><span class="ls-pct" id="LSPCT">0%</span></div>
-  </div>
-  <div class="ls-dots">
-    <div class="ls-dot"></div>
-    <div class="ls-dot"></div>
-    <div class="ls-dot"></div>
+  <div class="ll">nexPLAY-Gapro</div>
+  <p style="color:var(--t2);font-size:.85rem;margin-top:-12px">Cargando tu experiencia gaming...</p>
+  <div class="lb"><div class="lf" id="LF"></div></div>
+</div>
+
+<!-- NOTIFS -->
+<div class="nc" id="NC"></div>
+
+<!-- BAN -->
+<div class="bo" id="BO">
+  <div class="bo-card">
+    <div style="font-size:4rem;margin-bottom:14px">🚫✖🔒</div>
+    <h2 style="color:var(--dn);font-size:1.6rem;margin-bottom:10px">Cuenta Suspendida por equipo de Gapro</h2>
+    <p style="color:var(--t2);margin-bottom:10px" id="BR">Tu cuenta fue suspendida.</p>
+    <p style="font-size:.78rem;color:var(--t3)">Fecha: <b id="BD"></b> — Hora: <b id="BT"></b></p>
+    <button class="btn bs bf" style="margin-top:20px" onclick="document.getElementById('BO').classList.remove('on')">Cerrar</button>
   </div>
 </div>
 
-<!-- MAIN PAGE -->
-<div class="page" id="PAGE">
+<!-- OVERLAY SIDEBAR MOBILE -->
+<div class="sb-overlay" id="SOV" onclick="cSB()"></div>
 
-<header class="site-header">
-  <div class="site-header-inner">
-    <div class="site-logo">nexPLAY</div>
-    <nav class="site-nav">
-      <button class="on" onclick="showSec('logos',this)">Logos</button>
-      <button onclick="showSec('colors',this)">Colores</button>
-      <button onclick="showSec('typo',this)">Tipografía</button>
-      <button onclick="showSec('usage',this)">Uso</button>
-    </nav>
+<!-- AUTH -->
+<div id="AS">
+
+<!-- SPLASH -->
+<div class="sc on" id="SP" style="background:radial-gradient(ellipse at 20% 20%,rgba(124,58,237,.2),transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(6,182,212,.15),transparent 50%),var(--bg)">
+  <div class="auth-wrap">
+    <div class="auth-logo">nexPLAY-Gapro</div>
+    <p class="auth-sub">La Plataforma Gaming Definitiva</p>
+    <div style="display:flex;gap:10px;margin-bottom:48px;flex-wrap:wrap;justify-content:center">
+      <span style="background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.4);padding:4px 12px;border-radius:99px;font-size:.75rem;color:var(--p2)">🎮 Gratis</span>
+      <span style="background:rgba(6,182,212,.15);border:1px solid rgba(6,182,212,.4);padding:4px 12px;border-radius:99px;font-size:.75rem;color:var(--s)">🛡️ Sin Ads</span>
+      <span style="background:rgba(244,63,94,.15);border:1px solid rgba(244,63,94,.4);padding:4px 12px;border-radius:99px;font-size:.75rem;color:var(--ac)">🚀 Web</span>
+      <span style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);padding:4px 12px;border-radius:99px;font-size:.75rem;color:var(--go)">📱 Móvil</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px">
+      <button class="btn bp bf" style="padding:14px;font-size:1rem;animation:pulse 2.5s infinite" onclick="SS('LG')">🎮 Iniciar Sesión</button>
+      <button class="btn bc2 bf" style="padding:14px;font-size:1rem" onclick="SS('RG')">🛠 Crear Cuenta</button>
+    </div>
+    <p style="margin-top:40px;color:var(--t3);font-size:.72rem">nexPLAY v3.0.0 • 2025</p>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="sc" id="LG">
+  <div class="auth-wrap">
+    <div class="auth-logo">nexPLAY-Gapro</div>
+    <p class="auth-sub">Bienvenido de vuelta 👾</p>
+    <div class="auth-card">
+      <h2>Iniciar Sesión</h2>
+      <div class="fg"><label>Usuario o Email</label><input class="inp" id="LU" placeholder="Tu usuario o correo" autocomplete="username"></div>
+      <div class="fg"><label>Contraseña</label><input class="inp" type="password" id="LP" placeholder="Tu contraseña" autocomplete="current-password"><div class="em" id="LE">❌🔒 Credenciales incorrectas</div></div>
+      <button class="btn bp bf" style="margin-top:4px" onclick="doL()">Entrar →</button>
+      <div class="divider">o</div>
+      <button class="btn bc2 bf" onclick="SS('RG')">¿Sin cuenta? Regístrate</button>
+      <button class="link-btn" style="display:block;text-align:center;margin-top:14px" onclick="SS('SP')">← Volver</button>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="sc" id="RG">
+  <div class="auth-wrap">
+    <div class="auth-logo">nexPLAY-Gapro</div>
+    <p class="auth-sub">Únete a la comunidad 🚀</p>
+    <div class="auth-card">
+      <h2>Crear Cuenta</h2>
+      <div class="fg"><label>Usuario *</label><input class="inp" id="RU" placeholder="Ej: GamerPro99" oninput="ckU(this)" autocomplete="username"><div class="em" id="RUE"></div><div class="sm" id="RUO">✅ Nombre disponible</div></div>
+      <div class="fg"><label>Email *</label><input class="inp" type="email" id="RE" placeholder="tu@email.com"><div class="em" id="REE"></div></div>
+      <div class="fg"><label>Contraseña *</label><input class="inp" type="password" id="RP" placeholder="Mín. 6 caracteres"></div>
+      <div class="fg"><label>Confirmar contraseña *</label><input class="inp" type="password" id="RP2" placeholder="Repite tu contraseña"><div class="em" id="RPE">Las contraseñas no coinciden ✖</div></div>
+      <div class="em" id="RGE" style="margin-bottom:8px"></div>
+      <button class="btn bp bf" onclick="doR()">Crear cuenta 🎮</button>
+      <button class="link-btn" style="display:block;text-align:center;margin-top:14px" onclick="SS('LG')">¿Ya tienes cuenta? Inicia sesión</button>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="sc" id="WL">
+  <div style="min-height:100vh;background:radial-gradient(ellipse at 30% 20%,rgba(124,58,237,.2),transparent 60%),var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center">
+    <div style="width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--s));display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 18px;animation:popIn .8s ease" id="WAV">🎮</div>
+    <h1 style="font-size:2.2rem;font-weight:900;margin-bottom:10px">¡Bienvenido, <span id="WN" style="color:var(--p2)">Jugador</span>! 🎉</h1>
+    <p style="color:var(--t2);margin-bottom:36px;font-size:1rem">Tu aventura en nexPLAY comienza ahora</p>
+    <div class="wf">
+      <div class="wc"><div style="font-size:1.8rem;margin-bottom:8px">🎮</div><div style="font-weight:700;margin-bottom:4px">Juega Sin Límites</div><div style="color:var(--t2);font-size:.8rem">Cientos de juegos gratis</div></div>
+      <div class="wc"><div style="font-size:1.8rem;margin-bottom:8px">🏆</div><div style="font-weight:700;margin-bottom:4px">Equipos</div><div style="color:var(--t2);font-size:.8rem">Crea tu equipo dev</div></div>
+      <div class="wc"><div style="font-size:1.8rem;margin-bottom:8px">🚀</div><div style="font-weight:700;margin-bottom:4px">Publica</div><div style="color:var(--t2);font-size:.8rem">Comparte con el mundo</div></div>
+      <div class="wc"><div style="font-size:1.8rem;margin-bottom:8px">📱</div><div style="font-weight:700;margin-bottom:4px">Móvil & PC</div><div style="color:var(--t2);font-size:.8rem">En todos tus dispositivos</div></div>
+    </div>
+    <button class="btn bp" style="padding:14px 44px;font-size:1rem" onclick="SS('TR')">Continuar →</button>
+  </div>
+</div>
+
+<!-- TERMS -->
+<div class="sc" id="TR">
+  <div style="min-height:100vh;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px">
+    <div class="terms-card">
+      <h1 style="font-size:1.8rem;font-weight:800;color:var(--ac);margin-bottom:6px">⚖️ Términos de Servicio</h1>
+      <p style="color:var(--t2);font-size:.88rem">Lee y acepta antes de continuar en nexPLAY</p>
+      <div class="tco">
+        <h3>1. Aceptación</h3><p>Al usar nexPLAY-Gapro aceptas estos términos en su totalidad.</p>
+        <h3>2. LÍMITE DE RESPONSABILIDAD — nexPLAY NO se hace responsable de:</h3>
+        <ul style="margin:8px 0 8px 18px;line-height:2.2">
+          <li>🔐 Robo, hackeo o acceso no autorizado a tu cuenta</li>
+          <li>💻 Pérdida de datos, progreso o información personal</li>
+          <li>🎮 Contenido publicado por terceros o desarrolladores</li>
+          <li>💰 Pérdidas económicas derivadas del uso de la plataforma</li>
+          <li>🌐 Tiempo de inactividad, errores o interrupciones del servicio</li>
+          <li>😰 Daños indirectos, incidentales o consecuentes de cualquier tipo</li>
+          <li>🔒SI haz sido hackeado debe imforma al equipo de gapro🧨</li>
+        </ul>
+        <h3>3. Conducta del Usuario</h3><p>Prohibido: lenguaje ofensivo, spam, contenido ilegal, hackeo sin autorización, suplantación de identidades.</p>
+        <h3>4. Contenido de Juegos</h3><p>Los juegos son responsabilidad exclusiva de sus desarrolladores. nexPLAY actúa como intermediario.</p>
+        <h3>5. Privacidad</h3><p>Tus datos se usan únicamente para mejorar tu experiencia. No los vendemos a terceros.</p>
+        <h3>6. Suspensiones</h3><p>nexPLAY-Gapro puede suspender cuentas que violen estos términos sin previo aviso.</p>
+      </div>
+      <label class="tchk"><input type="checkbox" id="TC" onchange="tA()"><span>He leído y acepto los Términos de Servicio de nexPLAY-Gapro</span></label>
+      <button class="btn bp bf" id="AB" onclick="gA()" disabled style="opacity:.5">Aceptar y Entrar 🎮</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /AS -->
+
+<!-- MAIN APP -->
+<div id="MA">
+
+<!-- SIDEBAR -->
+<aside class="sb" id="SB">
+  <div class="sb-logo">
+    <div class="sb-logo-text">nexPLAY-Gapro</div>
+    <span class="sb-logo-badge">v3.0</span>
+  </div>
+  <div class="sb-user">
+    <div class="sb-av" id="SBAV"><span id="SBAVT">👤</span></div>
+    <div><div class="sb-name" id="SBN">Usuario</div><div class="sb-role" id="SBR">Jugador</div></div>
+  </div>
+  <div class="nav-sec">Explorar</div>
+  <div class="ni on" onclick="gP('HP',this)"><span>🏠</span> Inicio</div>
+  <div class="ni" onclick="gP('GP',this)"><span>🎮</span> Juegos</div>
+  <div class="ni" onclick="gP('TP',this)"><span>🏆</span> Equipos</div>
+  <div class="nav-sec">Mi Cuenta</div>
+  <div class="ni" onclick="gP('PP',this)"><span>👤</span> Mi Perfil</div>
+  <div class="ni" onclick="gP('PB',this)"><span>🏅</span> Mis Badges</div>
+  <div class="ni" onclick="gP('PUB',this)"><span>📤</span> Publicar Juego</div>
+  <div class="ni" onclick="gP('SET',this)"><span>⚙️</span> Configuración</div>
+  <div class="nav-sec" id="ANS" style="display:none">Administración</div>
+  <div class="ni" id="ANI" style="display:none" onclick="gP('ADM',this)"><span>🔧</span> Panel Admin <span class="nb">ADMIN</span></div>
+  <div class="sb-footer"><button class="btn bd bf" style="font-size:.83rem" onclick="doOut()">← Cerrar Sesión</button></div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="tb">
+  <button class="ib" id="MBT" onclick="tSB()" style="display:none">☰</button>
+  <div class="search-box" style="position:relative">
+    <span style="color:var(--t3)">🔍</span>
+    <input id="SI" placeholder="Buscar juegos, equipos..." oninput="doSch(this.value)" autocomplete="off">
+    <div class="sr2" id="SR"></div>
+  </div>
+  <div class="tb-right">
+    <span class="ab-badge" id="ABB">🛡️ Sin Ads</span>
+    <div class="ib" onclick="tNP()" style="position:relative" title="Notificaciones">🔔<span class="ndot" id="ND" style="display:none"></span></div>
+    <div class="tb-av" id="TAV" onclick="gP('PP',null)" title="Mi perfil"><span id="TAVT">👤</span></div>
   </div>
 </header>
 
-<div class="container">
-
-<!-- HERO -->
-<div class="hero-sec sec" id="sec-hero">
-  <div class="hero-chip">✦ Brand Kit Oficial 2025</div>
-  <h1 class="hero-title">nexPLAY Brand Kit</h1>
-  <p class="hero-sub">Todas las versiones del logo, paleta de colores, tipografía y guías de uso para la plataforma gaming más completa.</p>
+<!-- NOTIF PANEL -->
+<div id="NP">
+  <div style="padding:13px 16px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center">
+    <b style="font-size:.9rem">🔔 Notificaciones</b>
+    <button onclick="mR()" style="background:none;border:none;color:var(--p2);cursor:pointer;font-size:.75rem;font-family:inherit">Marcar leídas</button>
+  </div>
+  <div id="NL" style="max-height:320px;overflow-y:auto"></div>
 </div>
 
-<!-- LOGOS -->
-<div class="sec" id="sec-logos">
-  <div class="sec-label">
-    <div class="sec-label-num">01</div>
-    <div class="sec-label-text">Variantes del Logo</div>
-    <div class="sec-label-line"></div>
+<!-- MAIN -->
+<main class="main">
+
+<!-- HOME -->
+<div class="pg on" id="HP">
+  <div id="UB" class="upd-banner" style="display:none">
+    <div>🆕 <b id="UBT">nexPLAY v3.0.0 — ¡Rediseño completo!</b></div>
+    <button class="upd-close" onclick="this.parentElement.style.display='none'">✕</button>
   </div>
-  <div class="logo-grid" id="LGRID"></div>
+  <div class="hero">
+    <div class="hero-tag">✨ Plataforma #1 de juegos web</div>
+    <h1 id="HT">Juega. Crea. Comparte.</h1>
+    <p id="HD">Miles de juegos gratuitos sin descarga desde cualquier dispositivo. PC, móvil o tablet — tú eliges.</p>
+    <div class="hero-btns">
+      <button class="btn bp" onclick="gP('GP',null)">🎮 Explorar Juegos</button>
+      <button class="btn bs" onclick="gP('PUB',null)">🚀 Publicar</button>
+    </div>
+    <button id="HEB" class="hero-edit btn bp" onclick="gP('ADM',null);setTimeout(()=>oAT('AC'),200)">✏️ Editar Hero</button>
+  </div>
+  <div class="cats" id="HC"></div>
+  <div class="sec-hd"><div><div class="sec-title">⭐ Destacados</div></div><button class="btn bc2" style="font-size:.8rem;padding:6px 14px" onclick="gP('GP',null)">Ver todos →</button></div>
+  <div class="games-grid" id="FG"></div>
+  <div class="sec-hd" style="margin-top:28px"><div><div class="sec-title">🔥 Populares</div></div></div>
+  <div class="games-grid" id="POG"></div>
+  <div class="sec-hd" style="margin-top:28px"><div><div class="sec-title">🏆 Equipos Destacados</div></div></div>
+  <div class="team-grid" id="HTG"></div>
 </div>
 
-<!-- COLORS -->
-<div class="sec" id="sec-colors" style="display:none">
-  <div class="sec-label">
-    <div class="sec-label-num">02</div>
-    <div class="sec-label-text">Paleta de Colores</div>
-    <div class="sec-label-line"></div>
-  </div>
-  <div class="colors-grid" id="CGRID"></div>
+<!-- GAMES -->
+<div class="pg" id="GP">
+  <div class="sec-hd"><div><div class="sec-title">🎮 Todos los Juegos</div><div class="sec-sub" id="GCT"></div></div></div>
+  <div class="cats" id="GC"></div>
+  <div class="games-grid" id="AGG"></div>
 </div>
 
-<!-- TYPOGRAPHY -->
-<div class="sec" id="sec-typo" style="display:none">
-  <div class="sec-label">
-    <div class="sec-label-num">03</div>
-    <div class="sec-label-text">Tipografía</div>
-    <div class="sec-label-line"></div>
-  </div>
-  <div class="typo-grid">
-    <div class="typo-card">
-      <div class="typo-sample" style="background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent">nexPLAY</div>
-      <div style="font-size:1.2rem;font-weight:700;margin-bottom:8px;color:var(--t2)">Inter Black 900</div>
-      <div class="typo-meta">Uso: Logotipo, Titulares<br>Tamaño mínimo: 24px<br>Kerning: -2px<br>A a B b C c D d 0 1 2 3</div>
-    </div>
-    <div class="typo-card">
-      <div class="typo-sample" style="font-weight:600;font-size:2rem;color:var(--tx)">Aa Bb Cc</div>
-      <div style="font-size:1.2rem;font-weight:700;margin-bottom:8px;color:var(--t2)">Inter SemiBold 600</div>
-      <div class="typo-meta">Uso: Subtítulos, UI principal<br>Tamaño mínimo: 14px<br>Interlineado: 1.5<br>1 2 3 4 5 6 7 8 9 0</div>
-    </div>
-    <div class="typo-card">
-      <div class="typo-sample" style="font-weight:400;font-size:1.8rem;color:var(--t2)">Lorem ipsum</div>
-      <div style="font-size:1.2rem;font-weight:700;margin-bottom:8px;color:var(--t2)">Inter Regular 400</div>
-      <div class="typo-meta">Uso: Cuerpo de texto<br>Tamaño mínimo: 13px<br>Interlineado: 1.7<br>Color: #94A3B8</div>
-    </div>
-    <div class="typo-card">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-        <span style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);color:#A78BFA;padding:3px 10px;border-radius:99px;font-size:.8rem;font-weight:600">PREMIUM</span>
-        <span style="background:rgba(6,182,212,.15);border:1px solid rgba(6,182,212,.4);color:#67E8F9;padding:3px 10px;border-radius:99px;font-size:.8rem;font-weight:600">NUEVO</span>
-        <span style="background:rgba(244,63,94,.15);border:1px solid rgba(244,63,94,.4);color:#F43F5E;padding:3px 10px;border-radius:99px;font-size:.8rem;font-weight:600">HOT</span>
+<!-- TEAMS -->
+<div class="pg" id="TP">
+  <div class="sec-hd"><div><div class="sec-title">🏆 Equipos</div></div><button class="btn bp" onclick="oM('CTM')">+ Crear Equipo</button></div>
+  <div class="team-grid" id="TG"></div>
+</div>
+
+<!-- PROFILE -->
+<div class="pg" id="PP">
+  <div class="prof-hd">
+    <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+      <div class="prof-av" id="PA" onclick="oM('AVM')"><span id="PAT" style="font-size:2rem">👤</span><div class="av-overlay">📷</div></div>
+      <div style="flex:1;min-width:200px">
+        <div class="prof-name"><span id="PN"></span><span id="PBG"></span></div>
+        <div class="prof-role" id="PR"></div>
+        <div class="prof-stats">
+          <div class="stat-i"><div class="stat-n" id="SGA">0</div><div class="stat-l">Juegos</div></div>
+          <div class="stat-i"><div class="stat-n" id="SLA">0</div><div class="stat-l">Likes</div></div>
+          <div class="stat-i"><div class="stat-n" id="SDA">0</div><div class="stat-l">Dislikes</div></div>
+          <div class="stat-i"><div class="stat-n" id="STA" style="font-size:.85rem">—</div><div class="stat-l">Equipo</div></div>
+        </div>
+        <div class="prof-actions">
+          <button class="btn bs" style="font-size:.8rem;padding:8px 14px" onclick="oM('EPM')">✏️ Editar</button>
+          <button class="btn bs" style="font-size:.8rem;padding:8px 14px" onclick="oM('CCM')">🔐 Creds</button>
+          <button class="btn bs" style="font-size:.8rem;padding:8px 14px" onclick="shrPr()">📤 Compartir</button>
+          <button class="btn bs" style="font-size:.8rem;padding:8px 14px" onclick="oM('AVM')">🖼️ Avatar</button>
+          <button class="btn bs" style="font-size:.8rem;padding:8px 14px" onclick="gP('PB',null)">🏅 Badges</button>
+        </div>
       </div>
-      <div style="font-size:1.2rem;font-weight:700;margin-bottom:8px;color:var(--t2)">Chips & Labels</div>
-      <div class="typo-meta">Uso: Badges, estados, tags<br>Font: Inter SemiBold 600<br>Padding: 3px 10px<br>Border-radius: 99px</div>
+    </div>
+  </div>
+  <div class="ptabs">
+    <div class="pti on" onclick="sT('MG',this)">🎮 Juegos</div>
+    <div class="pti" onclick="sT('LK',this)">❤️ Favoritos</div>
+    <div class="pti" onclick="sT('MT',this)">🏆 Equipo</div>
+    <div class="pti" onclick="sT('ACT',this)">📊 Actividad</div>
+    <div class="pti" onclick="sT('SCL',this)">🌐 Social</div>
+    <div class="pti" onclick="sT('MBL',this)">🏅 Badges</div>
+  </div>
+  <div class="tct on" id="MG"><div class="games-grid" id="MGG"></div></div>
+  <div class="tct" id="LK"><div class="games-grid" id="LKG"></div></div>
+  <div class="tct" id="MT"><div id="MTC"></div></div>
+  <div class="tct" id="ACT"><div id="ACTL" style="display:flex;flex-direction:column;gap:9px"></div></div>
+  <div class="tct" id="SCL"><div id="SCLL"></div></div>
+  <div class="tct" id="MBL"><div id="MBLL" style="display:flex;flex-wrap:wrap;gap:12px;padding:10px 0"></div></div>
+</div>
+
+<!-- BADGES PAGE -->
+<div class="pg" id="PB">
+  <div class="sec-hd"><div><div class="sec-title">🏅 Badges Verificados</div><div class="sec-sub">20+ badges disponibles — asignados por administradores</div></div></div>
+  <div class="card" style="margin-bottom:20px"><p style="color:var(--t2);font-size:.88rem">Haz clic en cualquier badge para ver más información. Los badges son asignados por el equipo de Gapro.</p></div>
+  <div class="bg-grid" id="BGGRID"></div>
+</div>
+
+<!-- PUBLISH -->
+<div class="pg" id="PUB">
+  <div class="sec-hd"><div><div class="sec-title">📤 Publicar Juego</div><div class="sec-sub">Comparte tu creación con la comunidad nexPLAY-Gapro</div></div></div>
+  <div class="pub-grid" id="PG2">
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <h3 style="font-size:.95rem;font-weight:600;color:var(--s);margin-bottom:16px">📋 Pasos para Publicar</h3>
+        <ol class="steps-list">
+          <li><div class="step-c"><div class="step-t">Completa el formulario</div><div class="step-d">Nombre, portada y URL de tu juego</div></div></li>
+          <li><div class="step-c"><div class="step-t">Revisión del admin</div><div class="step-d">El admin revisa en 1-3 días hábiles</div></div></li>
+          <li><div class="step-c"><div class="step-t">¡Publicado!</div><div class="step-d">Tu juego aparece en nexPLAY para todos</div></div></li>
+          <li><div class="step-c"><div class="step-t">Estadísticas en vivo</div><div class="step-d">Vistas, likes y comentarios en tiempo real</div></div></li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3 style="font-size:.95rem;font-weight:600;color:var(--s);margin-bottom:12px">⚡ Requisitos</h3>
+        <ul style="color:var(--t2);font-size:.82rem;line-height:2.2;list-style:none">
+          <li>✅ HTML5, Unity WebGL o similar</li>
+          <li>✅ Sin anuncios externos en el juego</li>
+          <li>✅ Contenido apto para todo público</li>
+          <li>✅ Portada de al menos 400×300px</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:.95rem;font-weight:600;color:var(--s);margin-bottom:20px">🎮 Datos del Juego</h3>
+      <div class="fg"><label>Nombre del Juego *</label><input class="inp" id="PN2" placeholder="Ej: Super Jump Adventure"></div>
+      <div class="fg"><label>Desarrollador / Equipo *</label><input class="inp" id="PD" placeholder="Tu nombre o nombre del equipo"></div>
+      <div class="fg"><label>Descripción *</label><textarea class="inp" id="PDSC" placeholder="Mecánicas, historia, controles..." style="min-height:80px"></textarea></div>
+      <div class="fg">
+        <label>Portada del Juego *</label>
+        <div class="iuz" onclick="document.getElementById('CI').click()" id="CZ"><img id="CP2" class="ip2"><div class="fil" id="CL"><span style="font-size:2rem">🖼️</span><span style="font-weight:600;font-size:.88rem">Seleccionar imagen del explorador</span><span style="font-size:.72rem">PNG, JPG, WEBP — Máx 5MB</span></div></div>
+        <input type="file" class="fih" id="CI" accept="image/*" onchange="hI(this,'CP2','CL','CZ')">
+      </div>
+      <div class="fg"><label>URL del Juego *</label><input class="inp" type="url" id="PU" placeholder="https://mi-juego.com"></div>
+      <div class="frow">
+        <div class="fg"><label>Género *</label><select class="inp" id="PGN"><option value="">Seleccionar...</option><option>Acción</option><option>Aventura</option><option>Puzzle</option><option>Plataformas</option><option>Carreras</option><option>Deportes</option><option>Estrategia</option><option>RPG</option><option>Terror</option><option>Educativo</option><option>Casual</option><option>Multijugador</option></select></div>
+        <div class="fg"><label>Motor / Tecnología</label><input class="inp" id="PE" placeholder="Unity, Godot, Phaser..."></div>
+      </div>
+      <div class="fg"><label>Equipo (opcional)</label><select class="inp" id="PTS"><option value="">Independiente</option></select></div>
+      <button class="btn bp bf" style="margin-top:4px" onclick="subG()">🚀 Enviar para Revisión</button>
     </div>
   </div>
 </div>
 
-<!-- USAGE -->
-<div class="sec" id="sec-usage" style="display:none">
-  <div class="sec-label">
-    <div class="sec-label-num">04</div>
-    <div class="sec-label-text">Guías de Uso</div>
-    <div class="sec-label-line"></div>
+<!-- SETTINGS -->
+<div class="pg" id="SET">
+  <div class="sec-hd"><div><div class="sec-title">⚙️ Configuración</div></div></div>
+  <div class="sg">
+    <div class="sc3">
+      <h3>🎨 Apariencia</h3>
+      <div class="sr"><div class="sr-label">Color de Acento</div>
+        <div class="cp-row">
+          <div class="cd2 on" style="background:#7C3AED" onclick="sC('#7C3AED','#5B21B6',this)"></div>
+          <div class="cd2" style="background:#06B6D4" onclick="sC('#06B6D4','#0891B2',this)"></div>
+          <div class="cd2" style="background:#F43F5E" onclick="sC('#F43F5E','#BE123C',this)"></div>
+          <div class="cd2" style="background:#F59E0B" onclick="sC('#F59E0B','#D97706',this)"></div>
+          <div class="cd2" style="background:#10B981" onclick="sC('#10B981','#059669',this)"></div>
+          <div class="cd2" style="background:#EC4899" onclick="sC('#EC4899','#BE185D',this)"></div>
+          <div class="cd2" style="background:#FF6200" onclick="sC('#FF6200','#CC4E00',this)"></div>
+        </div>
+      </div>
+      <div class="sr"><div><div class="sr-label">Animaciones</div><div class="sr-sub">Efectos visuales en la UI</div></div><label class="toggle"><input type="checkbox" checked id="AT"><span class="tslider"></span></label></div>
+    </div>
+    <div class="sc3">
+      <h3>📱 Móvil & PC</h3>
+      <div class="sr"><div><div class="sr-label">Barra de nav inferior</div><div class="sr-sub">Menú rápido en móvil</div></div><label class="toggle"><input type="checkbox" checked id="MNT" onchange="tMN(this)"><span class="tslider"></span></label></div>
+      <div class="sr"><div><div class="sr-label">Vibración háptica</div><div class="sr-sub">Feedback táctil</div></div><label class="toggle"><input type="checkbox" id="VT"><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">FS automático en juegos</div><label class="toggle"><input type="checkbox"><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">Modo touch mejorado</div><label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+    </div>
+    <div class="sc3">
+      <h3>🛡️ Privacidad</h3>
+      <div class="sr"><div><div class="sr-label">Bloqueador de Anuncios</div><div class="sr-sub">Bloquea todos los anuncios</div></div><label class="toggle"><input type="checkbox" checked id="ADT" onchange="tAd(this)"><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">Perfil Público</div><label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">Protección de imágenes</div><label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">Mostrar en Equipos</div><label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+    </div>
+    <div class="sc3">
+      <h3>⚡ Rendimiento</h3>
+      <p style="color:var(--t2);font-size:.78rem;margin-bottom:10px">Optimiza nexPLAY para tu equipo</p>
+      <div class="p-grid">
+        <div class="po" onclick="sPM('auto',this)"><h4>⚡ Auto</h4><p>Detecta automáticamente</p></div>
+        <div class="po on" onclick="sPM('high',this)"><h4>🔥 Alto</h4><p>Máxima calidad</p></div>
+        <div class="po" onclick="sPM('med',this)"><h4>⚙️ Medio</h4><p>Balance calidad/velocidad</p></div>
+        <div class="po" onclick="sPM('low',this)"><h4>🐌 PC Antigua</h4><p>Máxima optimización</p></div>
+      </div>
+    </div>
+    <div class="sc3">
+      <h3>🔔 Notificaciones</h3>
+      <div class="sr"><div class="sr-label">Actualizaciones nexPLAY</div><label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">Juegos nuevos</div><label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">Actividad del equipo</div><label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+      <div class="sr"><div class="sr-label">Nuevos likes</div><label class="toggle"><input type="checkbox"><span class="tslider"></span></label></div>
+    </div>
+    <div class="sc3">
+      <h3>ℹ️ Acerca de nexPLAY</h3>
+      <div class="sr"><div class="sr-label">Versión</div><span style="color:var(--s);font-size:.85rem;font-weight:600">v3.0.0</span></div>
+      <div class="sr"><div class="sr-label">Build</div><span style="color:var(--t2);font-size:.8rem">2025.06</span></div>
+      <div class="sr"><div class="sr-label">Plataforma</div><span style="color:var(--t2);font-size:.8rem" id="PLI">Web</span></div>
+      <div class="sr"><div class="sr-label">Licencia</div><span style="color:var(--t2);font-size:.8rem">nexPLAY © 2025</span></div>
+    </div>
+    <div class="sc3">
+      <h3>🗑️ Zona Peligrosa</h3>
+      <button class="btn bd bf" style="margin-bottom:9px;font-size:.85rem" onclick="if(confirm('¿Eliminar tu cuenta? Esta acción es irreversible.'))sN('🗑️','Cuenta eliminada','Eliminada definitivamente','dn')">🗑️ Eliminar Cuenta</button>
+      <button class="btn bc2 bf" style="font-size:.85rem" onclick="doOut()">← Cerrar Sesión</button>
+    </div>
   </div>
-  <div class="usage-grid" id="UGRID"></div>
 </div>
 
+<!-- ADMIN -->
+<div class="pg" id="ADM">
+  <div class="adm-hd">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-size:2.5rem">🔧🛠</span>
+      <div>
+        <div style="font-size:.68rem;opacity:.7;text-transform:uppercase;letter-spacing:2px;font-weight:700">Panel de Control</div>
+        <h1 style="font-size:1.8rem;font-weight:900;margin-bottom:2px">Administración nexPLAY</h1>
+        <div style="opacity:.8;font-size:.85rem">Control total de la plataforma</div>
+      </div>
+    </div>
+  </div>
+  <div class="adm-tabs">
+    <div class="ati on" onclick="oAT('AS2',this)">📊 Stats</div>
+    <div class="ati" onclick="oAT('AU',this)">👥 Usuarios</div>
+    <div class="ati" onclick="oAT('AG',this)">🎮 Juegos</div>
+    <div class="ati" onclick="oAT('ATM',this)">🏆 Equipos</div>
+    <div class="ati" onclick="oAT('AR',this)">🚨🧨 Reportes</div>
+    <div class="ati" onclick="oAT('AC',this)">✏️ Contenido</div>
+    <div class="ati" onclick="oAT('ABG',this)">🏅 Badges</div>
+    <div class="ati" onclick="oAT('ANF',this)">📢 Notifs</div>
+    <div class="ati" onclick="oAT('ACR',this)">🔐🔑 Credenciales</div>
+  </div>
+  <!-- STATS -->
+  <div class="asec on" id="AS2">
+    <div class="stat-grid">
+      <div class="ast"><div class="ast-n" id="ASU" style="color:var(--p2)">0</div><div class="ast-l">👥 Usuarios</div></div>
+      <div class="ast"><div class="ast-n" id="ASG" style="color:var(--s)">0</div><div class="ast-l">🎮 Juegos</div></div>
+      <div class="ast"><div class="ast-n" id="AST" style="color:var(--ac)">0</div><div class="ast-l">🏆 Equipos</div></div>
+      <div class="ast"><div class="ast-n" id="ASP" style="color:var(--wn)">0</div><div class="ast-l">⏳ Pendientes</div></div>
+      <div class="ast"><div class="ast-n" id="ASB" style="color:var(--dn)">0</div><div class="ast-l">🚫 Baneados</div></div>
+      <div class="ast"><div class="ast-n" id="ASR" style="color:var(--wn)">0</div><div class="ast-l">🚨 Reportes</div></div>
+    </div>
+    <div class="card"><h3 style="font-size:.9rem;font-weight:600;margin-bottom:13px">📈 Actividad (7 días)</h3><div class="chart-w" id="ACH"></div><div class="chart-l" id="ACHL"></div></div>
+  </div>
+  <!-- USERS -->
+  <div class="asec" id="AU">
+    <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
+      <input class="inp" placeholder="🔍 Buscar usuario..." id="AUS" oninput="rAU()" style="flex:1;min-width:160px">
+      <select class="inp" id="AUF" onchange="rAU()" style="width:auto"><option value="all">Todos</option><option value="active">Activos</option><option value="banned">Baneados</option></select>
+    </div>
+    <div style="overflow-x:auto"><table class="dt"><thead><tr><th>Usuario</th><th>Email</th><th>Estado</th><th>Badges</th><th>Acciones</th></tr></thead><tbody id="AUT"></tbody></table></div>
+  </div>
+  <!-- GAMES -->
+  <div class="asec" id="AG">
+    <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap">
+      <input class="inp" placeholder="🔍 Buscar juego..." id="AGS" oninput="rAG()" style="flex:1">
+      <select class="inp" id="AGF" onchange="rAG()" style="width:auto"><option value="all">Todos</option><option value="pending">Pendientes</option><option value="approved">Aprobados</option><option value="banned">Baneados</option></select>
+    </div>
+    <div style="overflow-x:auto"><table class="dt"><thead><tr><th>Juego</th><th>Dev</th><th>Género</th><th>Estado</th><th>❤️</th><th>Acciones</th></tr></thead><tbody id="AGT"></tbody></table></div>
+  </div>
+  <!-- TEAMS -->
+  <div class="asec" id="ATM"><div style="overflow-x:auto"><table class="dt"><thead><tr><th>Equipo</th><th>Creador</th><th>Juegos</th><th>Estado</th><th>Badges</th><th>Acciones</th></tr></thead><tbody id="ATT"></tbody></table></div></div>
+  <!-- REPORTS -->
+  <div class="asec" id="AR"><div id="ARL"></div></div>
+  <!-- CONTENT -->
+  <div class="asec" id="AC">
+    <h3 style="font-size:.95rem;font-weight:600;margin-bottom:16px">✏️ Editar Contenido de la Plataforma</h3>
+    <div class="card" style="margin-bottom:14px"><h4 style="color:var(--s);font-size:.88rem;margin-bottom:12px">🦸 Hero Principal</h4><div class="fg"><label>Título</label><input class="inp" id="EHT" placeholder="Juega. Crea. Comparte."></div><div class="fg"><label>Descripción</label><textarea class="inp" id="EHD"></textarea></div><button class="btn bp" onclick="sHr()">💾 Guardar Hero</button></div>
+    <div class="card" style="margin-bottom:14px"><h4 style="color:var(--s);font-size:.88rem;margin-bottom:12px">📢 Banner de Anuncio</h4><div class="fg"><label>Texto</label><input class="inp" id="EBT" placeholder="Nuevo anuncio..."></div><div style="display:flex;gap:9px"><button class="btn bp" onclick="sBn()">📢 Publicar</button><button class="btn bs" onclick="document.getElementById('UB').style.display='none'">🗑️ Ocultar</button></div></div>
+    <div class="card"><h4 style="color:var(--s);font-size:.88rem;margin-bottom:12px">🎮 Nueva Categoría</h4><div style="display:flex;gap:7px;flex-wrap:wrap"><input class="inp" id="NCN" placeholder="Nombre..." style="flex:1"><input class="inp" id="NCI" placeholder="🎮" style="width:70px"><button class="btn bp" onclick="addCat()">+ Añadir</button></div></div>
+  </div>
+  <!-- BADGES ADMIN -->
+  <div class="asec" id="ABG">
+    <h3 style="font-size:.95rem;font-weight:600;margin-bottom:6px">🏅 Gestión de Badges</h3>
+    <p style="color:var(--t2);font-size:.82rem;margin-bottom:16px">Asigna o retira badges verificados a usuarios y equipos.</p>
+    <div class="card" style="margin-bottom:14px">
+      <h4 style="color:var(--s);font-size:.88rem;margin-bottom:12px">Asignar Badge a Usuario</h4>
+      <div class="frow"><div class="fg"><label>Usuario</label><select class="inp" id="BGU"></select></div><div class="fg"><label>Badge</label><select class="inp" id="BGS"></select></div></div>
+      <div style="display:flex;gap:9px"><button class="btn bp" onclick="asBg()">🏅 Asignar</button><button class="btn bd" onclick="rmBg()">🗑️ Retirar</button></div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <h4 style="color:var(--s);font-size:.88rem;margin-bottom:12px">Asignar Badge a Equipo</h4>
+      <div class="frow"><div class="fg"><label>Equipo</label><select class="inp" id="BGTM"></select></div><div class="fg"><label>Badge</label><select class="inp" id="BGTS"></select></div></div>
+      <div style="display:flex;gap:9px"><button class="btn bp" onclick="asBgT()">🏅 Asignar</button><button class="btn bd" onclick="rmBgT()">🗑️ Retirar</button></div>
+    </div>
+    <h4 style="font-size:.9rem;margin-bottom:12px">Vista previa — todos los badges</h4>
+    <div class="bg-grid" id="ABGG"></div>
+  </div>
+  <!-- NOTIFS -->
+  <div class="asec" id="ANF">
+    <div class="card" style="margin-bottom:14px">
+      <h4 style="color:var(--s);font-size:.88rem;margin-bottom:12px">📢 Notificación Global</h4>
+      <div class="fg"><label>Tipo</label><select class="inp" id="ANT"><option value="in">ℹ️ Info</option><option value="ok">✅ Éxito</option><option value="wn">⚠️ Aviso</option><option value="dn">❌ Error</option></select></div>
+      <div class="fg"><label>Título</label><input class="inp" id="ANTL" placeholder="Título..."></div>
+      <div class="fg"><label>Mensaje</label><textarea class="inp" id="ANM" placeholder="Mensaje..."></textarea></div>
+      <button class="btn bp" onclick="sGN()">📢 Enviar a Todos</button>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--s);font-size:.88rem;margin-bottom:12px">🆕 Publicar Actualización</h4>
+      <div class="fg"><label>Versión</label><input class="inp" id="ANV" placeholder="v3.1.0"></div>
+      <div class="fg"><label>Descripción</label><input class="inp" id="ANVM" placeholder="Nuevas funciones..."></div>
+      <button class="btn bp" onclick="sUpd()">🚀 Publicar</button>
+    </div>
+  </div>
+  <!-- CREDS -->
+  <div class="asec" id="ACR">
+    <div class="card" style="max-width:440px">
+      <h4 style="color:var(--s);font-size:.88rem;margin-bottom:16px">🔐 Cambiar Credenciales Admin</h4>
+      <div class="fg"><label>Nuevo Usuario Admin</label><input class="inp" id="ANU" placeholder="Nuevo nombre de usuario"></div>
+      <div class="fg"><label>Nueva Contraseña</label><input class="inp" type="password" id="ANP" placeholder="Nueva contraseña"></div>
+      <div class="fg"><label>Confirmar Contraseña</label><input class="inp" type="password" id="ANP2" placeholder="Confirmar"></div>
+      <div class="fg"><label>Contraseña Actual (verificación)</label><input class="inp" type="password" id="ACP" placeholder="Tu contraseña actual"></div>
+      <button class="btn bp" onclick="chAC()">💾 Actualizar Credenciales</button>
+    </div>
+  </div>
 </div>
+
+<!-- TEAM VIEW -->
+<div class="pg" id="TVP">
+  <div style="display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--t2);margin-bottom:18px">
+    <span style="cursor:pointer;transition:color .2s" onclick="gP('TP',null)">🏆 Equipos</span>
+    <span style="color:var(--br2)">›</span>
+    <span id="TVB" style="color:var(--tx)">Equipo</span>
+  </div>
+  <div class="tvh" id="TVH"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap">
+    <div><h3 style="font-size:.95rem;font-weight:600;margin-bottom:13px">👥 Miembros del Equipo</h3><div class="mem-grid" id="TVM"></div></div>
+    <div><h3 style="font-size:.95rem;font-weight:600;margin-bottom:13px">🎮 Juegos del Equipo</h3><div class="games-grid" id="TVG" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr))"></div></div>
+  </div>
+</div>
+
+</main>
+
+<!-- MOBILE NAV -->
+<nav class="mob-nav" id="MNV">
+  <div class="mni on" onclick="gP('HP',null);sMN(this)"><span>🏠</span><span>Inicio</span></div>
+  <div class="mni" onclick="gP('GP',null);sMN(this)"><span>🎮</span><span>Juegos</span></div>
+  <div class="mni" onclick="gP('TP',null);sMN(this)"><span>🏆</span><span>Equipos</span></div>
+  <div class="mni" onclick="gP('PP',null);sMN(this)"><span>👤</span><span>Perfil</span></div>
+  <div class="mni" onclick="tSB()"><span>☰</span><span>Menú</span></div>
+</nav>
+
+</div><!-- /MA -->
+
+<!-- MODALS -->
+<div class="mo" id="AVM"><div class="md"><button class="mc" onclick="cM('AVM')">✕</button>
+  <h2>🖼️ Cambiar Avatar</h2>
+  <button class="av-upload" onclick="document.getElementById('AFI').click()">📂 Subir imagen desde el explorador de archivos</button>
+  <input type="file" class="fih" id="AFI" accept="image/*" onchange="hAv(this)">
+  <p style="color:var(--t2);font-size:.8rem;margin:12px 0 8px">— o elige un emoji —</p>
+  <div class="av-opts" id="AOC"></div>
+  <div style="margin-top:14px"><label style="color:var(--t2);font-size:.8rem;display:block;margin-bottom:6px">Emoji personalizado:</label>
+    <div style="display:flex;gap:8px"><input class="inp" id="CEI" placeholder="🎯 🔥 ⚡" maxlength="2" style="font-size:1.2rem;flex:1"><button class="btn bp" onclick="setEm()">✓ Usar</button></div>
+  </div>
+  <div id="APW" style="text-align:center;margin-top:14px;display:none">
+    <p style="color:var(--t2);font-size:.8rem;margin-bottom:8px">Vista previa:</p>
+    <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;margin:0 auto;border:3px solid var(--p)"><img id="API" style="width:100%;height:100%;object-fit:cover" src=""></div>
+    <button class="btn bp" style="margin-top:12px" onclick="cfAv()">✓ Confirmar foto</button>
+  </div>
+</div></div>
+
+<div class="mo" id="EPM"><div class="md"><button class="mc" onclick="cM('EPM')">✕</button>
+  <h2>✏️ Editar Perfil</h2>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:14px;background:var(--bg3);border-radius:var(--r2)">
+    <div style="width:58px;height:58px;border-radius:50%;overflow:hidden;border:2px solid var(--p);flex-shrink:0;cursor:pointer" onclick="cM('EPM');oM('AVM')" id="EPP"><span id="EPPT" style="font-size:1.8rem;display:flex;align-items:center;justify-content:center;height:100%">👤</span></div>
+    <div><div style="font-weight:600;font-size:.88rem">Avatar / Foto de Perfil</div><button class="btn bs" style="font-size:.75rem;padding:5px 12px;margin-top:7px" onclick="cM('EPM');oM('AVM')">📷 Cambiar Avatar</button></div>
+  </div>
+  <div class="fg"><label>Bio</label><textarea class="inp" id="EBI" placeholder="Cuéntanos sobre ti..."></textarea></div>
+  <div class="frow">
+    <div class="fg"><label>Twitter/X</label><input class="inp" id="ETW" placeholder="@usuario"></div>
+    <div class="fg"><label>YouTube</label><input class="inp" id="EYT" placeholder="Canal de YouTube"></div>
+  </div>
+  <div class="frow">
+    <div class="fg"><label>Twitch</label><input class="inp" id="ETH" placeholder="Tu canal"></div>
+    <div class="fg"><label>Discord</label><input class="inp" id="EDC" placeholder="Tu#1234"></div>
+  </div>
+  <div class="frow">
+    <div class="fg"><label>Instagram</label><input class="inp" id="EIG" placeholder="@usuario_ig"></div>
+    <div class="fg"><label>TikTok</label><input class="inp" id="ETK" placeholder="@usuario_tiktok"></div>
+  </div>
+  <div class="fg"><label>Sitio Web</label><input class="inp" type="url" id="EWB" placeholder="https://tu-web.com"></div>
+  <button class="btn bp bf" onclick="svP()">💾 Guardar Cambios</button>
+</div></div>
+
+<div class="mo" id="CCM"><div class="md"><button class="mc" onclick="cM('CCM')">✕</button>
+  <h2>🔐 Cambiar Credenciales</h2>
+  <div class="fg"><label>Nuevo nombre de usuario</label><input class="inp" id="CNU" placeholder="Nuevo usuario"></div>
+  <div class="fg"><label>Nuevo email</label><input class="inp" type="email" id="CNE" placeholder="nuevo@email.com"></div>
+  <div class="fg"><label>Nueva contraseña</label><input class="inp" type="password" id="CNP" placeholder="Nueva contraseña"></div>
+  <div class="fg"><label>Confirmar contraseña</label><input class="inp" type="password" id="CNP2" placeholder="Confirmar"></div>
+  <div class="fg"><label>Contraseña actual *</label><input class="inp" type="password" id="CCP" placeholder="Tu contraseña actual"></div>
+  <button class="btn bp bf" onclick="svC()">💾 Actualizar</button>
+</div></div>
+
+<div class="mo" id="CTM"><div class="md"><button class="mc" onclick="cM('CTM')">✕</button>
+  <h2>🏆 Crear Equipo</h2>
+  <div class="fg"><label>Logo del Equipo</label>
+    <div class="iuz" onclick="document.getElementById('TLI').click()" id="TLZ"><img id="TLP" class="ip2"><div class="fil" id="TLL"><span style="font-size:1.8rem">🖼️</span><span style="font-weight:600;font-size:.85rem">Seleccionar logo</span></div></div>
+    <input type="file" class="fih" id="TLI" accept="image/*" onchange="hI(this,'TLP','TLL','TLZ')">
+  </div>
+  <div class="fg"><label>Nombre del Equipo *</label><input class="inp" id="TN" placeholder="Ej: Dragon Studio, PixelForge..."></div>
+  <div class="fg"><label>Descripción</label><textarea class="inp" id="TD" placeholder="¿Qué hace tu equipo?"></textarea></div>
+  <div class="frow">
+    <div class="fg"><label>Twitter/X</label><input class="inp" id="TTW" placeholder="@equipo"></div>
+    <div class="fg"><label>YouTube</label><input class="inp" id="TYT" placeholder="Canal de YouTube"></div>
+  </div>
+  <div class="frow">
+    <div class="fg"><label>Discord</label><input class="inp" id="TDC" placeholder="discord.gg/servidor"></div>
+    <div class="fg"><label>Sitio Web</label><input class="inp" type="url" id="TWB" placeholder="https://tu-equipo.com"></div>
+  </div>
+  <button class="btn bp bf" onclick="crT()">🚀 Crear Equipo</button>
+</div></div>
+
+<div class="mo" id="RM"><div class="md"><button class="mc" onclick="cM('RM')">✕</button>
+  <h2>🚨 Reportar</h2>
+  <p style="color:var(--t2);margin-bottom:13px;font-size:.88rem">Selecciona el motivo del reporte:</p>
+  <div style="margin-bottom:14px;display:flex;flex-direction:column;gap:7px">
+    <label style="display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--bg3);border-radius:var(--r2);cursor:pointer;border:1px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='transparent'"><input type="radio" name="RR" value="inappropriate" style="accent-color:var(--p)"> Contenido inapropiado</label>
+    <label style="display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--bg3);border-radius:var(--r2);cursor:pointer;border:1px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='transparent'"><input type="radio" name="RR" value="spam" style="accent-color:var(--p)"> Spam o publicidad</label>
+    <label style="display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--bg3);border-radius:var(--r2);cursor:pointer;border:1px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='transparent'"><input type="radio" name="RR" value="copyright" style="accent-color:var(--p)"> Derechos de autor</label>
+    <label style="display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--bg3);border-radius:var(--r2);cursor:pointer;border:1px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='transparent'"><input type="radio" name="RR" value="harassment" style="accent-color:var(--p)"> Acoso o abuso</label>
+    <label style="display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--bg3);border-radius:var(--r2);cursor:pointer;border:1px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='transparent'"><input type="radio" name="RR" value="malware" style="accent-color:var(--p)"> Malware / Peligroso</label>
+    <label style="display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--bg3);border-radius:var(--r2);cursor:pointer;border:1px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='transparent'"><input type="radio" name="RR" value="other" style="accent-color:var(--p)"> Otro motivo</label>
+  </div>
+  <div class="fg"><label>Detalles adicionales</label><textarea class="inp" id="RD" placeholder="Describe el problema con más detalle..."></textarea></div>
+  <button class="btn bd bf" onclick="sbR()">📤 Enviar Reporte</button>
+</div></div>
+
+<div class="mo" id="BNM"><div class="md"><button class="mc" onclick="cM('BNM')">✕</button>
+  <h2>🚫 Confirmar Ban</h2>
+  <input type="hidden" id="BTI"><input type="hidden" id="BTT">
+  <div class="fg"><label>Motivo del ban *</label><textarea class="inp" id="BRI" placeholder="Especifica el motivo del baneo..." style="min-height:100px"></textarea></div>
+  <button class="btn bd bf" onclick="exB()">🚫 Confirmar Ban</button>
+</div></div>
+
+<div class="mo" id="SHM"><div class="md"><button class="mc" onclick="cM('SHM')">✕</button>
+  <h2>📤 Compartir Perfil</h2>
+  <div id="SHC" style="background:var(--bg3);border-radius:var(--r2);padding:22px;text-align:center;margin-bottom:14px;border:1px solid var(--br2)"></div>
+  <button class="btn bp bf" onclick="cpP()">📋 Copiar enlace al portapapeles</button>
+</div></div>
+
+<div class="mo" id="BGM"><div class="md"><button class="mc" onclick="cM('BGM')">✕</button><div id="BGD" style="text-align:center;padding:10px 0"></div></div></div>
+
+<!-- GAME PLAYER -->
+<div class="gpo" id="GPO">
+  <div class="g-ph">
+    <button onclick="clP()" style="background:none;border:none;color:var(--t2);cursor:pointer;font-size:1.5rem;padding:4px 8px;touch-action:manipulation;transition:color .2s" onmouseover="this.style.color='var(--tx)'" onmouseout="this.style.color='var(--t2)'">✕</button>
+    <div><div style="font-weight:700;font-size:.95rem" id="PT">Juego</div><div style="font-size:.72rem;color:var(--t2)" id="PDV">nexPLAY</div></div>
+    <div class="g-pa">
+      <button class="btn bs" id="PLB" onclick="lFP()" style="font-size:.8rem;padding:7px 12px">❤️ <span id="PLC">0</span></button>
+      <button class="btn bs" onclick="oRp(null,'game')" style="font-size:.8rem;padding:7px 12px">🚨 Reportar</button>
+      <button class="btn bs" onclick="tFS()" style="font-size:.8rem;padding:7px 12px">⛶ FS</button>
+      <div id="CBW" style="display:none"><button class="btn bs" onclick="tCP()" style="font-size:.8rem;padding:7px 12px">🔧 Cheats</button></div>
+    </div>
+  </div>
+  <div class="g-bar">
+    <span style="color:var(--t3);font-size:.75rem;font-weight:500">Modo:</span>
+    <div class="mt on" onclick="sGM('n',this)">⚡ Normal</div>
+    <div class="mt" onclick="sGM('p',this)">🔥 Alto Rend.</div>
+    <div class="mt" onclick="sGM('l',this)">🐌 PC Antigua</div>
+  </div>
+  <div class="g-frame" style="position:relative">
+    <iframe id="GF" class="gf" sandbox="allow-scripts allow-same-origin allow-forms" allow="fullscreen"></iframe>
+    <div class="cheat-panel" id="CPL">
+      <div style="font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:11px;padding-bottom:8px;border-bottom:1px solid var(--br);font-weight:700">🔧 Cheat Engine — Solo Admins</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:.83rem">Atravesar Paredes<label class="toggle"><input type="checkbox" id="CW" onchange="apC('walls',this.checked)"><span class="tslider"></span></label></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:.83rem">Inmunidad Total<label class="toggle"><input type="checkbox" id="CI2" onchange="apC('immunity',this.checked)"><span class="tslider"></span></label></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:.83rem">Vidas Infinitas<label class="toggle"><input type="checkbox" id="CL2" onchange="apC('lives',this.checked)"><span class="tslider"></span></label></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:.83rem">Velocidad ×2<label class="toggle"><input type="checkbox" id="CSP" onchange="apC('speed',this.checked)"><span class="tslider"></span></label></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:.83rem">Dinero Infinito<label class="toggle"><input type="checkbox" id="CMN" onchange="apC('money',this.checked)"><span class="tslider"></span></label></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-// ===== LOADING =====
-let pct=0;
-const lsb=document.getElementById('LSB'),lspct=document.getElementById('LSPCT');
-const iv=setInterval(()=>{
-  pct+=Math.random()*8+2;
-  if(pct>100)pct=100;
-  lsb.style.width=pct+'%';
-  lspct.textContent=Math.floor(pct)+'%';
-  if(pct>=100){clearInterval(iv);setTimeout(()=>{document.getElementById('LS').classList.add('hide');setTimeout(()=>{document.getElementById('LS').style.display='none';const p=document.getElementById('PAGE');p.classList.add('show');buildPage();},600);},400);}
-},90);
-
-// ===== BUILD =====
-function buildPage(){buildLogos();buildColors();buildUsage();}
-
-// ===== LOGOS =====
-const LOGOS=[
-  {id:'main',name:'Logo Principal',sub:'Fondo oscuro — uso general',bg:'#06070F',svgFn:logoMain},
-  {id:'horiz',name:'Horizontal Compact',sub:'Sidebar, topbar, headers',bg:'#0D0F1E',svgFn:logoHoriz},
-  {id:'icon',name:'Solo Icono',sub:'App icon, favicon 32×32+',bg:'#0F1120',svgFn:logoIcon},
-  {id:'white',name:'Versión Blanca',sub:'Sobre fondos de color',bg:'linear-gradient(135deg,#7C3AED,#06B6D4)',svgFn:logoWhite},
-  {id:'dark',name:'Versión Oscura',sub:'Sobre fondos claros',bg:'#F1F5F9',svgFn:logoDark},
-  {id:'cyber',name:'Versión Cyber',sub:'Edición especial / eventos',bg:'#030711',svgFn:logoCyber},
-  {id:'minimal',name:'Minimal',sub:'Impresión, documentos',bg:'#06070F',svgFn:logoMinimal},
-  {id:'animated',name:'Animado (Neon)',sub:'Pantallas digitales, splash',bg:'#06070F',svgFn:logoNeon},
+// ===== BADGES =====
+const BADGES=[
+  {id:'famous',n:'Verificado Famoso',c:'#1DA1F2',d:'Para celebridades e influencers reconocidos.'},
+  {id:'gov',n:'Verificado Gobierno',c:'#FFCC00',d:'Cuentas oficiales gubernamentales y estatales.'},
+  {id:'edu',n:'Verificado Educación',c:'#10B981',d:'Universidades y centros educativos acreditados.'},
+  {id:'biz',n:'Verificado Empresa',c:'#8E8E93',d:'Negocios y organizaciones corporativas.'},
+  {id:'elite',n:'Verificado Élite',c:'#FFD700',d:'Nivel máximo exclusivo para miembros destacados.'},
+  {id:'art',n:'Verificado Artista',c:'#C026D3',d:'Músicos, pintores, actores y creadores artísticos.'},
+  {id:'sport',n:'Verificado Deportivo',c:'#EF4444',d:'Atletas profesionales y organizaciones deportivas.'},
+  {id:'med',n:'Verificado Médico',c:'#0EA5E9',d:'Doctores, hospitales y profesionales de la salud.'},
+  {id:'dev',n:'Verificado Desarrollador',c:'#22D3EE',d:'Programadores, ingenieros y empresas tech.'},
+  {id:'vip',n:'Verificado VIP',c:'#7C3AED',d:'Miembros muy importantes de alto estatus.'},
+  {id:'chef',n:'Verificado Chef',c:'#F59E0B',d:'Chefs profesionales y restaurantes de alta cocina.'},
+  {id:'law',n:'Verificado Abogado',c:'#4F46E5',d:'Abogados, bufetes y expertos legales.'},
+  {id:'press',n:'Verificado Periodista',c:'#E11D48',d:'Periodistas y medios de comunicación reconocidos.'},
+  {id:'sci',n:'Verificado Científico',c:'#06B67F',d:'Investigadores y profesionales de la ciencia.'},
+  {id:'music',n:'Verificado Músico',c:'#DB2777',d:'Artistas musicales y productores.'},
+  {id:'photo',n:'Verificado Fotógrafo',c:'#EA580C',d:'Fotógrafos profesionales y estudios fotográficos.'},
+  {id:'write',n:'Verificado Escritor',c:'#9333EA',d:'Autores, novelistas y escritores destacados.'},
+  {id:'entrep',n:'Verificado Emprendedor',c:'#14B8A6',d:'Emprendedores y fundadores de startups.'},
+  {id:'infl',n:'Verificado Influencer',c:'#EC4899',d:'Creadores de contenido digital con gran alcance.'},
+  {id:'sec',n:'Verificado Seguridad',c:'#1E2937',d:'Fuerzas de seguridad, militares y protección.'},
+  {id:'admin',n:'Verificado Admin',c:'#FF6200',d:'Administradores oficiales de nexPLAY.'}
 ];
-
-function buildLogos(){
-  const g=document.getElementById('LGRID');
-  g.innerHTML=LOGOS.map(l=>`
-    <div class="logo-card" style="animation-delay:${LOGOS.indexOf(l)*0.08}s">
-      <div class="logo-card-preview" style="background:${l.bg}">
-        <div class="shimmer-bar"></div>
-        <div class="scanline"></div>
-        ${l.svgFn()}
-      </div>
-      <div class="logo-card-info">
-        <div><div class="logo-card-name">${l.name}</div><div class="logo-card-sub">${l.sub}</div></div>
-        <button class="logo-card-dl" onclick="dlLogo('${l.id}')">↓ SVG</button>
-      </div>
-    </div>
-  `).join('');
+function bSVG(b,sz){sz=sz||60;let inner='';
+  if(b.id==='elite')inner=`<circle cx="50" cy="50" r="34" fill="#0F0F14" stroke="${b.c}" stroke-width="5"/><path d="M31 50L46 68L74 33" fill="none" stroke="${b.c}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="36" cy="37" r="3" fill="${b.c}"/><circle cx="64" cy="37" r="3" fill="${b.c}"/>`;
+  else if(b.id==='admin')inner=`<g transform="translate(50 50) rotate(-35)"><rect x="-8" y="8" width="7" height="34" rx="2" fill="#1C1C1E"/><rect x="-19" y="-13" width="30" height="16" rx="3" fill="#1C1C1E"/><rect x="-17" y="-11" width="26" height="12" fill="#FF8533"/></g><circle cx="50" cy="50" r="46" fill="none" stroke="#FFD700" stroke-width="3"/>`;
+  else inner=`<path d="M31 50L46 67L73 33" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>`;
+  return `<svg width="${sz}" height="${sz}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="46" fill="${b.c}" stroke="#fff" stroke-width="7"/>${inner}</svg>`;}
+function bHTML(b){return `<div class="bw">${bSVG(b,18)}<div class="btt">${b.n}</div></div>`;}
+function uBdgs(u){if(!u||!u.badges)return '';return u.badges.map(id=>{const b=BADGES.find(x=>x.id===id);return b?bHTML(b):''}).join('');}
+function tBdgs(t){if(!t||!t.badges)return '';return t.badges.map(id=>{const b=BADGES.find(x=>x.id===id);return b?bHTML(b):''}).join('');}
+// ===== DATA =====
+let DB={users:[],games:[],teams:[],reports:[],cats:[
+  {id:'all',n:'Todos',i:'🎮'},{id:'ac',n:'Acción',i:'⚔️'},{id:'av',n:'Aventura',i:'🗺️'},
+  {id:'pz',n:'Puzzle',i:'🧩'},{id:'pl',n:'Plataformas',i:'🏃'},{id:'rc',n:'Carreras',i:'🏎️'},
+  {id:'sp',n:'Deportes',i:'⚽'},{id:'st',n:'Estrategia',i:'♟️'},{id:'rp',n:'RPG',i:'🐉'},
+  {id:'cs',n:'Casual',i:'🎈'},{id:'ml',n:'Multi',i:'👥'},{id:'ed',n:'Educativo',i:'📚'}
+]};
+let CU=null,cGid=null,rTgt=null,pAvI=null;
+let adC={u:'nexplay',p:'julio2012*'};
+let inbox=[];
+const EMJS=['🎮','👾','🎯','🔥','⚡','🦊','🐉','🎲','🏆','🚀','💎','🌟','🎪','🦁','🐺','🎭','🎸','🤖','👻','💀','🦄','🐯','🦅','⚔️','🛡️','🏹','🎃','🌈','🎵','🔮'];
+const GCOL=['linear-gradient(135deg,#7C3AED,#06B6D4)','linear-gradient(135deg,#F43F5E,#F59E0B)','linear-gradient(135deg,#1DA1F2,#10B981)','linear-gradient(135deg,#F59E0B,#FF6200)','linear-gradient(135deg,#EC4899,#7C3AED)'];
+const GEM={Acción:'⚔️',Aventura:'🗺️',Puzzle:'🧩',Plataformas:'🏃',Carreras:'🏎️',Deportes:'⚽',Estrategia:'♟️',RPG:'🐉',Casual:'🎈',Multijugador:'👥',Educativo:'📚',Terror:'👻'};
+const BAD=['puta','mierda','culo','cono','verga','pendejo','idiota','estupido','cabron','joder','fuck','shit','ass','bitch','damn','crap','bastard'];
+function sv(){try{localStorage.setItem('nx3',JSON.stringify(DB));localStorage.setItem('nx3ac',JSON.stringify(adC));}catch(e){}}
+function ld(){try{const d=localStorage.getItem('nx3');if(d){const p=JSON.parse(d);DB={...DB,...p};}const a=localStorage.getItem('nx3ac');if(a)adC=JSON.parse(a);}catch(e){}
+  if(!DB.games||!DB.games.length)DB.games=[
+    {id:'g1',n:'Marble Run 3D',desc:'Guía la bola por pistas espectaculares llenas de obstáculos.',url:'about:blank',cover:'',genre:'Plataformas',eng:'Unity',team:'',dev:'OSA Studio',ok:true,feat:true,ban:false,likes:[],dislikes:[],plays:4250,date:'2025-01-10',badge:'hot'},
+    {id:'g2',n:'Space Defender',desc:'Defiende la galaxia de oleadas de enemigos alienígenas.',url:'about:blank',cover:'',genre:'Acción',eng:'Phaser',team:'',dev:'PixelForge',ok:true,feat:true,ban:false,likes:[],dislikes:[],plays:3100,date:'2025-02-05',badge:'featured'},
+    {id:'g3',n:'Puzzle Master X',desc:'100 niveles de puzzles únicos que pondrán a prueba tu mente.',url:'about:blank',cover:'',genre:'Puzzle',eng:'Godot',team:'',dev:'BrainGames',ok:true,feat:false,ban:false,likes:[],dislikes:[],plays:1890,date:'2025-03-12',badge:'new'},
+    {id:'g4',n:'Super Runner',desc:'Plataformas clásicas con mecánicas modernas y gráficos vibrantes.',url:'about:blank',cover:'',genre:'Plataformas',eng:'GDevelop',team:'',dev:'RetroLabs',ok:true,feat:false,ban:false,likes:[],dislikes:[],plays:2750,date:'2025-03-28',badge:''},
+    {id:'g5',n:'Word Storm',desc:'Desafío de vocabulario multijugador en tiempo real.',url:'about:blank',cover:'',genre:'Casual',eng:'Phaser',team:'',dev:'WordWizard',ok:true,feat:false,ban:false,likes:[],dislikes:[],plays:980,date:'2025-04-15',badge:'new'},
+    {id:'g6',n:'Dragon Quest Mini',desc:'RPG épico de fantasía con historia profunda y batallas estratégicas.',url:'about:blank',cover:'',genre:'RPG',eng:'Unity',team:'',dev:'DragonDev',ok:true,feat:false,ban:false,likes:[],dislikes:[],plays:3400,date:'2025-04-20',badge:'hot'},
+  ];}
+function fN(n){return n>=1000?(n/1000).toFixed(1)+'k':String(n);}
+// ===== SCREENS =====
+function SS(id){document.querySelectorAll('#AS .sc').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+function gP(id,nav){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(nav){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));nav.classList.add('on');}
+  document.getElementById('NP').style.display='none';cSB();
+  if(id==='HP')rH();if(id==='GP')rGP();if(id==='TP')rT();if(id==='PP')rP();
+  if(id==='ADM')rA();if(id==='PUB')fTD();if(id==='PB')rBP();
 }
-
-function logoMain(){return `
-<svg width="260" height="110" viewBox="0 0 260 110">
-<defs>
-<linearGradient id="lm1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient>
-<linearGradient id="lm2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#67E8F9"/></linearGradient>
-</defs>
-<g transform="translate(12,12)" class="logo-float">
-<circle cx="42" cy="42" r="36" fill="none" stroke="url(#lm1)" stroke-width="1.5" opacity="0.5"/>
-<circle cx="42" cy="42" r="28" fill="none" stroke="#67E8F9" stroke-width="1" opacity="0.25"/>
-<circle cx="78" cy="42" r="4" fill="#67E8F9" opacity="0.7"/>
-<path d="M14 44 Q14 20 36 20 L60 20 Q82 20 82 44 L82 60 Q82 76 67 76 Q58 76 54 67 L50 59 Q47 53 42 53 Q37 53 34 59 L30 67 Q26 76 17 76 Q2 76 2 60 L2 44 Z" fill="url(#lm1)" stroke="rgba(6,7,15,.6)" stroke-width="2"/>
-<line x1="24" y1="40" x2="24" y2="50" stroke="rgba(6,7,15,.9)" stroke-width="3.5" stroke-linecap="round"/>
-<line x1="19" y1="45" x2="29" y2="45" stroke="rgba(6,7,15,.9)" stroke-width="3.5" stroke-linecap="round"/>
-<circle cx="62" cy="38" r="5" fill="rgba(6,7,15,.8)"/><circle cx="62" cy="38" r="2" fill="#67E8F9"/>
-<circle cx="72" cy="47" r="5" fill="rgba(6,7,15,.8)"/><circle cx="72" cy="47" r="2" fill="#A78BFA"/>
-</g>
-<text x="110" y="55" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="900" fill="url(#lm2)" letter-spacing="-1">nexPLAY</text>
-<text x="111" y="74" font-family="Inter,Arial,sans-serif" font-size="9" font-weight="500" fill="#64748B" letter-spacing="2.5">GAMING PLATFORM</text>
-</svg>`;}
-
-function logoHoriz(){return `
-<svg width="200" height="52" viewBox="0 0 200 52">
-<defs><linearGradient id="lh1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient><linearGradient id="lh2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#67E8F9"/></linearGradient></defs>
-<g transform="translate(0,1)">
-<path d="M7 24 Q7 10 18 10 L32 10 Q43 10 43 24 L43 34 Q43 42 35 42 Q30 42 28 37 L26 33 Q25 30 22 30 Q19 30 18 33 L16 37 Q14 42 8 42 Q0 42 0 34 Z" fill="url(#lh1)" stroke="rgba(6,7,15,.5)" stroke-width="1.5"/>
-<line x1="12" y1="22" x2="12" y2="28" stroke="rgba(6,7,15,.9)" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="9" y1="25" x2="15" y2="25" stroke="rgba(6,7,15,.9)" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="33" cy="21" r="3" fill="rgba(6,7,15,.8)"/><circle cx="33" cy="21" r="1.2" fill="#67E8F9"/>
-<circle cx="39" cy="27" r="3" fill="rgba(6,7,15,.8)"/><circle cx="39" cy="27" r="1.2" fill="#A78BFA"/>
-</g>
-<text x="52" y="34" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="900" fill="url(#lh2)" letter-spacing="-0.5">nexPLAY</text>
-</svg>`;}
-
-function logoIcon(){return `
-<svg width="80" height="80" viewBox="0 0 80 80">
-<defs><linearGradient id="li1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient></defs>
-<rect x="0" y="0" width="80" height="80" rx="20" fill="#0F1120" stroke="#2A2D4A" stroke-width="1.5"/>
-<g transform="translate(8,8)" class="logo-glow">
-<path d="M10 33 Q10 14 27 14 L45 14 Q62 14 62 33 L62 46 Q62 58 52 58 Q46 58 43 52 L40 46 Q38 41 32 41 Q26 41 24 46 L21 52 Q18 58 12 58 Q2 58 2 46 Z" fill="url(#li1)" stroke="rgba(6,7,15,.5)" stroke-width="2"/>
-<line x1="18" y1="30" x2="18" y2="39" stroke="rgba(6,7,15,.9)" stroke-width="4" stroke-linecap="round"/>
-<line x1="13" y1="34.5" x2="23" y2="34.5" stroke="rgba(6,7,15,.9)" stroke-width="4" stroke-linecap="round"/>
-<circle cx="47" cy="28" r="5.5" fill="rgba(6,7,15,.8)"/><circle cx="47" cy="28" r="2" fill="#67E8F9"/>
-<circle cx="57" cy="37" r="5.5" fill="rgba(6,7,15,.8)"/><circle cx="57" cy="37" r="2" fill="#A78BFA"/>
-</g>
-</svg>`;}
-
-function logoWhite(){return `
-<svg width="200" height="80" viewBox="0 0 200 80">
-<text x="100" y="44" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="-1">nexPLAY</text>
-<text x="100" y="62" font-family="Inter,Arial,sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="3">GAMING PLATFORM</text>
-</svg>`;}
-
-function logoDark(){return `
-<svg width="200" height="80" viewBox="0 0 200 80">
-<defs><linearGradient id="ld1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5B21B6"/><stop offset="100%" stop-color="#0891B2"/></linearGradient></defs>
-<text x="100" y="44" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="900" fill="url(#ld1)" text-anchor="middle" letter-spacing="-1">nexPLAY</text>
-<text x="100" y="62" font-family="Inter,Arial,sans-serif" font-size="9" font-weight="600" fill="#64748B" text-anchor="middle" letter-spacing="3">GAMING PLATFORM</text>
-</svg>`;}
-
-function logoCyber(){return `
-<svg width="260" height="110" viewBox="0 0 260 110">
-<defs>
-<linearGradient id="lc1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06B6D4"/><stop offset="100%" stop-color="#7C3AED"/></linearGradient>
-<filter id="gf1"><feGaussianBlur stdDeviation="2" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
-</defs>
-<rect x="0" y="0" width="260" height="110" fill="#030711"/>
-<line x1="0" y1="20" x2="260" y2="20" stroke="#0D1B2A" stroke-width="1"/>
-<line x1="0" y1="40" x2="260" y2="40" stroke="#0D1B2A" stroke-width="1"/>
-<line x1="0" y1="60" x2="260" y2="60" stroke="#0D1B2A" stroke-width="1"/>
-<line x1="0" y1="80" x2="260" y2="80" stroke="#0D1B2A" stroke-width="1"/>
-<g transform="translate(12,12)">
-<path d="M14 44 Q14 20 36 20 L60 20 Q82 20 82 44 L82 60 Q82 76 67 76 Q58 76 54 67 L50 59 Q47 53 42 53 Q37 53 34 59 L30 67 Q26 76 17 76 Q2 76 2 60 L2 44 Z" fill="none" stroke="#06B6D4" stroke-width="2" filter="url(#gf1)"/>
-<path d="M14 44 Q14 20 36 20 L60 20 Q82 20 82 44 L82 60 Q82 76 67 76 Q58 76 54 67 L50 59 Q47 53 42 53 Q37 53 34 59 L30 67 Q26 76 17 76 Q2 76 2 60 L2 44 Z" fill="rgba(6,182,212,0.08)" stroke="#67E8F9" stroke-width="1"/>
-<line x1="24" y1="40" x2="24" y2="50" stroke="#67E8F9" stroke-width="3" stroke-linecap="round"/>
-<line x1="19" y1="45" x2="29" y2="45" stroke="#67E8F9" stroke-width="3" stroke-linecap="round"/>
-<circle cx="62" cy="38" r="5" fill="none" stroke="#A78BFA" stroke-width="2"/>
-<circle cx="62" cy="38" r="2" fill="#A78BFA"/>
-<circle cx="72" cy="47" r="5" fill="none" stroke="#67E8F9" stroke-width="2"/>
-<circle cx="72" cy="47" r="2" fill="#67E8F9"/>
-</g>
-<text x="110" y="53" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="900" fill="none" stroke="#06B6D4" stroke-width="1.5" letter-spacing="-1" opacity="0.4">nexPLAY</text>
-<text x="110" y="53" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="900" fill="url(#lc1)" letter-spacing="-1">nexPLAY</text>
-<text x="111" y="72" font-family="Inter,Arial,sans-serif" font-size="8" font-weight="600" fill="#06B6D4" letter-spacing="4" opacity="0.7">CYBER EDITION</text>
-</svg>`;}
-
-function logoMinimal(){return `
-<svg width="220" height="60" viewBox="0 0 220 60">
-<defs><linearGradient id="lmin1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#67E8F9"/></linearGradient></defs>
-<circle cx="16" cy="30" r="12" fill="none" stroke="url(#lmin1)" stroke-width="2"/>
-<circle cx="16" cy="30" r="4" fill="url(#lmin1)"/>
-<line x1="28" y1="30" x2="36" y2="30" stroke="#2A2D4A" stroke-width="1.5"/>
-<text x="40" y="37" font-family="Inter,Arial,sans-serif" font-size="26" font-weight="900" fill="#F1F5F9" letter-spacing="-0.5">nexPLAY</text>
-</svg>`;}
-
-function logoNeon(){return `
-<svg width="240" height="100" viewBox="0 0 240 100">
-<defs>
-<filter id="nf"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-<linearGradient id="ln1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#67E8F9"/></linearGradient>
-</defs>
-<g filter="url(#nf)" class="logo-glow">
-<g transform="translate(10,14)">
-<path d="M10 34 Q10 16 26 16 L46 16 Q62 16 62 34 L62 46 Q62 57 53 57 Q47 57 45 52 L43 47 Q41 43 36 43 Q31 43 29 47 L27 52 Q25 57 19 57 Q8 57 8 46 Z" fill="none" stroke="#A78BFA" stroke-width="2.5"/>
-<path d="M10 34 Q10 16 26 16 L46 16 Q62 16 62 34 L62 46 Q62 57 53 57 Q47 57 45 52 L43 47 Q41 43 36 43 Q31 43 29 47 L27 52 Q25 57 19 57 Q8 57 8 46 Z" fill="rgba(167,139,250,0.07)"/>
-<line x1="19" y1="31" x2="19" y2="39" stroke="#67E8F9" stroke-width="3" stroke-linecap="round"/>
-<line x1="15" y1="35" x2="23" y2="35" stroke="#67E8F9" stroke-width="3" stroke-linecap="round"/>
-<circle cx="47" cy="29" r="4" fill="none" stroke="#F43F5E" stroke-width="2"/>
-<circle cx="55" cy="36" r="4" fill="none" stroke="#A78BFA" stroke-width="2"/>
-</g>
-<text x="80" y="58" font-family="Inter,Arial,sans-serif" font-size="36" font-weight="900" fill="url(#ln1)" letter-spacing="-1">nexPLAY</text>
-</g>
-</svg>`;}
-
-// ===== COLORS =====
-const COLORS=[
-  {name:'Morado Principal',hex:'#7C3AED',rgb:'124, 58, 237'},
-  {name:'Morado Oscuro',hex:'#5B21B6',rgb:'91, 33, 182'},
-  {name:'Lila Suave',hex:'#A78BFA',rgb:'167, 139, 250'},
-  {name:'Cyan Brillante',hex:'#06B6D4',rgb:'6, 182, 212'},
-  {name:'Cyan Claro',hex:'#67E8F9',rgb:'103, 232, 249'},
-  {name:'Rojo Acento',hex:'#F43F5E',rgb:'244, 63, 94'},
-  {name:'Ámbar',hex:'#F59E0B',rgb:'245, 158, 11'},
-  {name:'Verde OK',hex:'#10B981',rgb:'16, 185, 129'},
-  {name:'Fondo Base',hex:'#06070F',rgb:'6, 7, 15'},
-  {name:'Fondo Card',hex:'#0F1120',rgb:'15, 17, 32'},
-  {name:'Borde Suave',hex:'#2A2D4A',rgb:'42, 45, 74'},
-  {name:'Texto Principal',hex:'#F1F5F9',rgb:'241, 245, 249'},
-];
-
-function buildColors(){
-  const g=document.getElementById('CGRID');
-  g.innerHTML=COLORS.map(c=>`
-    <div class="color-card" onclick="navigator.clipboard&&navigator.clipboard.writeText('${c.hex}')">
-      <div class="color-swatch" style="background:${c.hex}"></div>
-      <div class="color-info">
-        <div class="color-name">${c.name}</div>
-        <div class="color-hex">${c.hex}</div>
-        <div class="color-hex">${c.rgb}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ===== USAGE =====
-function buildUsage(){
-  const g=document.getElementById('UGRID');
-  const items=[
-    {label:'Topbar / Header',bg:'#0D0F1E',content:usageFavicon()},
-    {label:'Splash Screen',bg:'#06070F',content:usageSplash()},
-    {label:'Sidebar',bg:'#0D0F1E',content:usageSidebar()},
-    {label:'Favicon / App Icon',bg:'#131528',content:usageAppIcon()},
-    {label:'Fondo Claro',bg:'#F1F5F9',content:usageDarkOnLight()},
-    {label:'Banner / OG Image',bg:'linear-gradient(135deg,#5B21B6,#0891B2)',content:usageBanner()},
-  ];
-  g.innerHTML=items.map(u=>`
-    <div class="usage-card">
-      <div class="usage-preview" style="background:${u.bg}">
-        <div class="shimmer-bar" style="opacity:.5"></div>
-        ${u.content}
-      </div>
-      <div class="usage-label">${u.label}</div>
-    </div>
-  `).join('');
-}
-
-function usageFavicon(){return `
-<svg width="200" height="40" viewBox="0 0 200 40">
-<defs><linearGradient id="uf1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient></defs>
-<rect x="0" y="0" width="200" height="40" fill="rgba(13,15,30,.95)"/>
-<rect x="0" y="39" width="200" height="1" fill="#1E2140"/>
-<g transform="translate(12,7)">
-<path d="M5 14 Q5 6 12 6 L20 6 Q27 6 27 14 L27 19 Q27 24 22 24 Q19 24 18 21 L17 19 Q16 17 14 17 Q12 17 11 19 L10 21 Q9 24 6 24 Q1 24 1 19 Z" fill="url(#uf1)"/>
-<line x1="7" y1="13" x2="7" y2="17" stroke="rgba(6,7,15,.9)" stroke-width="2" stroke-linecap="round"/>
-<line x1="5" y1="15" x2="9" y2="15" stroke="rgba(6,7,15,.9)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="20" cy="12" r="2.5" fill="rgba(6,7,15,.8)"/><circle cx="20" cy="12" r="1" fill="#67E8F9"/>
-<circle cx="24" cy="16" r="2.5" fill="rgba(6,7,15,.8)"/><circle cx="24" cy="16" r="1" fill="#A78BFA"/>
-</g>
-<text x="45" y="25" font-family="Inter,Arial,sans-serif" font-size="15" font-weight="900" fill="#A78BFA" letter-spacing="-.5">nexPLAY</text>
-<rect x="140" y="10" width="50" height="20" rx="10" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.4)" stroke-width="1"/>
-<text x="165" y="24" font-family="Inter,Arial,sans-serif" font-size="9" font-weight="600" fill="#A78BFA" text-anchor="middle" letter-spacing="1">v3.1.0</text>
-</svg>`;}
-
-function usageSplash(){return `
-<svg width="160" height="120" viewBox="0 0 160 120">
-<defs>
-<radialGradient id="us1" cx="50%" cy="40%" r="60%">
-<stop offset="0%" stop-color="#7C3AED" stop-opacity=".25"/>
-<stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
-</radialGradient>
-<linearGradient id="us2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#67E8F9"/></linearGradient>
-</defs>
-<rect x="0" y="0" width="160" height="120" fill="#06070F"/>
-<ellipse cx="80" cy="48" rx="70" ry="50" fill="url(#us1)"/>
-<text x="80" y="50" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="900" fill="url(#us2)" text-anchor="middle" letter-spacing="-1">nexPLAY</text>
-<text x="80" y="68" font-family="Inter,Arial,sans-serif" font-size="7" font-weight="500" fill="#64748B" text-anchor="middle" letter-spacing="2">GAMING PLATFORM</text>
-<rect x="40" y="85" width="80" height="3" rx="2" fill="#1E2140"/>
-<rect x="40" y="85" width="55" height="3" rx="2" fill="url(#us2)"/>
-<text x="80" y="106" font-family="Inter,Arial,sans-serif" font-size="7" fill="#64748B" text-anchor="middle">Cargando...</text>
-</svg>`;}
-
-function usageSidebar(){return `
-<svg width="70" height="120" viewBox="0 0 70 120">
-<rect x="0" y="0" width="70" height="120" fill="#0D0F1E"/>
-<rect x="69" y="0" width="1" height="120" fill="#1E2140"/>
-<text x="10" y="28" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="900" fill="#A78BFA" letter-spacing="-.3">nexPLAY</text>
-<rect x="8" y="38" width="54" height="14" rx="5" fill="rgba(124,58,237,.2)"/>
-<text x="15" y="49" font-family="Inter,Arial,sans-serif" font-size="8" fill="#A78BFA">🏠 Inicio</text>
-<text x="15" y="66" font-family="Inter,Arial,sans-serif" font-size="8" fill="#64748B">🎮 Juegos</text>
-<text x="15" y="80" font-family="Inter,Arial,sans-serif" font-size="8" fill="#64748B">🏆 Equipos</text>
-<text x="15" y="94" font-family="Inter,Arial,sans-serif" font-size="8" fill="#64748B">👤 Perfil</text>
-<text x="15" y="108" font-family="Inter,Arial,sans-serif" font-size="8" fill="#64748B">⚙️ Config</text>
-</svg>`;}
-
-function usageAppIcon(){return `
-<svg width="80" height="80" viewBox="0 0 80 80">
-<defs><linearGradient id="uai1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient></defs>
-<rect x="0" y="0" width="80" height="80" rx="20" fill="#0F1120"/>
-<rect x="1" y="1" width="78" height="78" rx="19" fill="none" stroke="#2A2D4A" stroke-width="1.5"/>
-<g transform="translate(8,8)">
-<path d="M10 33 Q10 14 27 14 L45 14 Q62 14 62 33 L62 46 Q62 58 52 58 Q46 58 43 52 L40 46 Q38 41 32 41 Q26 41 24 46 L21 52 Q18 58 12 58 Q2 58 2 46 Z" fill="url(#uai1)" stroke="rgba(6,7,15,.5)" stroke-width="2"/>
-<line x1="18" y1="30" x2="18" y2="39" stroke="rgba(6,7,15,.9)" stroke-width="4" stroke-linecap="round"/>
-<line x1="13" y1="34.5" x2="23" y2="34.5" stroke="rgba(6,7,15,.9)" stroke-width="4" stroke-linecap="round"/>
-<circle cx="47" cy="28" r="5.5" fill="rgba(6,7,15,.8)"/><circle cx="47" cy="28" r="2" fill="#67E8F9"/>
-<circle cx="57" cy="37" r="5.5" fill="rgba(6,7,15,.8)"/><circle cx="57" cy="37" r="2" fill="#A78BFA"/>
-</g>
-</svg>`;}
-
-function usageDarkOnLight(){return `
-<svg width="200" height="60" viewBox="0 0 200 60">
-<defs><linearGradient id="udl1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#5B21B6"/><stop offset="100%" stop-color="#0891B2"/></linearGradient></defs>
-<text x="100" y="34" font-family="Inter,Arial,sans-serif" font-size="26" font-weight="900" fill="url(#udl1)" text-anchor="middle" letter-spacing="-1">nexPLAY</text>
-<text x="100" y="50" font-family="Inter,Arial,sans-serif" font-size="8" font-weight="500" fill="#64748B" text-anchor="middle" letter-spacing="2.5">GAMING PLATFORM</text>
-</svg>`;}
-
-function usageBanner(){return `
-<svg width="200" height="100" viewBox="0 0 200 100">
-<defs>
-<linearGradient id="ubn1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5B21B6"/><stop offset="100%" stop-color="#0891B2"/></linearGradient>
-<linearGradient id="ubn2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#67E8F9"/></linearGradient>
-</defs>
-<rect x="0" y="0" width="200" height="100" fill="url(#ubn1)"/>
-<circle cx="160" cy="20" r="60" fill="rgba(255,255,255,.04)"/>
-<text x="100" y="42" font-family="Inter,Arial,sans-serif" font-size="28" font-weight="900" fill="url(#ubn2)" text-anchor="middle" letter-spacing="-1">nexPLAY</text>
-<text x="100" y="60" font-family="Inter,Arial,sans-serif" font-size="8" font-weight="500" fill="rgba(255,255,255,.7)" text-anchor="middle" letter-spacing="2.5">GAMING PLATFORM</text>
-<rect x="65" y="70" width="70" height="20" rx="10" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
-<text x="100" y="84" font-family="Inter,Arial,sans-serif" font-size="8" font-weight="600" fill="#fff" text-anchor="middle" letter-spacing="1">Juega Gratis</text>
-</svg>`;}
-
-// ===== SECTIONS =====
-function showSec(name,btn){
-  document.querySelectorAll('.site-nav button').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  ['logos','colors','typo','usage'].forEach(s=>{
-    const el=document.getElementById('sec-'+s);
-    if(el)el.style.display=s===name?'':'none';
-  });
-}
-
-// ===== DOWNLOAD =====
-function dlLogo(id){
-  const map={
-    main:logoMain(),horiz:logoHoriz(),icon:logoIcon(),
-    white:logoWhite(),dark:logoDark(),cyber:logoCyber(),
-    minimal:logoMinimal(),animated:logoNeon()
-  };
-  const svgStr='<?xml version="1.0" encoding="UTF-8"?>'+map[id];
-  const blob=new Blob([svgStr],{type:'image/svg+xml'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='nexplay-logo-'+id+'.svg';
-  a.click();
-}
+function sMN(el){document.querySelectorAll('.mni').forEach(n=>n.classList.remove('on'));el.classList.add('on');}
+function tSB(){const s=document.getElementById('SB'),o=document.getElementById('SOV');s.classList.toggle('on');o.classList.toggle('on');}
+function cSB(){document.getElementById('SB').classList.remove('on');document.getElementById('SOV').classList.remove('on');}
+// ===== AUTH =====
+function ckU(inp){const v=inp.value.trim(),eE=document.getElementById('RUE'),eO=document.getElementById('RUO');eE.style.display='none';eO.style.display='none';
+  if(v.length<3){eE.textContent='❌ Mínimo 3 caracteres';eE.style.display='block';return false;}
+  if(BAD.some(w=>v.toLowerCase().includes(w))){eE.textContent='❌ Nombre no permitido';eE.style.display='block';return false;}
+  if(!/^[a-zA-Z0-9_.\-]+$/.test(v)){eE.textContent='❌ Solo letras, números, _.-';eE.style.display='block';return false;}
+  if(DB.users.find(u=>u.username.toLowerCase()===v.toLowerCase())){eE.textContent='❌ Ya en uso';eE.style.display='block';return false;}
+  eO.style.display='block';return true;}
+function doL(){const u=document.getElementById('LU').value.trim(),p=document.getElementById('LP').value;
+  if(u===adC.u&&p===adC.p){let adm=DB.users.find(x=>x.isAdmin);
+    if(!adm){adm={id:'admin',username:adC.u,email:'admin@nexplay.com',pass:adC.p,role:'Administrador',isAdmin:true,avatar:'⚙️',avatarImg:null,bio:'Administrador oficial de nexPLAY.',banned:false,likes:[],dislikes:[],team:null,joined:new Date().toISOString(),badges:['admin','elite','vip'],twitter:'',youtube:'',twitch:'',discord:'',instagram:'',tiktok:'',web:''};DB.users.push(adm);sv();}
+    else{adm.pass=adC.p;adm.username=adC.u;if(!adm.badges)adm.badges=['admin','elite'];}
+    CU=adm;launch();return;}
+  const user=DB.users.find(x=>(x.username.toLowerCase()===u.toLowerCase()||x.email===u)&&x.pass===p);
+  if(!user){document.getElementById('LE').style.display='block';return;}
+  if(user.banned){const d=new Date(user.banDate||Date.now());document.getElementById('BR').textContent=user.banReason||'Violación de términos de servicio.';document.getElementById('BD').textContent=d.toLocaleDateString('es');document.getElementById('BT').textContent=d.toLocaleTimeString('es');document.getElementById('BO').classList.add('on');return;}
+  CU=user;document.getElementById('LE').style.display='none';launch();}
+function doR(){const u=document.getElementById('RU').value.trim(),e=document.getElementById('RE').value.trim(),p=document.getElementById('RP').value,p2=document.getElementById('RP2').value;
+  if(!ckU(document.getElementById('RU')))return;
+  if(!e||!e.includes('@')){const el=document.getElementById('REE');el.textContent='❌ Email inválido';el.style.display='block';return;}
+  if(DB.users.find(x=>x.email===e)){const el=document.getElementById('REE');el.textContent='❌ Email ya registrado';el.style.display='block';return;}
+  if(p.length<6){const el=document.getElementById('RGE');el.textContent='❌ Contraseña mínimo 6 caracteres';el.style.display='block';return;}
+  if(p!==p2){document.getElementById('RPE').style.display='block';return;}
+  const nu={id:'u'+Date.now(),username:u,email:e,pass:p,role:'Jugador',isAdmin:false,avatar:'🎮',avatarImg:null,bio:'',banned:false,likes:[],dislikes:[],team:null,joined:new Date().toISOString(),badges:[],twitter:'',youtube:'',twitch:'',discord:'',instagram:'',tiktok:'',web:''};
+  DB.users.push(nu);sv();CU=nu;document.getElementById('WN').textContent=u;SS('WL');}
+function tA(){const b=document.getElementById('AB'),c=document.getElementById('TC');b.disabled=!c.checked;b.style.opacity=c.checked?'1':'.5';}
+function gA(){if(!document.getElementById('TC').checked)return;launch();}
+function launch(){
+  document.getElementById('AS').style.display='none';document.getElementById('MA').style.display='block';
+  uSB();rH();
+  const isA=CU&&CU.isAdmin;
+  document.getElementById('ANS').style.display=isA?'':'none';
+  document.getElementById('ANI').style.display=isA?'flex':'none';
+  document.getElementById('HEB').style.display=isA?'block':'none';
+  document.getElementById('CBW').style.display=isA?'block':'none';
+  document.getElementById('MBT').style.display='flex';
+  document.getElementById('PLI').textContent=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'📱 Móvil':'💻 PC/Desktop';
+  const ao=document.getElementById('AOC');if(ao)ao.innerHTML=EMJS.map(e=>`<div class="av-opt" onclick="pEm('${e}')">${e}</div>`).join('');
+  inbox=[{ic:'🎮',t:'Bienvenido a nexPLAY-Gapro',m:'Explora miles de juegos gratis',tp:'in',time:'Ahora',r:false},{ic:'🆕',t:'nexPLAY v3.0.0',m:'Rediseño completo + badges + soporte móvil',tp:'ok',time:'Hoy',r:false}];
+  rNL();fillBgSelects();
+  setTimeout(()=>sN('👋','Bienvenido a nexPLAY-Gapro',`Hola ${CU.username}! Disfruta la nueva versión 🎮`,'ok'),500);
+  setTimeout(()=>{document.getElementById('UB').style.display='flex';},1600);}
+function doOut(){CU=null;document.getElementById('MA').style.display='none';document.getElementById('AS').style.display='block';SS('SP');}
+function uSB(){if(!CU)return;document.getElementById('SBN').textContent=CU.username;document.getElementById('SBR').textContent=CU.isAdmin?'Administrador ⚙️':'Jugador';setAv('SBAV','SBAVT',CU);setAv2('TAV','TAVT',CU);}
+function setAv(cId,tId,u){const c=document.getElementById(cId);if(!c)return;if(u.avatarImg)c.innerHTML=`<img src="${u.avatarImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" draggable="false">`;else{const t=document.getElementById(tId);if(t)t.textContent=u.avatar||'👤';}}
+function setAv2(cId,tId,u){const c=document.getElementById(cId);if(!c)return;if(u.avatarImg)c.innerHTML=`<img src="${u.avatarImg}" style="width:100%;height:100%;object-fit:cover" draggable="false">`;else{const t=document.getElementById(tId);if(t)t.textContent=u.avatar||'👤';}}
+// ===== NOTIFS =====
+function sN(ic,t,m,tp,dur){tp=tp||'in';dur=dur||4500;
+  const c=document.getElementById('NC'),n=document.createElement('div');
+  n.className=`nf ${tp}`;n.innerHTML=`<span style="font-size:1.2rem;flex-shrink:0">${ic}</span><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:.85rem">${t}</div><div style="color:var(--t2);font-size:.76rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m}</div></div><button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:.9rem;padding:0;flex-shrink:0">✕</button>`;
+  c.appendChild(n);setTimeout(()=>n.remove(),dur);
+  inbox.unshift({ic,t,m,tp,time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),r:false});
+  document.getElementById('ND').style.display='block';rNL();
+  if(document.getElementById('VT')&&document.getElementById('VT').checked&&navigator.vibrate)navigator.vibrate(50);}
+function rNL(){const l=document.getElementById('NL');if(!l)return;if(!inbox.length){l.innerHTML='<div style="padding:20px;text-align:center;color:var(--t2);font-size:.85rem">Sin notificaciones</div>';return;}l.innerHTML=inbox.slice(0,20).map(n=>`<div style="padding:11px 16px;border-bottom:1px solid var(--br);display:flex;gap:9px;${n.r?'':'background:rgba(124,58,237,.04)'}"><span style="font-size:1.1rem;flex-shrink:0">${n.ic}</span><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:.82rem">${n.t}</div><div style="color:var(--t2);font-size:.73rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${n.m}</div><div style="color:var(--t3);font-size:.68rem;margin-top:2px">${n.time}</div></div></div>`).join('');}
+function tNP(){const p=document.getElementById('NP');p.style.display=p.style.display==='block'?'none':'block';rNL();}
+function mR(){inbox.forEach(n=>n.r=true);document.getElementById('ND').style.display='none';rNL();}
+// ===== HOME =====
+function rH(){rCats(document.getElementById('HC'));
+  rGG(DB.games.filter(g=>g.ok&&!g.ban&&g.feat),document.getElementById('FG'));
+  rGG(DB.games.filter(g=>g.ok&&!g.ban).sort((a,b)=>b.plays-a.plays).slice(0,6),document.getElementById('POG'));
+  const ht=document.getElementById('HTG'),ft=DB.teams.filter(t=>!t.ban&&t.feat);
+  if(!ft.length){ht.innerHTML='<p style="color:var(--t2);font-size:.85rem">No hay equipos destacados aún.</p>';return;}ht.innerHTML=ft.map(t=>tCH(t)).join('');}
+function rCats(c){if(!c)return;c.innerHTML=DB.cats.map((ct,i)=>`<div class="cc ${i===0?'on':''}" onclick="fCat('${ct.id}',this)">${ct.i} ${ct.n}</div>`).join('');}
+function fCat(id,el){document.querySelectorAll('.cc').forEach(c=>c.classList.remove('on'));el.classList.add('on');gP('GP',null);setTimeout(()=>rGP(id),80);}
+// ===== GAMES =====
+function rGP(cat){cat=cat||'all';rCats(document.getElementById('GC'));let gs=DB.games.filter(g=>g.ok&&!g.ban);
+  if(cat!=='all'){const co=DB.cats.find(c=>c.id===cat);if(co)gs=gs.filter(g=>g.genre&&g.genre.toLowerCase().includes(co.n.toLowerCase()));}
+  document.getElementById('GCT').textContent=`${gs.length} juegos disponibles`;rGG(gs,document.getElementById('AGG'));}
+function rGG(gs,c){if(!c)return;if(!gs.length){c.innerHTML='<div class="empty"><div class="empty-ic">🎮</div><h3>Sin juegos aquí</h3><p style="font-size:.82rem">¡Publica el primero!</p></div>';return;}c.innerHTML=gs.map(g=>gCH(g)).join('');}
+function gCH(g){const lk=CU&&g.likes&&g.likes.includes(CU.id),dk=CU&&g.dislikes&&g.dislikes.includes(CU.id),bg=g.cover?'':`background:${GCOL[g.n.charCodeAt(0)%5]}`;
+  return `<div class="gc ${g.feat?'feat':''}" onclick="opG('${g.id}')"><div class="gt" style="${bg}">${g.cover?`<img src="${g.cover}" alt="${g.n}" draggable="false" oncontextmenu="return false">`:`<span class="gt-em">${GEM[g.genre]||'🎮'}</span>`}${g.badge?`<span class="gbdg ${g.badge==='hot'?'hot':g.badge==='new'?'new':'feat'}">${g.badge==='hot'?'🔥 HOT':g.badge==='new'?'🆕 NEW':'⭐ DEST'}</span>`:''}</div><div class="gi"><div class="gn" title="${g.n}">${g.n}</div><div class="gdev">${g.dev||'Dev'}</div><div class="gst"><span>▶️ ${fN(g.plays||0)}</span><span>❤️ ${(g.likes||[]).length}</span></div></div><div class="ga" onclick="event.stopPropagation()"><button class="gab ${lk?'lk':''}" onclick="doLk('${g.id}',event)">❤️ ${(g.likes||[]).length}</button><button class="gab ${dk?'dk':''}" onclick="doDk('${g.id}',event)">👎</button><button class="gab" onclick="oRp('${g.id}','game');event.stopPropagation()">🚨</button><button class="gab" onclick="shG('${g.id}');event.stopPropagation()">📤</button></div></div>`;}
+function opG(id){const g=DB.games.find(x=>x.id===id);if(!g)return;if(g.ban){sN('🚫','No disponible','Este juego fue suspendido','dn');return;}cGid=id;g.plays=(g.plays||0)+1;sv();
+  document.getElementById('PT').textContent=g.n;document.getElementById('PDV').textContent='por '+(g.dev||'nexPLAY');document.getElementById('GF').src=g.url||'about:blank';
+  const lk=CU&&g.likes&&g.likes.includes(CU.id);document.getElementById('PLB').className=`btn ${lk?'bp':'bs'}`;document.getElementById('PLC').textContent=(g.likes||[]).length;
+  document.getElementById('GPO').classList.add('on');document.body.style.overflow='hidden';}
+function clP(){document.getElementById('GPO').classList.remove('on');document.getElementById('GF').src='about:blank';document.body.style.overflow='';cGid=null;}
+function tFS(){const el=document.getElementById('GPO');if(!document.fullscreenElement)el.requestFullscreen().catch(()=>{});else document.exitFullscreen();}
+function doLk(id,e){if(e)e.stopPropagation();if(!CU){sN('⚠️','Inicia sesión','Necesitas una cuenta para dar like','wn');return;}const g=DB.games.find(x=>x.id===id);if(!g)return;if(!g.likes)g.likes=[];if(!g.dislikes)g.dislikes=[];if(g.likes.includes(CU.id))g.likes=g.likes.filter(x=>x!==CU.id);else{g.likes.push(CU.id);g.dislikes=g.dislikes.filter(x=>x!==CU.id);}if(!CU.likes)CU.likes=[];const li=CU.likes.indexOf(id);if(li>=0)CU.likes.splice(li,1);else CU.likes.push(id);sv();rRF();}
+function doDk(id,e){if(e)e.stopPropagation();if(!CU){sN('⚠️','Inicia sesión','','wn');return;}const g=DB.games.find(x=>x.id===id);if(!g)return;if(!g.dislikes)g.dislikes=[];if(!g.likes)g.likes=[];if(g.dislikes.includes(CU.id))g.dislikes=g.dislikes.filter(x=>x!==CU.id);else{g.dislikes.push(CU.id);g.likes=g.likes.filter(x=>x!==CU.id);if(CU.likes)CU.likes=CU.likes.filter(x=>x!==id);}sv();rRF();}
+function lFP(){if(cGid)doLk(cGid,null);const g=DB.games.find(x=>x.id===cGid);if(g){const lk=CU&&g.likes&&g.likes.includes(CU.id);document.getElementById('PLB').className=`btn ${lk?'bp':'bs'}`;document.getElementById('PLC').textContent=(g.likes||[]).length;}}
+function oRp(id,tp){rTgt={id:id||cGid,type:tp};oM('RM');}
+function shG(id){const g=DB.games.find(x=>x.id===id);if(!g)return;if(navigator.share)navigator.share({title:g.n,text:`¡Juega ${g.n} en nexPLAY!`,url:location.href}).catch(()=>{});else navigator.clipboard.writeText(location.href+'#game='+id).then(()=>sN('📋','Link copiado','Enlace del juego copiado al portapapeles','ok')).catch(()=>{});}
+function rRF(){if(document.getElementById('HP').classList.contains('on'))rH();if(document.getElementById('GP').classList.contains('on'))rGP();if(document.getElementById('PP').classList.contains('on'))rP();}
+// ===== TEAMS =====
+function rT(){const g=document.getElementById('TG');if(!DB.teams.length){g.innerHTML='<div class="empty"><div class="empty-ic">🏆</div><h3>Sin equipos aún</h3><button class="btn bp" style="margin-top:12px" onclick="oM(\'CTM\')">+ Crear Equipo</button></div>';return;}g.innerHTML=DB.teams.filter(t=>!t.ban).map(t=>tCH(t)).join('');}
+function tCH(t){const tg=DB.games.filter(g=>g.team===t.id&&g.ok).length,lg=t.logo?`<div class="t-logo"><img src="${t.logo}" draggable="false" oncontextmenu="return false"></div>`:'<div class="t-logo">🏆</div>';return `<div class="tcd ${t.feat?'feat':''}" onclick="vT('${t.id}')">${lg}<div class="t-nrow"><span class="t-name">${t.name}</span>${tBdgs(t)}</div><p class="t-desc">${t.desc||''}</p><div class="t-meta"><span>🎮 ${tg} juegos</span><span>📅 ${new Date(t.date).toLocaleDateString('es')}</span>${t.feat?'<span style="color:var(--go)">⭐ Destacado</span>':''}</div></div>`;}
+function crT(){if(!CU)return;const name=document.getElementById('TN').value.trim();if(!name){sN('⚠️','Error','El nombre del equipo es requerido','wn');return;}if(DB.teams.find(t=>t.name.toLowerCase()===name.toLowerCase())){sN('❌','Error','Ya existe un equipo con ese nombre','dn');return;}const lp=document.getElementById('TLP'),logo=lp.style.display!=='none'?lp.src:'';const t={id:'t'+Date.now(),name,desc:document.getElementById('TD').value,logo,creator:CU.id,members:[CU.id],date:new Date().toISOString(),feat:false,ban:false,badges:[],twitter:document.getElementById('TTW').value,youtube:document.getElementById('TYT').value,discord:document.getElementById('TDC').value,website:document.getElementById('TWB').value};DB.teams.push(t);CU.team=t.id;sv();cM('CTM');rT();sN('🏆','Equipo creado',`¡${name} ha sido creado exitosamente!`,'ok');['TN','TD','TTW','TYT','TDC','TWB'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('TLP').style.display='none';document.getElementById('TLL').style.display='flex';document.getElementById('TLZ').classList.remove('has');}
+function vT(id){const t=DB.teams.find(x=>x.id===id);if(!t)return;document.getElementById('TVB').textContent=t.name;const lg=t.logo?`<div class="tvl"><img src="${t.logo}" draggable="false" oncontextmenu="return false"></div>`:'<div class="tvl">🏆</div>';const soc=[];if(t.twitter)soc.push(`<a class="sl3" href="https://twitter.com/${t.twitter}" target="_blank" rel="noopener">🐦 Twitter</a>`);if(t.youtube)soc.push(`<a class="sl3" href="${t.youtube}" target="_blank" rel="noopener">▶️ YouTube</a>`);if(t.discord)soc.push(`<a class="sl3" href="https://discord.gg/${t.discord}" target="_blank" rel="noopener">💬 Discord</a>`);if(t.website)soc.push(`<a class="sl3" href="${t.website}" target="_blank" rel="noopener">🌐 Web</a>`);
+  document.getElementById('TVH').innerHTML=`${lg}<div class="t-nrow" style="font-size:1.3rem;font-weight:800;margin-bottom:8px">${t.name}${tBdgs(t)}</div><p style="color:var(--t2);margin-bottom:10px;font-size:.88rem;line-height:1.6">${t.desc||''}</p><div style="font-size:.78rem;color:var(--t3);margin-bottom:14px">📅 Creado: ${new Date(t.date).toLocaleDateString('es',{year:'numeric',month:'long',day:'numeric'})}</div>${soc.length?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">${soc.map(s=>`<a class="btn bc2" style="font-size:.78rem;padding:5px 12px">${s}</a>`).join('')}</div>`:''}<div>${CU&&!t.members.includes(CU.id)?`<button class="btn bp" style="font-size:.88rem" onclick="jnT('${t.id}')">+ Unirse al Equipo</button>`:'<span style="color:var(--ok);font-size:.88rem;font-weight:600">✅ Eres miembro de este equipo</span>'}</div>`;
+  document.getElementById('TVM').innerHTML=t.members.map(uid=>{const u=DB.users.find(x=>x.id===uid);if(!u)return '';const avH=u.avatarImg?`<img src="${u.avatarImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" draggable="false">`:(u.avatar||'👤');return `<div class="mem-card"><div class="mem-av">${avH}</div><div style="font-weight:600;font-size:.8rem;margin-bottom:2px">${u.username}</div><div style="font-size:.68rem;color:var(--t2)">${uid===t.creator?'👑 Fundador':'Miembro'}</div>${uBdgs(u)}</div>`;}).join('');
+  rGG(DB.games.filter(g=>g.team===t.id&&g.ok&&!g.ban),document.getElementById('TVG'));gP('TVP',null);}
+function jnT(id){if(!CU)return;const t=DB.teams.find(x=>x.id===id);if(!t||t.members.includes(CU.id))return;if(CU.team){sN('⚠️','Ya perteneces a un equipo','Sal de tu equipo actual primero','wn');return;}t.members.push(CU.id);CU.team=id;sv();sN('🏆','¡Unido!',`Ahora eres miembro de ${t.name}`,'ok');vT(id);}
+// ===== PROFILE =====
+function rP(){if(!CU)return;const pa=document.getElementById('PA');if(CU.avatarImg)pa.innerHTML=`<img src="${CU.avatarImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" draggable="false"><div class="av-overlay">📷</div>`;else pa.innerHTML=`<span id="PAT" style="font-size:2rem">${CU.avatar||'👤'}</span><div class="av-overlay">📷</div>`;
+  document.getElementById('PN').textContent=CU.username;document.getElementById('PBG').innerHTML=uBdgs(CU);document.getElementById('PR').textContent=CU.isAdmin?'⚙️ Administrador de nexPLAY':'🎮 Jugador';
+  const mg=DB.games.filter(g=>g.dev===CU.username);document.getElementById('SGA').textContent=mg.length;document.getElementById('SLA').textContent=(CU.likes||[]).length;document.getElementById('SDA').textContent=(CU.dislikes||[]).length;const mt=DB.teams.find(t=>t.id===CU.team);document.getElementById('STA').textContent=mt?mt.name:'—';
+  rGG(mg,document.getElementById('MGG'));rGG(DB.games.filter(g=>g.likes&&g.likes.includes(CU.id)),document.getElementById('LKG'));
+  const mtc=document.getElementById('MTC');if(mt)mtc.innerHTML=`<div class="tcd" onclick="vT('${mt.id}')">${tCH(mt)}</div>`;else mtc.innerHTML='<div class="empty"><div class="empty-ic">🏆</div><h3>Sin equipo</h3><button class="btn bp" style="margin-top:12px" onclick="oM(\'CTM\')">Crear Equipo</button></div>';
+  document.getElementById('ACTL').innerHTML=[{i:'🎮',t:'Cuenta creada en nexPLAY',d:new Date(CU.joined).toLocaleDateString('es')},...mg.slice(0,5).map(g=>({i:'📤',t:`Publicaste: ${g.n}`,d:new Date(g.date||CU.joined).toLocaleDateString('es')}))].map(a=>`<div style="display:flex;gap:12px;align-items:center;padding:12px;background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r2)"><span style="font-size:1.2rem">${a.i}</span><div style="flex:1;font-size:.85rem;font-weight:500">${a.t}</div><span style="font-size:.72rem;color:var(--t2)">${a.d}</span></div>`).join('');
+  const sc=[];if(CU.twitter)sc.push(['🐦','Twitter/X','@'+CU.twitter]);if(CU.youtube)sc.push(['▶️','YouTube',CU.youtube]);if(CU.twitch)sc.push(['💜','Twitch',CU.twitch]);if(CU.discord)sc.push(['💬','Discord',CU.discord]);if(CU.instagram)sc.push(['📸','Instagram','@'+CU.instagram]);if(CU.tiktok)sc.push(['🎵','TikTok','@'+CU.tiktok]);if(CU.web)sc.push(['🌐','Web',CU.web]);
+  document.getElementById('SCLL').innerHTML=sc.length?sc.map(s=>`<div class="soc-card"><span class="soc-icon">${s[0]}</span><div class="soc-info"><div class="soc-type">${s[1]}</div><div class="soc-val">${s[2]}</div></div></div>`).join('')+'<button class="btn bc2" style="font-size:.82rem;margin-top:8px" onclick="oM(\'EPM\')">✏️ Editar redes</button>':'<div class="empty"><div class="empty-ic">🌐</div><h3>Sin redes sociales</h3><button class="btn bp" style="margin-top:12px" onclick="oM(\'EPM\')">+ Añadir</button></div>';
+  const mbl=document.getElementById('MBLL');if(!CU.badges||!CU.badges.length)mbl.innerHTML='<div class="empty"><div class="empty-ic">🏅</div><h3>Sin badges aún</h3><p style="font-size:.82rem">Los administradores asignan badges</p></div>';
+  else mbl.innerHTML=CU.badges.map(bid=>{const b=BADGES.find(x=>x.id===bid);if(!b)return '';return `<div style="background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r2);padding:16px;text-align:center;cursor:pointer;transition:all .25s;min-width:130px" onclick="shBg('${bid}')" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--br2)'">${bSVG(b,52)}<div style="font-size:.72rem;font-weight:700;margin-top:9px;color:${b.c}">${b.n.replace('Verificado ','')}</div></div>`;}).join('');
+  updEPM();}
+function sT(id,el){document.querySelectorAll('.tct').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.pti').forEach(t=>t.classList.remove('on'));document.getElementById(id).classList.add('on');el.classList.add('on');}
+function svP(){if(!CU)return;CU.bio=document.getElementById('EBI').value;CU.twitter=document.getElementById('ETW').value;CU.youtube=document.getElementById('EYT').value;CU.twitch=document.getElementById('ETH').value;CU.discord=document.getElementById('EDC').value;CU.instagram=document.getElementById('EIG').value;CU.tiktok=document.getElementById('ETK').value;CU.web=document.getElementById('EWB').value;sv();cM('EPM');rP();sN('✅','Perfil actualizado','Tus cambios han sido guardados','ok');}
+function svC(){const np=document.getElementById('CNP').value,np2=document.getElementById('CNP2').value,cp=document.getElementById('CCP').value;if(cp!==CU.pass){sN('❌','Error','La contraseña actual es incorrecta','dn');return;}if(np&&np!==np2){sN('❌','Error','Las contraseñas no coinciden','dn');return;}const nu=document.getElementById('CNU').value.trim(),ne=document.getElementById('CNE').value.trim();if(nu)CU.username=nu;if(ne)CU.email=ne;if(np)CU.pass=np;sv();cM('CCM');uSB();sN('✅','Credenciales actualizadas','Tus datos de acceso han sido actualizados','ok');}
+function shrPr(){const c=document.getElementById('SHC'),avH=CU.avatarImg?`<img src="${CU.avatarImg}" style="width:72px;height:72px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block;border:3px solid var(--p)" draggable="false">`:`<div style="font-size:2.8rem;margin-bottom:12px">${CU.avatar||'👤'}</div>`;c.innerHTML=`${avH}<div style="font-size:1.2rem;font-weight:800;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:7px">${CU.username}${uBdgs(CU)}</div><div style="color:var(--t2);font-size:.85rem;margin-bottom:8px">${CU.role||'Jugador'} en nexPLAY</div>${CU.bio?`<div style="color:var(--t2);font-size:.82rem;line-height:1.6">${CU.bio}</div>`:''}<div style="font-size:.7rem;color:var(--t3);margin-top:12px;padding-top:12px;border-top:1px solid var(--br)">nexPLAY v3.0.0 — La Plataforma Gaming Definitiva</div>`;oM('SHM');}
+function cpP(){navigator.clipboard.writeText(`nexPLAY — Perfil de ${CU.username} | ${location.href}`).then(()=>sN('📋','Copiado','Enlace de perfil copiado al portapapeles','ok')).catch(()=>{});}
+function updEPM(){if(!CU)return;const c=document.getElementById('EPP');if(!c)return;if(CU.avatarImg)c.innerHTML=`<img src="${CU.avatarImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;else c.innerHTML=`<span id="EPPT" style="font-size:1.8rem;display:flex;align-items:center;justify-content:center;height:100%">${CU.avatar||'👤'}</span>`;document.getElementById('EBI').value=CU.bio||'';document.getElementById('ETW').value=CU.twitter||'';document.getElementById('EYT').value=CU.youtube||'';document.getElementById('ETH').value=CU.twitch||'';document.getElementById('EDC').value=CU.discord||'';document.getElementById('EIG').value=CU.instagram||'';document.getElementById('ETK').value=CU.tiktok||'';document.getElementById('EWB').value=CU.web||'';}
+// ===== AVATAR =====
+function hAv(inp){const f=inp.files[0];if(!f)return;if(f.size>5*1024*1024){sN('⚠️','Archivo muy grande','El máximo es 5MB','wn');return;}const r=new FileReader();r.onload=e=>{pAvI=e.target.result;document.getElementById('API').src=pAvI;document.getElementById('APW').style.display='block';sN('🖼️','Imagen cargada','Haz clic en Confirmar para aplicar','in');};r.readAsDataURL(f);}
+function cfAv(){if(!pAvI||!CU)return;CU.avatarImg=pAvI;CU.avatar='📷';sv();uSB();rP();cM('AVM');updEPM();pAvI=null;document.getElementById('APW').style.display='none';sN('✅','Avatar actualizado','Tu foto de perfil fue actualizada','ok');}
+function pEm(em){if(!CU)return;CU.avatar=em;CU.avatarImg=null;sv();document.querySelectorAll('.av-opt').forEach(a=>a.classList.remove('on'));if(event&&event.target)event.target.classList.add('on');uSB();rP();cM('AVM');updEPM();sN('✅','Avatar cambiado',em+' establecido como avatar','ok');}
+function setEm(){const em=document.getElementById('CEI').value.trim();if(!em||!CU)return;CU.avatar=em;CU.avatarImg=null;sv();uSB();rP();cM('AVM');updEPM();sN('✅','Avatar cambiado',em+' establecido','ok');}
+// ===== PUBLISH =====
+function hI(inp,pId,lId,zId){const f=inp.files[0];if(!f)return;if(f.size>5*1024*1024){sN('⚠️','Archivo muy grande','El máximo es 5MB','wn');return;}const r=new FileReader();r.onload=e=>{document.getElementById(pId).src=e.target.result;document.getElementById(pId).style.display='block';document.getElementById(lId).style.display='none';document.getElementById(zId).classList.add('has');};r.readAsDataURL(f);}
+function fTD(){if(!CU)return;const s=document.getElementById('PTS');if(!s)return;s.innerHTML='<option value="">Independiente</option>';DB.teams.filter(t=>t.members.includes(CU.id)).forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.name;s.appendChild(o);});}
+function subG(){if(!CU)return;const n=document.getElementById('PN2').value.trim(),d=document.getElementById('PD').value.trim(),desc=document.getElementById('PDSC').value.trim(),u=document.getElementById('PU').value.trim(),gn=document.getElementById('PGN').value;if(!n||!d||!desc||!u||!gn){sN('⚠️','Campos incompletos','Completa todos los campos marcados con *','wn');return;}const pr=document.getElementById('CP2'),cv=pr.style.display!=='none'?pr.src:'';const g={id:'g'+Date.now(),n,dev:d,desc,url:u,genre:gn,eng:document.getElementById('PE').value,team:document.getElementById('PTS').value,cover:cv,ok:false,feat:false,ban:false,likes:[],dislikes:[],plays:0,date:new Date().toISOString(),badge:'new',by:CU.id};DB.games.push(g);sv();sN('🚀','¡Juego enviado!','Tu juego está en revisión. El admin lo revisará pronto','ok');['PN2','PD','PDSC','PU','PE'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('PGN').value='';pr.style.display='none';document.getElementById('CL').style.display='flex';document.getElementById('CZ').classList.remove('has');}
+// ===== REPORT =====
+function sbR(){const r=document.querySelector('input[name="RR"]:checked');if(!r){sN('⚠️','Selecciona un motivo','Elige el motivo del reporte','wn');return;}DB.reports.push({id:'r'+Date.now(),target:rTgt,reason:r.value,details:document.getElementById('RD').value,reporter:CU?CU.id:null,date:new Date().toISOString(),resolved:false});sv();cM('RM');sN('✅','Reporte enviado','El equipo de nexPLAY lo revisará pronto','ok');}
+// ===== BADGES PAGE =====
+function rBP(){const g=document.getElementById('BGGRID');g.innerHTML=BADGES.map(b=>`<div class="bg-card" onclick="shBg('${b.id}')" style="--glow-color:${b.c}">${bSVG(b,65)}<div class="bg-name" style="color:${b.c}">${b.n.replace('Verificado ','')}</div>${CU&&CU.badges&&CU.badges.includes(b.id)?'<span class="bg-have">✓ Tienes</span>':''}</div>`).join('');}
+function shBg(id){const b=BADGES.find(x=>x.id===id);if(!b)return;document.getElementById('BGD').innerHTML=`<div style="margin-bottom:16px;animation:badgeGlow 2s ease infinite;color:${b.c}">${bSVG(b,110)}</div><h2 style="color:${b.c};font-size:1.5rem;font-weight:800;margin-bottom:10px">${b.n}</h2><p style="color:var(--t2);font-size:.9rem;line-height:1.7;margin-bottom:16px">${b.d}</p>${CU&&CU.badges&&CU.badges.includes(b.id)?`<div style="background:rgba(16,185,129,.1);border:1px solid var(--ok);border-radius:var(--r2);padding:10px 16px;color:var(--ok);font-size:.85rem;font-weight:600">✅ Ya tienes este badge</div>`:'<div style="background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r2);padding:10px 16px;color:var(--t2);font-size:.82rem">Los badges son asignados por el equipo de nexPLAY</div>'}`;oM('BGM');}
+// ===== ADMIN =====
+function rA(){document.getElementById('ASU').textContent=DB.users.filter(u=>!u.isAdmin).length;document.getElementById('ASG').textContent=DB.games.filter(g=>g.ok).length;document.getElementById('AST').textContent=DB.teams.length;document.getElementById('ASP').textContent=DB.games.filter(g=>!g.ok&&!g.ban).length;document.getElementById('ASB').textContent=DB.users.filter(u=>u.banned).length;document.getElementById('ASR').textContent=DB.reports.filter(r=>!r.resolved).length;rAU();rAG();rAT();rARp();rACH();fillBgSelects();rABG();}
+function rACH(){const c=document.getElementById('ACH'),l=document.getElementById('ACHL');if(!c||!l)return;const days=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],vals=[45,62,38,71,55,89,43],mx=Math.max(...vals);c.innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${(v/mx)*100}%" data-v="${v}" title="${days[i]}: ${v}"></div>`).join('');l.innerHTML=days.map(d=>`<div class="cl">${d}</div>`).join('');}
+function oAT(id,el){document.querySelectorAll('.asec').forEach(s=>s.classList.remove('on'));document.querySelectorAll('.ati').forEach(t=>t.classList.remove('on'));document.getElementById(id).classList.add('on');if(el)el.classList.add('on');if(id==='AU')rAU();if(id==='AG')rAG();if(id==='ATM')rAT();if(id==='AR')rARp();if(id==='ABG'){fillBgSelects();rABG();}}
+function rAU(){const s=(document.getElementById('AUS')||{value:''}).value.toLowerCase(),f=(document.getElementById('AUF')||{value:'all'}).value;let us=DB.users.filter(u=>!u.isAdmin);if(s)us=us.filter(u=>u.username.toLowerCase().includes(s)||u.email.toLowerCase().includes(s));if(f==='active')us=us.filter(u=>!u.banned);if(f==='banned')us=us.filter(u=>u.banned);const tb=document.getElementById('AUT');if(!tb)return;tb.innerHTML=us.map(u=>`<tr><td><div style="display:flex;align-items:center;gap:7px"><div style="width:28px;height:28px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--p),var(--s));display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">${u.avatarImg?`<img src="${u.avatarImg}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:u.avatar||'👤'}</div><b style="font-size:.82rem">${u.username}</b></div></td><td style="color:var(--t2);font-size:.78rem">${u.email}</td><td><span style="color:${u.banned?'var(--dn)':'var(--ok)'};font-size:.78rem;font-weight:600">${u.banned?'🚫 Ban':'✅ OK'}</span></td><td><div style="display:flex;gap:2px;flex-wrap:wrap">${uBdgs(u)}</div></td><td><div class="ab2">${!u.banned?`<button class="mb" style="background:var(--dn);color:#fff" onclick="oBM('${u.id}','user')">🚫</button>`:`<button class="mb" style="background:var(--ok);color:#fff" onclick="unB('${u.id}','user')">✅</button>`}<button class="mb" style="background:var(--p);color:#fff" onclick="gP('ADM',null);setTimeout(()=>{oAT('ABG');document.getElementById('BGU').value='${u.id}';},200)" title="Gestionar badges">🏅</button></div></td></tr>`).join('');}
+function rAG(){const s=(document.getElementById('AGS')||{value:''}).value.toLowerCase(),f=(document.getElementById('AGF')||{value:'all'}).value;let gs=DB.games;if(s)gs=gs.filter(g=>g.n.toLowerCase().includes(s)||g.dev.toLowerCase().includes(s));if(f==='pending')gs=gs.filter(g=>!g.ok&&!g.ban);if(f==='approved')gs=gs.filter(g=>g.ok&&!g.ban);if(f==='banned')gs=gs.filter(g=>g.ban);const tb=document.getElementById('AGT');if(!tb)return;tb.innerHTML=gs.map(g=>`<tr><td><b style="font-size:.82rem">${g.n}</b></td><td style="color:var(--t2);font-size:.78rem">${g.dev}</td><td><span style="background:var(--bg3);padding:2px 7px;border-radius:5px;font-size:.72rem;font-weight:500">${g.genre}</span></td><td><span style="color:${g.ban?'var(--dn)':g.ok?'var(--ok)':'var(--wn)'};font-size:.78rem;font-weight:600">${g.ban?'🚫':g.ok?'✅':'⏳'}</span></td><td style="font-size:.8rem;font-weight:600">❤️ ${(g.likes||[]).length}</td><td><div class="ab2">${!g.ok&&!g.ban?`<button class="mb" style="background:var(--ok);color:#fff" onclick="apG('${g.id}')">✅ Aprobar</button>`:''} ${!g.ban?`<button class="mb" style="background:var(--dn);color:#fff" onclick="oBM('${g.id}','game')">🚫</button>`:`<button class="mb" style="background:var(--ok);color:#fff" onclick="unB('${g.id}','game')">✅</button>`}<button class="mb" style="background:${g.feat?'var(--t3)':'var(--go)'};color:${g.feat?'#fff':'#000'}" onclick="tFt('${g.id}','game')">${g.feat?'★ Quitar':'⭐ Feat'}</button></div></td></tr>`).join('');}
+function rAT(){const tb=document.getElementById('ATT');if(!tb)return;tb.innerHTML=DB.teams.map(t=>`<tr><td><b style="font-size:.82rem">${t.name}</b></td><td style="color:var(--t2);font-size:.78rem">${(DB.users.find(u=>u.id===t.creator)||{}).username||'?'}</td><td style="font-size:.8rem">${DB.games.filter(g=>g.team===t.id).length}</td><td><span style="color:${t.ban?'var(--dn)':'var(--ok)'};font-size:.78rem;font-weight:600">${t.ban?'🚫 Ban':'✅ OK'}</span></td><td><div style="display:flex;gap:2px;flex-wrap:wrap">${tBdgs(t)}</div></td><td><div class="ab2">${!t.ban?`<button class="mb" style="background:var(--dn);color:#fff" onclick="oBM('${t.id}','team')">🚫</button>`:`<button class="mb" style="background:var(--ok);color:#fff" onclick="unB('${t.id}','team')">✅</button>`}<button class="mb" style="background:${t.feat?'var(--t3)':'var(--go)'};color:${t.feat?'#fff':'#000'}" onclick="tFt('${t.id}','team')">${t.feat?'★':'⭐'}</button><button class="mb" style="background:var(--p);color:#fff" onclick="gP('ADM',null);setTimeout(()=>{oAT('ABG');document.getElementById('BGTM').value='${t.id}';},200)">🏅</button></div></td></tr>`).join('');}
+function rARp(){const l=document.getElementById('ARL'),pd=DB.reports.filter(r=>!r.resolved);if(!pd.length){l.innerHTML='<div class="empty"><div class="empty-ic">✅</div><h3>Sin reportes pendientes</h3></div>';return;}l.innerHTML=pd.map(r=>{const rp=DB.users.find(u=>u.id===r.reporter);return `<div style="background:var(--bg3);border:1px solid var(--br2);border-radius:var(--r2);padding:16px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><b style="font-size:.88rem">🚨 ${r.reason}</b><div style="color:var(--t2);font-size:.78rem;margin-top:3px">Por: <b>${rp?rp.username:'?'}</b> | Tipo: ${r.target.type}</div>${r.details?`<div style="color:var(--t2);font-size:.76rem;margin-top:5px;font-style:italic">"${r.details}"</div>`:''}<div style="font-size:.7rem;color:var(--t3);margin-top:5px">${new Date(r.date).toLocaleString('es')}</div></div><div class="ab2"><button class="mb" style="background:var(--ok);color:#fff" onclick="rsR('${r.id}')">✅ Resolver</button><button class="mb" style="background:var(--dn);color:#fff" onclick="oBM('${r.target.id}','${r.target.type}')">🚫 Banear</button></div></div></div>`;}).join('');}
+function fillBgSelects(){const gu=document.getElementById('BGU'),gt=document.getElementById('BGTM'),gs=document.getElementById('BGS'),gts=document.getElementById('BGTS');if(gu)gu.innerHTML=DB.users.filter(u=>!u.isAdmin).map(u=>`<option value="${u.id}">${u.username}</option>`).join('');if(gt)gt.innerHTML=DB.teams.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');const bo=BADGES.map(b=>`<option value="${b.id}">${b.n}</option>`).join('');if(gs)gs.innerHTML=bo;if(gts)gts.innerHTML=bo;}
+function rABG(){const g=document.getElementById('ABGG');if(!g)return;g.innerHTML=BADGES.map(b=>`<div class="bg-card" onclick="shBg('${b.id}')" style="cursor:pointer">${bSVG(b,55)}<div class="bg-name" style="color:${b.c};font-size:.72rem">${b.n.replace('Verificado ','')}</div></div>`).join('');}
+function asBg(){const uid=document.getElementById('BGU').value,bid=document.getElementById('BGS').value;const u=DB.users.find(x=>x.id===uid);if(!u)return;if(!u.badges)u.badges=[];if(!u.badges.includes(bid))u.badges.push(bid);sv();sN('🏅','Badge asignado',`${BADGES.find(b=>b.id===bid)?.n} → ${u.username}`,'ok');rAU();}
+function rmBg(){const uid=document.getElementById('BGU').value,bid=document.getElementById('BGS').value;const u=DB.users.find(x=>x.id===uid);if(!u||!u.badges)return;u.badges=u.badges.filter(b=>b!==bid);sv();sN('🗑️','Badge retirado','Badge eliminado del usuario','wn');rAU();}
+function asBgT(){const tid=document.getElementById('BGTM').value,bid=document.getElementById('BGTS').value;const t=DB.teams.find(x=>x.id===tid);if(!t)return;if(!t.badges)t.badges=[];if(!t.badges.includes(bid))t.badges.push(bid);sv();sN('🏅','Badge asignado al equipo',`${BADGES.find(b=>b.id===bid)?.n} → ${t.name}`,'ok');rAT();}
+function rmBgT(){const tid=document.getElementById('BGTM').value,bid=document.getElementById('BGTS').value;const t=DB.teams.find(x=>x.id===tid);if(!t||!t.badges)return;t.badges=t.badges.filter(b=>b!==bid);sv();sN('🗑️','Badge retirado del equipo','','wn');rAT();}
+function oBM(id,tp){document.getElementById('BTI').value=id;document.getElementById('BTT').value=tp;document.getElementById('BRI').value='';oM('BNM');}
+function exB(){const id=document.getElementById('BTI').value,tp=document.getElementById('BTT').value,r=document.getElementById('BRI').value.trim();if(!r){sN('⚠️','Motivo requerido','Debes especificar el motivo del ban','wn');return;}const now=new Date().toISOString();if(tp==='user'){const u=DB.users.find(x=>x.id===id);if(u){u.banned=true;u.banReason=r;u.banDate=now;}}else if(tp==='game'){const g=DB.games.find(x=>x.id===id);if(g){g.ban=true;g.banReason=r;g.banDate=now;}}else if(tp==='team'){const t=DB.teams.find(x=>x.id===id);if(t){t.ban=true;t.banReason=r;t.banDate=now;}}sv();cM('BNM');rA();sN('🚫','Ban aplicado','La acción fue ejecutada correctamente','ok');}
+function unB(id,tp){if(tp==='user'){const u=DB.users.find(x=>x.id===id);if(u){u.banned=false;delete u.banReason;delete u.banDate;}}else if(tp==='game'){const g=DB.games.find(x=>x.id===id);if(g){g.ban=false;delete g.banReason;}}else if(tp==='team'){const t=DB.teams.find(x=>x.id===id);if(t){t.ban=false;delete t.banReason;}}sv();rA();sN('✅','Desbaneado','El ban fue levantado correctamente','ok');}
+function apG(id){const g=DB.games.find(x=>x.id===id);if(g){g.ok=true;sv();rAG();sN('✅','Juego aprobado',`${g.n} ya está disponible en nexPLAY`,'ok');}}
+function tFt(id,tp){if(tp==='game'){const g=DB.games.find(x=>x.id===id);if(g){g.feat=!g.feat;sv();rAG();sN(g.feat?'⭐':'★',g.feat?'Juego destacado':'Destacado eliminado',g.n,'in');}}else{const t=DB.teams.find(x=>x.id===id);if(t){t.feat=!t.feat;sv();rAT();sN(t.feat?'⭐':'★',t.feat?'Equipo destacado':'Destacado eliminado',t.name,'in');}}}
+function rsR(id){const r=DB.reports.find(x=>x.id===id);if(r)r.resolved=true;sv();rARp();document.getElementById('ASR').textContent=DB.reports.filter(r=>!r.resolved).length;sN('✅','Reporte resuelto','El reporte fue marcado como resuelto','ok');}
+function sGN(){const tp=document.getElementById('ANT').value,t=document.getElementById('ANTL').value,m=document.getElementById('ANM').value;if(!t||!m){sN('⚠️','Campos vacíos','Título y mensaje son requeridos','wn');return;}const ic={in:'ℹ️',ok:'✅',wn:'⚠️',dn:'❌'}[tp];sN(ic,t,m,tp);document.getElementById('ANTL').value='';document.getElementById('ANM').value='';sN('📢','Notificación enviada',`"${t}" enviada a todos los usuarios`,'ok');}
+function sUpd(){const v=document.getElementById('ANV').value,m=document.getElementById('ANVM').value;document.getElementById('UBT').textContent=`nexPLAY ${v} — ${m}`;document.getElementById('UB').style.display='flex';sN('🆕','Actualización publicada',`${v}: ${m}`,'in');}
+function sHr(){const t=document.getElementById('EHT').value,d=document.getElementById('EHD').value;if(t)document.getElementById('HT').textContent=t;if(d)document.getElementById('HD').textContent=d;sN('✅','Hero actualizado','El banner principal fue actualizado','ok');}
+function sBn(){const t=document.getElementById('EBT').value;if(t){document.getElementById('UBT').textContent=t;document.getElementById('UB').style.display='flex';}sN('📢','Banner publicado','Visible para todos los usuarios','ok');}
+function addCat(){const n=document.getElementById('NCN').value.trim(),i=document.getElementById('NCI').value.trim()||'🎮';if(!n)return;DB.cats.push({id:n.toLowerCase().replace(/\s+/g,'_'),n,i});sv();document.getElementById('NCN').value='';document.getElementById('NCI').value='';sN('✅','Categoría añadida',`${i} ${n} fue añadida`,'ok');}
+function chAC(){const nu=document.getElementById('ANU').value.trim(),np=document.getElementById('ANP').value,np2=document.getElementById('ANP2').value,cp=document.getElementById('ACP').value;if(cp!==adC.p){sN('❌','Error','La contraseña actual es incorrecta','dn');return;}if(np&&np!==np2){sN('❌','Error','Las contraseñas no coinciden','dn');return;}if(nu)adC.u=nu;if(np)adC.p=np;if(CU&&CU.isAdmin){if(nu)CU.username=nu;if(np)CU.pass=np;}sv();['ANU','ANP','ANP2','ACP'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});sN('✅','Credenciales admin actualizadas','Los cambios han sido guardados de forma segura','ok');}
+// ===== SETTINGS =====
+function sC(p,d,el){document.documentElement.style.setProperty('--p',p);document.documentElement.style.setProperty('--pd',d);document.documentElement.style.setProperty('--p2',p);document.querySelectorAll('.cd2').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+function tAd(el){document.getElementById('ABB').textContent=el.checked?'🛡️ Sin Ads':'📢 Ads';sN(el.checked?'🛡️':'📢',el.checked?'Bloqueador activado':'Bloqueador desactivado','','in');}
+function sPM(m,el){document.querySelectorAll('.po').forEach(p=>p.classList.remove('on'));el.classList.add('on');const msgs={auto:'Detección automática',high:'Alto rendimiento activado',med:'Rendimiento medio',low:'Modo PC antigua activado'};sN('⚡','Rendimiento cambiado',msgs[m],'in');}
+function tMN(el){document.getElementById('MNV').style.display=el.checked?'flex':'none';}
+// ===== GAME PLAYER =====
+function sGM(m,el){document.querySelectorAll('.mt').forEach(t=>t.classList.remove('on'));el.classList.add('on');const fr=document.getElementById('GF');if(m==='l')fr.style.imageRendering='pixelated';else fr.style.imageRendering='auto';}
+function tCP(){document.getElementById('CPL').classList.toggle('on');}
+function apC(tp,a){if(!CU||!CU.isAdmin){sN('🔒','Acceso denegado','Los cheats son exclusivos para administradores','dn');return;}const nm={walls:'Atravesar paredes',immunity:'Inmunidad total',lives:'Vidas infinitas',speed:'Velocidad ×2',money:'Dinero infinito'};sN('🔧','Cheat Engine',`${nm[tp]}: ${a?'✅ ON':'❌ OFF'}`,a?'ok':'wn');try{document.getElementById('GF').contentWindow.postMessage({nexplay_cheat:tp,active:a},'*');}catch(e){}}
+// ===== SEARCH =====
+function doSch(q){const r=document.getElementById('SR');if(!q||q.length<2){r.style.display='none';return;}const gs=DB.games.filter(g=>g.ok&&!g.ban&&g.n.toLowerCase().includes(q.toLowerCase())).slice(0,5),ts=DB.teams.filter(t=>!t.ban&&t.name.toLowerCase().includes(q.toLowerCase())).slice(0,3);if(!gs.length&&!ts.length){r.style.display='none';return;}r.innerHTML=(gs.length?'<div style="padding:6px 14px;font-size:.68rem;color:var(--t3);text-transform:uppercase;font-weight:700;letter-spacing:.5px">Juegos</div>':'')+gs.map(g=>`<div class="sri" onclick="opG('${g.id}');document.getElementById('SR').style.display='none'"><span>${GEM[g.genre]||'🎮'}</span><div><div style="font-weight:600;font-size:.83rem">${g.n}</div><div style="font-size:.72rem;color:var(--t2)">${g.genre}</div></div></div>`).join('')+(ts.length?'<div style="padding:6px 14px;font-size:.68rem;color:var(--t3);text-transform:uppercase;font-weight:700;letter-spacing:.5px;margin-top:4px">Equipos</div>':'')+ts.map(t=>`<div class="sri" onclick="vT('${t.id}');document.getElementById('SR').style.display='none'"><span>🏆</span><div><div style="font-weight:600;font-size:.83rem">${t.name}</div><div style="font-size:.72rem;color:var(--t2)">${t.members.length} miembros</div></div></div>`).join('');r.style.display='block';}
+document.addEventListener('click',e=>{if(!e.target.closest('.search-box'))document.getElementById('SR').style.display='none';if(!e.target.closest('#NP')&&!e.target.closest('.ib'))document.getElementById('NP').style.display='none';});
+// ===== MODALS =====
+function oM(id){document.getElementById(id).classList.add('on');}
+function cM(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){clP();document.querySelectorAll('.mo.on').forEach(m=>m.classList.remove('on'));document.getElementById('NP').style.display='none';}});
+document.addEventListener('contextmenu',e=>{if(e.target.tagName==='IMG')e.preventDefault();});
+// ===== INIT =====
+window.addEventListener('load',()=>{ld();
+  const lf=document.getElementById('LF');let pct=0;const iv=setInterval(()=>{pct=Math.min(pct+Math.random()*15,90);lf.style.width=pct+'%';},100);
+  setTimeout(()=>{clearInterval(iv);lf.style.width='100%';setTimeout(()=>{const ls=document.getElementById('LS');ls.style.opacity='0';setTimeout(()=>ls.style.display='none',500);},300);},1500);});
 </script>
 </body>
-</html>'''
+</html>
